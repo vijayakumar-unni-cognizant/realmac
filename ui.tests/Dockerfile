@@ -1,4 +1,4 @@
-# Copyright 2023 Adobe Systems Incorporated
+# Copyright 2026 Adobe Systems Incorporated
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM cypress/included:13.14.1
+# Migrated from Cypress to Playwright — run 2026-08-28T1200Z-tata-innovation-page.
+# Version pin rule: this tag MUST match the @playwright/test version in package.json.
+FROM mcr.microsoft.com/playwright:v1.49.1-jammy
 
-ENV APP_PATH /usr/src/app
-RUN apt -qqy update \
-    # Generic dependencies
-    && apt -qqy --no-install-recommends install \
-    curl \
-    build-essential
-# <<< End EAAS Convention \
-
-# Set Application Environment
+ENV APP_PATH=/usr/src/app
 WORKDIR ${APP_PATH}
 COPY ./test-module ./
 RUN npm install
-# no need to wait for selenium
+# Browsers are preinstalled in the base image; headless — no Xvfb/X11 needed.
 ENTRYPOINT ["bash","run.sh"]
-

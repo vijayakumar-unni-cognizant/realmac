@@ -1,0 +1,35 @@
+<!--/*
+    Site Footer — optional logo, N link columns, social-icon row, and legal/copyright
+    bar. See design/component-specifications.md § A.2.
+*/-->
+<footer class="cmp-site-footer" data-cmp-is="site-footer" data-sly-use.model="com.realmac.aem.core.models.SiteFooterModel">
+    <div class="cmp-site-footer__inner">
+        <img data-sly-test="${model.footerLogoFileReference}" class="cmp-site-footer__logo"
+             src="${model.footerLogoFileReference}" alt=""/>
+        <div class="cmp-site-footer__columns">
+            <nav class="cmp-site-footer__column" data-sly-repeat.column="${model.columns}" aria-label="${column.heading}">
+                <sly data-sly-test="${column.hasContent}">
+                    <h3 class="cmp-site-footer__column-heading">${column.heading}</h3>
+                    <ul class="cmp-site-footer__link-list">
+                        <li data-sly-repeat.link="${column.links}">
+                            <sly data-sly-test="${link.hasContent}">
+                                <a class="cmp-site-footer__link" href="${link.url}">${link.label}</a>
+                            </sly>
+                        </li>
+                    </ul>
+                </sly>
+            </nav>
+        </div>
+        <ul class="cmp-site-footer__social" data-sly-list.social="${model.socialLinks}">
+            <li class="cmp-site-footer__social-item" data-sly-test="${social.hasContent}">
+                <a class="cmp-site-footer__social-link" href="${social.url}" aria-label="${social.label}">
+                    <img class="cmp-site-footer__social-icon" src="${social.iconFileReference}" alt=""/>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="cmp-site-footer__legal">
+        <p class="cmp-site-footer__legal-text">${model.legalText}</p>
+    </div>
+</footer>
+<div data-sly-test="${!model.hasContent}" class="cq-placeholder" data-emptytext="Site Footer - Please configure the legal text."></div>

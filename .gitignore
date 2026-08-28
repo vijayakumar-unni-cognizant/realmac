@@ -104,3 +104,11 @@ reports/
 
 # Others
 dispatcher/src/conf.d/variables/default.vars
+
+### Claude ###
+# Ignore contents of .claude/agents, but keep the folder tracked
+.claude/agents/*
+!.claude/agents/runs/
+
+# Completely ignore .claude/skills
+.claude/skills/

@@ -1,28 +1,18 @@
 {
-  "name": "cypress-eaas",
+  "name": "playwright-eaas",
   "version": "1.0.0",
-  "description": "test cypress on eaas",
-  "main": "index.js",
-  "devDependencies": {
-    "cypress": "^13.14.1",
-    "cypress-fail-on-console-error": "^5.1.1",
-    "cypress-multi-reporters": "^1.6.4",
-    "cypress-terminal-report": "^6.1.2",
-    "eslint": "^8.57.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-chai-friendly": "^1.0.1",
-    "eslint-plugin-cypress": "^3.5.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1",
-    "mocha-junit-reporter": "^2.2.1"
-  },
+  "description": "Playwright UI test module for AEM as a Cloud Service (Cloud Manager Custom UI Testing) — migrated from Cypress, run 2026-08-28T1200Z-tata-innovation-page",
   "scripts": {
-    "lint": "eslint .",
-    "test": "cypress run --browser electron",
-    "test-chrome": "cypress run --browser chrome",
-    "test-firefox": "cypress run --browser firefox"
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=publish-chromium",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report",
+    "lint": "eslint ."
   },
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "1.49.1",
+    "eslint": "^8.57.0"
+  },
+  "license": "Apache-2.0"
 }

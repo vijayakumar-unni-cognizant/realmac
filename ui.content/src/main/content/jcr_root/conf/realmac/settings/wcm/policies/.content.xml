@@ -164,6 +164,37 @@
                             features="-"/>
                     </rtePlugins>
                 </policy_641562756958017>
+                <policy_landing_intro_text
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Landing Page — Intro Text"
+                    jcr:description="Lead + body copy for the intro/overview block. Clones the project default RTE config and adds the intro-lead style variant."
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    cq:allowSingleSelection="{Boolean}true">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                    <rtePlugins jcr:primaryType="nt:unstructured">
+                        <!-- Cloned verbatim from realmac/components/text/policy_641562756958017 ("Content Text") -->
+                        <paraformat jcr:primaryType="nt:unstructured" features="*">
+                            <formats jcr:primaryType="nt:unstructured" override="true">
+                                <item0 jcr:primaryType="nt:unstructured" description="Paragraph" tag="p"/>
+                                <item1 jcr:primaryType="nt:unstructured" description="Quote" tag="blockquote"/>
+                            </formats>
+                        </paraformat>
+                        <format jcr:primaryType="nt:unstructured" features="bold,italic"/>
+                        <links jcr:primaryType="nt:unstructured" features="modifylink,unlink"/>
+                        <lists jcr:primaryType="nt:unstructured" features="*"/>
+                    </rtePlugins>
+                    <cq:styleGroups jcr:primaryType="nt:unstructured">
+                        <item0 jcr:primaryType="nt:unstructured" cq:styleGroupLabel="Text Variant">
+                            <cq:styles jcr:primaryType="nt:unstructured">
+                                <item0
+                                    jcr:primaryType="nt:unstructured"
+                                    cq:styleClasses="cmp-text--intro-lead"
+                                    cq:styleId="20260828102"
+                                    cq:styleLabel="Intro Lead"/>
+                            </cq:styles>
+                        </item0>
+                    </cq:styleGroups>
+                </policy_landing_intro_text>
             </text>
             <title jcr:primaryType="nt:unstructured">
                 <policy_641475696923109
@@ -279,7 +310,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="XF Root"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    components="[group:Realmac - Content,/apps/realmac/components/form/container]">
+                    components="[group:Realmac - Content,/apps/realmac/components/form/container,group:Realmac - Structure]">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                     <cq:authoring jcr:primaryType="nt:unstructured">
                         <assetToComponentMapping jcr:primaryType="nt:unstructured">
@@ -304,6 +335,34 @@
                         </assetToComponentMapping>
                     </cq:authoring>
                 </policy_1575040440977>
+                <policy_landing_content
+                    jcr:description="Allowed components for the single editable content parsys on landing-page (hero, intro, card-grid)."
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Landing Page — Content"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    components="[realmac/components/teaser,realmac/components/text,realmac/components/title,realmac/components/image,realmac/components/button,realmac/components/container]">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_landing_content>
+                <policy_landing_card_grid
+                    jcr:description="Container restricted to innovation-centre card teasers only."
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Landing Page — Card Grid"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    components="[realmac/components/innovation-card]"
+                    cq:allowSingleSelection="{Boolean}true">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                    <cq:styleGroups jcr:primaryType="nt:unstructured">
+                        <item0 jcr:primaryType="nt:unstructured" cq:styleGroupLabel="Layout">
+                            <cq:styles jcr:primaryType="nt:unstructured">
+                                <item0
+                                    jcr:primaryType="nt:unstructured"
+                                    cq:styleClasses="cmp-container--card-grid"
+                                    cq:styleId="20260828103"
+                                    cq:styleLabel="Card Grid"/>
+                            </cq:styles>
+                        </item0>
+                    </cq:styleGroups>
+                </policy_landing_card_grid>
             </container>
             <teaser jcr:primaryType="nt:unstructured">
                 <policy_1575031387650
@@ -314,7 +373,67 @@
                     titleType="h3">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1575031387650>
+                <policy_landing_hero_teaser
+                    jcr:description="Full-bleed hero with overlaid H1 title. No CTA."
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Landing Page — Hero Teaser"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    allowedTypes="[h1]"
+                    titleFromPage="{Boolean}false"
+                    descriptionFromPage="{Boolean}false"
+                    titleType="h1"
+                    imageDelegate="realmac/components/image"
+                    actionsDisabled="{Boolean}true"
+                    cq:allowSingleSelection="{Boolean}true">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                    <cq:styleGroups jcr:primaryType="nt:unstructured">
+                        <item0 jcr:primaryType="nt:unstructured" cq:styleGroupLabel="Hero Variant">
+                            <cq:styles jcr:primaryType="nt:unstructured">
+                                <item0
+                                    jcr:primaryType="nt:unstructured"
+                                    cq:styleClasses="cmp-teaser--hero"
+                                    cq:styleId="20260828101"
+                                    cq:styleLabel="Hero"/>
+                            </cq:styles>
+                        </item0>
+                    </cq:styleGroups>
+                </policy_landing_hero_teaser>
             </teaser>
+            <innovation-card jcr:primaryType="nt:unstructured">
+                <policy_landing_card_teaser
+                    jcr:description="Innovation-centre showcase card: image + title + short descriptor + arrow link."
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Landing Page — Card Teaser"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    allowedTypes="[h3]"
+                    titleFromPage="{Boolean}false"
+                    descriptionFromPage="{Boolean}false"
+                    titleType="h3"
+                    imageDelegate="realmac/components/image"
+                    cq:allowSingleSelection="{Boolean}true">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                    <cq:styleGroups jcr:primaryType="nt:unstructured">
+                        <item0 jcr:primaryType="nt:unstructured" cq:styleGroupLabel="Card Variant">
+                            <cq:styles jcr:primaryType="nt:unstructured">
+                                <item0
+                                    jcr:primaryType="nt:unstructured"
+                                    cq:styleClasses="cmp-teaser--innovation-card"
+                                    cq:styleId="20260828104"
+                                    cq:styleLabel="Innovation Card"/>
+                            </cq:styles>
+                        </item0>
+                    </cq:styleGroups>
+                </policy_landing_card_teaser>
+            </innovation-card>
+            <button jcr:primaryType="nt:unstructured">
+                <policy_landing_button
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Landing Page — Button"
+                    jcr:description="Default Core Button options; no landing-page-specific constraint required this run."
+                    sling:resourceType="wcm/core/components/policy/policy">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_landing_button>
+            </button>
             <download jcr:primaryType="nt:unstructured">
                 <policy_1575032193319
                     jcr:description="Sets the title size to H3."

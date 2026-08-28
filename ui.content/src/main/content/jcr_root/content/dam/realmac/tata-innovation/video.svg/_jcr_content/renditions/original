@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="18px" viewBox="0 0 26 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>video</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="video" stroke="#FFFFFF">
+            <rect id="Rectangle-7" x="0.5" y="0.5" width="25" height="17" rx="3"></rect>
+            <path d="M11.2735186,5.42951867 C11.1921942,5.37637447 11.0971492,5.34807284 11,5.34807284 C10.7238576,5.34807284 10.5,5.57193046 10.5,5.84807284 L10.5,12.7717594 C10.5,12.8673673 10.5274115,12.9609707 10.5789854,13.0414754 C10.7279454,13.2739953 11.037196,13.341734 11.269716,13.192774 L16.6198374,9.76530784 C16.6793111,9.72720702 16.7300376,9.67693794 16.7686756,9.61781183 C16.9197357,9.38665075 16.8548011,9.07679922 16.62364,8.92573908 L11.2735186,5.42951867 Z" id="Path-6"></path>
+        </g>
+    </g>
+</svg>

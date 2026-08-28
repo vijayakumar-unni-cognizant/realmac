@@ -1,0 +1,26 @@
+<!--/*
+    Site Header — logo, embedded primary navigation (model-built synthetic resource,
+    no policy resolution), and utility links. See design/component-specifications.md § A.1.
+*/-->
+<header class="cmp-site-header" data-cmp-is="site-header" data-sly-use.model="com.realmac.aem.core.models.SiteHeaderModel">
+    <div class="cmp-site-header__inner">
+        <a class="cmp-site-header__logo" href="${model.logoLinkURL}">
+            <img class="cmp-site-header__logo-image" src="${model.logoFileReference}" alt="${model.logoAlt}"/>
+        </a>
+        <button type="button" class="cmp-site-header__menu-toggle" aria-expanded="false"
+                aria-controls="site-header-nav" aria-label="Open menu" data-cmp-hook-site-header="menuToggle">
+            <span class="cmp-site-header__menu-toggle-icon"></span>
+        </button>
+        <nav class="cmp-site-header__nav" id="site-header-nav" aria-label="Primary" data-cmp-hook-site-header="nav">
+            <div data-sly-resource="${model.navigationResource}"></div>
+        </nav>
+        <ul class="cmp-site-header__utility-links" data-sly-list.link="${model.utilityLinks}">
+            <li class="cmp-site-header__utility-item" data-sly-test="${link.hasContent}">
+                <a class="cmp-site-header__utility-link" href="${link.linkURL}" aria-label="${link.ariaLabel}">
+                    <img class="cmp-site-header__utility-icon" src="${link.iconFileReference}" alt=""/>
+                </a>
+            </li>
+        </ul>
+    </div>
+</header>
+<div data-sly-test="${!model.hasContent}" class="cq-placeholder" data-emptytext="Site Header - Please configure the logo."></div>

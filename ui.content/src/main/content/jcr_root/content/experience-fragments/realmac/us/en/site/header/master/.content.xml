@@ -13,22 +13,28 @@
             jcr:primaryType="nt:unstructured"
             sling:resourceType="realmac/components/container"
             layout="simple">
-            <navigation
+            <site-header
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="realmac/components/navigation"
-                collectAllPages="false"
+                sling:resourceType="realmac/components/site-header"
+                logoFileReference="/content/dam/realmac/tata-innovation/tata-logo.svg"
+                logoAlt="Realmac"
                 navigationRoot="/content/realmac/us/en"
-                skipNavigationRoot="false"
-                structureDepth="1"/>
-            <languagenavigation
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="realmac/components/languagenavigation"
-                navigationRoot="/content/realmac/us"
-                structureDepth="2"/>
-            <search
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="realmac/components/search"
-                searchRoot="/content/realmac/us"/>
+                navigationStructureDepth="{Long}1">
+                <utilityLinks jcr:primaryType="nt:unstructured">
+                    <item0
+                        jcr:primaryType="nt:unstructured"
+                        label="Search"
+                        iconFileReference="/content/dam/realmac/tata-innovation/search.svg"
+                        linkURL="/content/realmac/us/en/search.html"
+                        ariaLabel="Search"/>
+                    <item1
+                        jcr:primaryType="nt:unstructured"
+                        label="Contact"
+                        iconFileReference="/content/dam/realmac/tata-innovation/ContactUs.svg"
+                        linkURL="/content/realmac/us/en/contact.html"
+                        ariaLabel="Contact us"/>
+                </utilityLinks>
+            </site-header>
         </root>
     </jcr:content>
 </jcr:root>

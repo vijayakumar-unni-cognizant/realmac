@@ -1,2 +1,26 @@
 .cmp-text {}
 .cmp-text__paragraph {}
+
+// ==== Tata Innovation Landing Page variant (design/component-specifications.md § B.2) ====
+
+// Intro/overview text — lead paragraph vs body paragraph typography split; centered column.
+.cmp-text--intro-lead {
+    max-width: $content-max-width-text;
+    margin: 0 auto;
+    padding: $space-section-vertical-desktop 0;
+
+    @media (max-width: 767px) { padding: $space-section-vertical-mobile $space-gutter-mobile; }
+
+    p {
+        color: $color-body;
+        font-size: $font-size-intro-body;
+        line-height: 1.6;
+        margin-bottom: $space-paragraph;
+    }
+
+    p:first-of-type {
+        font-size: $font-size-intro-lead;
+        font-weight: 400;
+        line-height: 1.5;
+    }
+}

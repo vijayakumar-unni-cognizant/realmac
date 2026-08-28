@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2023 Adobe Systems Incorporated
+# Copyright 2026 Adobe Systems Incorporated
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,17 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# start a single X11 server and pass the server's address to each Cypress instance using DISPLAY variable
-pkill Xvfb
-echo 'start xvfb'
-Xvfb :99 -screen 0 1280x1024x24 -ac -nolisten tcp -nolisten unix &
-export DISPLAY=:99
-echo 'checking Xvfb'
-ps aux | grep Xvfb
-# disable color output when running Cypress
-export NO_COLOR=1
+# Migrated from Cypress to Playwright — run 2026-08-28T1200Z-tata-innovation-page.
+# Playwright runs headless in the mcr.microsoft.com/playwright base image — no Xvfb needed.
 
-# setup proxy environment variables
+# setup proxy environment variables (Cloud Manager EaaS convention — preserved verbatim)
 if [ -n "${PROXY_HOST:-}" ]; then
   if [ -n "${PROXY_HTTPS_PORT:-}" ]; then
     export HTTP_PROXY="https://${PROXY_HOST}:${PROXY_HTTPS_PORT}"
@@ -36,9 +29,9 @@ if [ -n "${PROXY_HOST:-}" ]; then
   fi
   if [ -n "${PROXY_OBSERVABILITY_PORT:-}" ] && [ -n "${HTTP_PROXY:-}" ]; then
     echo "Waiting for proxy"
-    curl --silent  --retry ${PROXY_RETRY_ATTEMPTS:-3} --retry-connrefused --retry-delay ${PROXY_RETRY_DELAY:-10} \
-      --proxy ${HTTP_PROXY} --proxy-cacert ${PROXY_CA_PATH:-""} \
-      ${PROXY_HOST}:${PROXY_OBSERVABILITY_PORT}
+    curl --silent --retry "${PROXY_RETRY_ATTEMPTS:-3}" --retry-connrefused --retry-delay "${PROXY_RETRY_DELAY:-10}" \
+      --proxy "${HTTP_PROXY}" --proxy-cacert "${PROXY_CA_PATH:-}" \
+      "${PROXY_HOST}:${PROXY_OBSERVABILITY_PORT}"
     if [ $? -ne 0 ]; then
       echo "Proxy is not ready"
       exit 1
@@ -46,5 +39,5 @@ if [ -n "${PROXY_HOST:-}" ]; then
   fi
 fi
 
-# execute tests
-npm test
+# JUnit XML is written to $REPORTS_PATH per the Cloud Manager UI-testing contract.
+npx playwright test
