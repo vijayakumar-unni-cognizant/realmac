@@ -1,0 +1,109 @@
+.cmp-site-footer {}
+.cmp-site-footer__inner {}
+.cmp-site-footer__logo {}
+.cmp-site-footer__columns {}
+.cmp-site-footer__column {}
+.cmp-site-footer__column-heading {}
+.cmp-site-footer__link-list {}
+.cmp-site-footer__link {}
+.cmp-site-footer__social {}
+.cmp-site-footer__social-item {}
+.cmp-site-footer__social-link {}
+.cmp-site-footer__social-icon {}
+.cmp-site-footer__legal {}
+.cmp-site-footer__legal-text {}
+
+// ==== Tata Innovation Landing Page — site-footer chrome
+//      (design/component-specifications.md § A.2 / § C.2; reference-deconstruction.md Region 5) ====
+//      Dark background (#1a1a1a) — every text-carrying descendant below sets its own explicit
+//      foreground color per best-practices B13 (no reliance on inheritance).
+
+.cmp-site-footer {
+    background-color: $color-footer-bg;
+    border-top: 1px solid $color-footer-divider;
+    color: $color-inverse-fg-muted;
+    padding: $space-section-vertical-desktop 24px $space-section-vertical-mobile;
+
+    &__inner {
+        max-width: $content-max-width-grid;
+        margin: 0 auto;
+    }
+
+    &__logo {
+        display: block;
+        height: 32px;
+        margin-bottom: 24px;
+    }
+
+    &__columns {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); // desktop
+        gap: $space-footer-column-gap-desktop;
+
+        @media (max-width: 767px) {
+            grid-template-columns: 1fr; // stacked
+            gap: $space-footer-column-gap-mobile;
+        }
+    }
+
+    &__column-heading {
+        font-size: $font-size-footer-heading;
+        font-weight: 700;
+        color: $color-inverse-fg;
+        margin: 0 0 12px;
+    }
+
+    &__link-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            margin-bottom: 8px;
+        }
+    }
+
+    &__link {
+        font-size: $font-size-footer-link;
+        color: $color-inverse-fg-muted;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            color: $color-inverse-fg;
+            text-decoration: underline;
+        }
+    }
+
+    &__social {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; // desktop
+        gap: $space-social-gap;
+        margin: 32px 0 0;
+        padding: 0;
+        list-style: none;
+
+        @media (max-width: 767px) {
+            justify-content: center;
+        }
+    }
+
+    &__social-icon {
+        display: block;
+        width: 24px;
+        height: 24px;
+    }
+
+    &__legal {
+        margin-top: $space-section-vertical-mobile;
+        padding-top: 16px;
+        border-top: 1px solid $color-footer-divider;
+    }
+
+    &__legal-text {
+        font-size: $font-size-legal;
+        color: $color-legal;
+        margin: 0;
+    }
+}

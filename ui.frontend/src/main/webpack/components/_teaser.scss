@@ -7,3 +7,113 @@
 .cmp-teaser__description {}
 .cmp-teaser__action-container {}
 .cmp-teaser__action-link {}
+
+// ==== Tata Innovation Landing Page variants (design/component-specifications.md § B.1 / § B.4) ====
+
+// Hero banner — full-bleed image, dark scrim, overlaid H1 title. No CTA (actionsDisabled on policy).
+.cmp-teaser--hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    height: 480px; // desktop
+
+    @media (max-width: 1199px) { height: 360px; } // tablet
+    @media (max-width: 767px)  { height: 280px; }  // mobile
+
+    .cmp-teaser__image {
+        position: absolute;
+        inset: 0;
+        z-index: $z-hero-image;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: $z-hero-scrim;
+            background-image: linear-gradient(to bottom, $color-scrim-top 0%, $color-scrim-bottom 100%);
+        }
+    }
+
+    .cmp-teaser__content {
+        position: relative;
+        z-index: $z-hero-content;
+        padding: 0 $space-hero-inset-desktop $space-hero-inset-desktop;
+
+        @media (max-width: 767px) { padding: 0 $space-hero-inset-mobile $space-hero-inset-mobile; }
+    }
+
+    .cmp-teaser__title {
+        color: $color-inverse-fg;
+        font-weight: 700;
+        font-size: $font-size-hero-title-desktop;
+
+        @media (max-width: 1199px) { font-size: $font-size-hero-title-tablet; }
+        @media (max-width: 767px)  { font-size: $font-size-hero-title-mobile; }
+    }
+
+    // actionsDisabled is set on policy_landing_hero_teaser; this is belt-and-suspenders.
+    .cmp-teaser__action-container,
+    .cmp-teaser__action-link { display: none; }
+}
+
+// Innovation showcase card — image-top card, title, optional descriptor, arrow-style CTA.
+.cmp-teaser--innovation-card {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid $color-hairline;
+    border-radius: $radius-card;
+    overflow: hidden;
+
+    .cmp-teaser__image {
+        // Core Teaser v2 emits .cmp-teaser__content before .cmp-teaser__image in the DOM;
+        // `order` puts the image visually first without disturbing tab/keyboard order (D7).
+        order: -1;
+
+        img {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            aspect-ratio: 1.38; // ~360:260 supplied card image ratio
+            object-fit: cover;
+        }
+    }
+
+    .cmp-teaser__content {
+        order: 0;
+        padding: 20px 20px 24px;
+    }
+
+    .cmp-teaser__title {
+        font-size: $font-size-card-title-desktop;
+        font-weight: 700;
+        color: $color-heading;
+
+        @media (max-width: 767px) { font-size: $font-size-card-title-mobile; }
+    }
+
+    .cmp-teaser__description {
+        font-size: $font-size-card-body;
+        color: $color-body-muted;
+        margin-top: 8px;
+    }
+
+    .cmp-teaser__action-link {
+        display: inline-block;
+        margin-top: 16px;
+        align-self: flex-end;
+        font-size: $font-size-card-cta;
+        font-weight: 500;
+        color: $color-accent-link;
+
+        &::after { content: ' \2192'; } // arrow glyph, no filled button per R4
+    }
+}

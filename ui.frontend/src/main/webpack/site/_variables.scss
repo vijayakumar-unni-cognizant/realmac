@@ -16,3 +16,63 @@ $color-link:            #2020E0;
 $color-foreground-dark: invert($color-foreground);
 $color-background-dark: invert($color-background);
 $color-link-dark:       invert($color-link);
+
+//== Tata Innovation Landing Page — pinned tokens (design/design-token-audit.md)
+//   Light-mode only; run 2026-08-28T1200Z-tata-innovation-page.
+
+// Colors
+$color-page-bg:                    #ffffff;
+$color-heading:                    #1a1a1a;
+$color-body:                       #333333;
+$color-body-muted:                 #555555;
+$color-hairline:                   #e5e5e5;
+$color-inverse-fg:                 #ffffff;
+$color-inverse-fg-muted:           #cccccc;
+$color-footer-bg:                  #1a1a1a;
+$color-footer-divider:             rgba(255, 255, 255, 0.1);
+$color-legal:                      #999999;
+$color-scrim-top:                  rgba(0, 0, 0, 0.25);
+$color-scrim-bottom:                rgba(0, 0, 0, 0.45);
+$color-accent-link:                #0a66c2;
+
+// Typography (font family reuses $font-family above)
+$font-size-hero-title-desktop:     56px;
+$font-size-hero-title-tablet:      36px;
+$font-size-hero-title-mobile:      28px;
+$font-size-nav:                    15px;
+$font-size-intro-lead:             21px;
+$font-size-intro-body:             16px;
+$font-size-intro-heading-desktop:  26px;
+$font-size-intro-heading-mobile:   22px;
+$font-size-card-title-desktop:     20px;
+$font-size-card-title-mobile:      18px;
+$font-size-card-body:              14px;
+$font-size-card-cta:               14px;
+$font-size-footer-heading:         15px;
+$font-size-footer-link:            13px;
+$font-size-legal:                  12px;
+
+// Spacing
+$space-section-vertical-desktop:   56px;
+$space-section-vertical-mobile:    32px;
+$space-paragraph:                  20px;
+$space-gutter-mobile:              20px;
+$space-card-gap:                   24px;
+$space-hero-inset-desktop:         48px;
+$space-hero-inset-mobile:          24px;
+$space-header-nav-gap:             28px;
+$space-utility-icon-gap:           16px;
+$space-footer-column-gap-desktop:  32px;
+$space-footer-column-gap-mobile:   24px;
+$space-social-gap:                 18px;
+$content-max-width-text:           840px;
+$content-max-width-grid:           1200px;
+
+// Radii — 6px is reference-measured; deliberately overrides the generic 16px guardrail default.
+$radius-card:                      6px;
+
+// Z-index
+$z-hero-image:                     1;
+$z-hero-scrim:                     2;
+$z-hero-content:                   3;
+$z-header:                         10;

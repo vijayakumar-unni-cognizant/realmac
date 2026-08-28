@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="18px" viewBox="0 0 24 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Contact Us</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Contact-Us" stroke="#FFFFFF">
+            <path d="M3,3 L9.84425436,9.87310936 C11.2011513,11.3756302 12.651657,11.3756302 14.1957715,9.87310936 C15.7398859,8.37058851 18.0079621,6.07955206 21,3" id="Path-3"></path>
+            <path d="M9,9 L3,15" id="Path-4"></path>
+            <path d="M21,9 L15,15" id="Path-4" transform="translate(18.000000, 12.000000) scale(-1, 1) translate(-18.000000, -12.000000) "></path>
+            <path d="M3,0.5 C1.61928813,0.5 0.5,1.61928813 0.5,3 L0.5,15 C0.5,16.3807119 1.61928813,17.5 3,17.5 L21,17.5 C22.3807119,17.5 23.5,16.3807119 23.5,15 L23.5,3 C23.5,1.61928813 22.3807119,0.5 21,0.5 L3,0.5 Z" id="Rectangle-7"></path>
+        </g>
+    </g>
+</svg>

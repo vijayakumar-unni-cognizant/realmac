@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="dam:Asset">
+    <jcr:content
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            jcr:primaryType="nt:unstructured"
+            dc:title="Video Icon"
+            dc:description="Supplied icon, not referenced by any component this run (no video-modal UI in scope). Seeded for DAM completeness per reference-assets.md."
+            dc:format="image/svg+xml"/>
+    </jcr:content>
+</jcr:root>

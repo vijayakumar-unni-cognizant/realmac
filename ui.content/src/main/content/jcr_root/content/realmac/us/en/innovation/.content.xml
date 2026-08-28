@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Innovation"
+        jcr:description="Explore Realmac's innovation network - research and development centres advancing chemicals, steel, technology, and automotive engineering."
+        cq:template="/conf/realmac/settings/wcm/templates/landing-page"
+        sling:resourceType="realmac/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="realmac/components/container"
+            layout="responsiveGrid">
+            <experiencefragment-header
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="realmac/components/experiencefragment"
+                fragmentVariationPath="/content/experience-fragments/realmac/us/en/site/header/master"/>
+            <container
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="realmac/components/container"
+                layout="responsiveGrid">
+                <container
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="realmac/components/container"
+                    layout="responsiveGrid">
+                    <teaser
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="realmac/components/teaser"
+                        titleFromPage="{Boolean}false"
+                        descriptionFromPage="{Boolean}false"
+                        jcr:title="Innovation"
+                        fileReference="/content/dam/realmac/tata-innovation/about_innovation_banner_desktop_1920x1080.jpg"
+                        imageAlt="Wide exterior view of a research and development facility, representing Realmac's innovation network"
+                        cq:styleIds="[20260828101]"/>
+                    <text
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="realmac/components/text"
+                        textIsRich="{Boolean}true"
+                        cq:styleIds="[20260828102]"
+                        text="&lt;p&gt;Innovation sits at the heart of everything we build, connecting research, engineering, and technology into a single forward-looking strategy.&lt;/p&gt;&#xd;&#xa;&lt;p&gt;Across our network of dedicated centres, multidisciplinary teams explore new materials, sustainable processes, and next-generation platforms &amp;mdash; turning early-stage research into products and services that shape how our businesses compete tomorrow.&lt;/p&gt;&#xd;&#xa;"/>
+                    <title
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="realmac/components/title"
+                        jcr:title="Driving Innovation Across Our Businesses"
+                        type="h2"/>
+                    <container
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="realmac/components/container"
+                        layout="responsiveGrid"
+                        cq:styleIds="[20260828103]">
+                        <card_0
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="realmac/components/innovation-card"
+                            jcr:title="Tata Chemicals Innovation Centre"
+                            jcr:description="Advanced materials and sustainable chemistry research supporting next-generation industrial applications."
+                            fileReference="/content/dam/realmac/tata-innovation/TataChemicals_Desk.jpg"
+                            imageAlt="Tata Chemicals Innovation Centre facility"
+                            actionsEnabled="{Boolean}true"
+                            titleFromPage="{Boolean}false"
+                            descriptionFromPage="{Boolean}false"
+                            cq:styleIds="[20260828104]">
+                            <actions jcr:primaryType="nt:unstructured">
+                                <item0
+                                    jcr:primaryType="nt:unstructured"
+                                    text="Learn More"
+                                    link="/content/realmac/us/en/innovation/tata-chemicals.html"/>
+                            </actions>
+                        </card_0>
+                        <card_1
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="realmac/components/innovation-card"
+                            jcr:title="Tata Steel Europe RD&amp;T"
+                            jcr:description="Research and technology development focused on advanced steel processing and sustainable manufacturing."
+                            fileReference="/content/dam/realmac/tata-innovation/TataSteelEurope_Desk.jpg"
+                            imageAlt="Tata Steel Europe Research, Development and Technology centre"
+                            actionsEnabled="{Boolean}true"
+                            titleFromPage="{Boolean}false"
+                            descriptionFromPage="{Boolean}false"
+                            cq:styleIds="[20260828104]">
+                            <actions jcr:primaryType="nt:unstructured">
+                                <item0
+                                    jcr:primaryType="nt:unstructured"
+                                    text="Learn More"
+                                    link="/content/realmac/us/en/innovation/tata-steel-europe.html"/>
+                            </actions>
+                        </card_1>
+                        <card_2
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="realmac/components/innovation-card"
+                            jcr:title="TCS Innovation Labs"
+                            jcr:description="Applied technology and digital engineering research accelerating enterprise-scale innovation."
+                            fileReference="/content/dam/realmac/tata-innovation/tcsinnovation_information_desktop_360x260.jpg"
+                            imageAlt="TCS Innovation Labs workspace"
+                            actionsEnabled="{Boolean}true"
+                            titleFromPage="{Boolean}false"
+                            descriptionFromPage="{Boolean}false"
+                            cq:styleIds="[20260828104]">
+                            <actions jcr:primaryType="nt:unstructured">
+                                <item0
+                                    jcr:primaryType="nt:unstructured"
+                                    text="Learn More"
+                                    link="/content/realmac/us/en/innovation/tcs-innovation-labs.html"/>
+                            </actions>
+                        </card_2>
+                        <card_3
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="realmac/components/innovation-card"
+                            jcr:title="Tata Motors European Technical Centre"
+                            jcr:description="Automotive engineering and vehicle technology research driving the next generation of mobility."
+                            fileReference="/content/dam/realmac/tata-innovation/TMETC_Desk.jpg"
+                            imageAlt="Tata Motors European Technical Centre engineering facility"
+                            actionsEnabled="{Boolean}true"
+                            titleFromPage="{Boolean}false"
+                            descriptionFromPage="{Boolean}false"
+                            cq:styleIds="[20260828104]">
+                            <actions jcr:primaryType="nt:unstructured">
+                                <item0
+                                    jcr:primaryType="nt:unstructured"
+                                    text="Learn More"
+                                    link="/content/realmac/us/en/innovation/tata-motors-etc.html"/>
+                            </actions>
+                        </card_3>
+                    </container>
+                </container>
+            </container>
+            <experiencefragment-footer
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="realmac/components/experiencefragment"
+                fragmentVariationPath="/content/experience-fragments/realmac/us/en/site/footer/master"/>
+        </root>
+    </jcr:content>
+</jcr:root>

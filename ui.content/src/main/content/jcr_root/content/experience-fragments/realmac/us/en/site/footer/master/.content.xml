@@ -13,14 +13,44 @@
             jcr:primaryType="nt:unstructured"
             sling:resourceType="realmac/components/container"
             layout="responsiveGrid">
-            <separator
+            <site-footer
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="realmac/components/separator"/>
-            <text
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="realmac/components/text"
-                text="&lt;p>Copyright 2026, Realmac.&amp;nbsp;All rights reserved.&lt;/p>&#xd;&#xa;&lt;p>345 Park Avenue,&amp;nbsp;San Jose, CA 95110-2704, USA&lt;/p>&#xd;&#xa;"
-                textIsRich="true"/>
+                sling:resourceType="realmac/components/site-footer"
+                legalText="&#169; 2026 Realmac. All rights reserved.">
+                <columns jcr:primaryType="nt:unstructured">
+                    <item0 jcr:primaryType="nt:unstructured" heading="Company">
+                        <links jcr:primaryType="nt:unstructured">
+                            <item0 jcr:primaryType="nt:unstructured" label="About Us" url="/content/realmac/us/en/about.html"/>
+                            <item1 jcr:primaryType="nt:unstructured" label="Careers" url="/content/realmac/us/en/careers.html"/>
+                            <item2 jcr:primaryType="nt:unstructured" label="Newsroom" url="/content/realmac/us/en/newsroom.html"/>
+                        </links>
+                    </item0>
+                    <item1 jcr:primaryType="nt:unstructured" heading="Innovation">
+                        <links jcr:primaryType="nt:unstructured">
+                            <item0 jcr:primaryType="nt:unstructured" label="Innovation Overview" url="/content/realmac/us/en/innovation.html"/>
+                            <item1 jcr:primaryType="nt:unstructured" label="Research Centres" url="/content/realmac/us/en/innovation.html"/>
+                        </links>
+                    </item1>
+                    <item2 jcr:primaryType="nt:unstructured" heading="Resources">
+                        <links jcr:primaryType="nt:unstructured">
+                            <item0 jcr:primaryType="nt:unstructured" label="Media Library" url="/content/realmac/us/en/media.html"/>
+                            <item1 jcr:primaryType="nt:unstructured" label="Publications" url="/content/realmac/us/en/publications.html"/>
+                        </links>
+                    </item2>
+                    <item3 jcr:primaryType="nt:unstructured" heading="Legal">
+                        <links jcr:primaryType="nt:unstructured">
+                            <item0 jcr:primaryType="nt:unstructured" label="Privacy Policy" url="/content/realmac/us/en/privacy.html"/>
+                            <item1 jcr:primaryType="nt:unstructured" label="Terms of Use" url="/content/realmac/us/en/terms.html"/>
+                        </links>
+                    </item3>
+                </columns>
+                <socialLinks jcr:primaryType="nt:unstructured">
+                    <item0 jcr:primaryType="nt:unstructured" iconFileReference="/content/dam/realmac/tata-innovation/FB.svg" url="https://www.facebook.com/realmac" label="Facebook"/>
+                    <item1 jcr:primaryType="nt:unstructured" iconFileReference="/content/dam/realmac/tata-innovation/Linkedin.svg" url="https://www.linkedin.com/company/realmac" label="LinkedIn"/>
+                    <item2 jcr:primaryType="nt:unstructured" iconFileReference="/content/dam/realmac/tata-innovation/Instagram.svg" url="https://www.instagram.com/realmac" label="Instagram"/>
+                    <item3 jcr:primaryType="nt:unstructured" iconFileReference="/content/dam/realmac/tata-innovation/ContactUs.svg" url="/content/realmac/us/en/contact.html" label="Contact"/>
+                </socialLinks>
+            </site-footer>
         </root>
     </jcr:content>
 </jcr:root>

@@ -1,0 +1,133 @@
+.cmp-site-header {}
+.cmp-site-header__inner {}
+.cmp-site-header__logo {}
+.cmp-site-header__logo-image {}
+.cmp-site-header__menu-toggle {}
+.cmp-site-header__nav {}
+.cmp-site-header__utility-links {}
+.cmp-site-header__utility-item {}
+.cmp-site-header__utility-link {}
+.cmp-site-header__utility-icon {}
+
+// ==== Tata Innovation Landing Page — site-header chrome
+//      (design/component-specifications.md § A.1 / § C.1; reference-deconstruction.md Region 1) ====
+
+.cmp-site-header {
+    position: sticky;
+    top: 0;
+    z-index: $z-header; // sits above the hero banner
+    background-color: $color-page-bg;
+    border-bottom: 1px solid $color-hairline;
+
+    &__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 72px; // desktop
+        padding: 0 24px;
+
+        @media (max-width: 767px) {
+            min-height: 64px;
+        }
+    }
+
+    &__logo {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    &__logo-image {
+        height: 44px; // desktop
+        width: auto;
+
+        @media (max-width: 767px) {
+            height: 32px;
+        }
+    }
+
+    // Hamburger toggle — hidden on desktop, shown below 768px.
+    &__menu-toggle {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        background: none;
+        border: 0;
+        cursor: pointer;
+
+        @media (max-width: 767px) {
+            display: flex;
+        }
+
+        &-icon,
+        &-icon::before,
+        &-icon::after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 8px;
+            right: 8px;
+            height: 2px;
+            background-color: $color-heading;
+        }
+
+        &-icon { top: 50%; transform: translateY(-50%); }
+        &-icon::before { top: -8px; }
+        &-icon::after { top: 8px; }
+    }
+
+    &__nav {
+        display: flex;
+        align-items: center;
+        gap: $space-header-nav-gap;
+
+        // Collapses to an off-canvas menu below 768px; JS toggles [data-cmp-is-open="true"].
+        @media (max-width: 767px) {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+            background-color: $color-page-bg;
+            border-bottom: 1px solid $color-hairline;
+            padding: 8px 24px 16px;
+
+            &[data-cmp-is-open="true"] {
+                display: flex;
+            }
+        }
+
+        a {
+            font-size: $font-size-nav;
+            font-weight: 500;
+            color: $color-heading;
+            text-decoration: none;
+
+            &:hover,
+            &:focus {
+                color: $color-accent-link;
+            }
+        }
+    }
+
+    &__utility-links {
+        display: flex;
+        align-items: center;
+        gap: $space-utility-icon-gap;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__utility-icon {
+        display: block;
+        width: 22px;
+        height: 22px;
+    }
+}
