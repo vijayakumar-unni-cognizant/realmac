@@ -1,0 +1,162 @@
+phase: test
+agent: sentinel
+run_id: 2026-08-28T1200Z-tata-innovation-page
+status: fail   # 3 NEW correctness-class findings + 1 serious a11y threshold miss + 1 LCP threshold miss.
+               # CQ-09 correctly cited as human-accepted (DECISIONS.md 2026-08-28T20:50Z) and does NOT
+               # contribute to this fail. This is the LAST stage of the ADLC run — no agent runs after
+               # Sentinel; this status is the terminal acceptance verdict.
+tracks_used: [ui-tests, nfr-baseline, a11y-deep, seo-deep, observability, authoring-provisions, graphql-content-parity, visual]
+urls_tested:
+  - { url: "https://publish-p185256-e1945105.adobeaemcloud.com/content/realmac/us/en/innovation.html", tier: publish, auth_mode: none }
+  - { url: "https://publish-p185256-e1945105.adobeaemcloud.com/content/experience-fragments/realmac/us/en/site/header/master.html", tier: publish, auth_mode: none }
+  - { url: "https://publish-p185256-e1945105.adobeaemcloud.com/content/experience-fragments/realmac/us/en/site/footer/master.html", tier: publish, auth_mode: none }
+  - { url: "https://author-p185256-e1945105.adobeaemcloud.com/content/experience-fragments/realmac/us/en/site/header/master.html", tier: author, auth_mode: bearer-token }
+report: runs/2026-08-28T1200Z-tata-innovation-page/test/sentinel/sentinel-report.html
+
+environment_targets:
+  author:
+    url: "https://author-p185256-e1945105.adobeaemcloud.com"
+    auth_mode: bearer-token
+    credential_source: ".env → AEM_AUTHOR_BEARER_TOKEN (read at runtime; never printed or written to any artifact)"
+    credential_presence_check: pass   # §0.5 preflight — non-empty, length 1338, checked before any probe
+    probe: { path: "/libs/granite/security/currentuser.json", http_status: 200, identity: "vijayakumar.unni@cognizant.com", identity_home: "/home/users/ims/vija/DJhDuBydeX-vl0-sZl-0" }
+    reachable: true
+  publish:
+    url: "https://publish-p185256-e1945105.adobeaemcloud.com"
+    auth_mode: none
+    probe: { path: "/content/realmac/us/en/innovation.html", http_status: 200 }
+    reachable: true
+tier_routing_respected: true   # authoring-provisions -> author; every other track -> publish
+
+deployed_build_reference:
+  note: >
+    The Lead's resume block explicitly stated the merged commit SHA was not separately supplied and
+    instructed Sentinel to record whatever the live environment itself exposes. Standard AEM version/
+    productinfo introspection endpoints (/system/console/status-productinfo.json,
+    /libs/cq/config/productinfo.json, /system/sling/info.sling.json) all returned 403/404 for this IMS
+    user's permission scope — Sentinel did NOT fabricate a version string. Observable build-fingerprint
+    proxies instead: Publish page `last-modified: Fri, 28 Aug 2026 16:41:30 GMT`, `etag:
+    W/"7649-65a1e1fdc426d"`; clientlib cache-busting hash `clientlib-site.lc-305b3542667708578649e9eb3c6cb5ac`.
+    Auditron's last independently-verified pre-merge build_hash was e260c64ec27823a644bd7c02fc157c09453b45fc
+    (handoffs/auditron.yaml) — Sentinel did not independently re-verify this exact SHA is what is live
+    (no accessible endpoint to do so), and does not claim it is.
+  last_modified_publish: "2026-08-28T16:41:30Z"
+  etag_publish: 'W/"7649-65a1e1fdc426d"'
+  auditron_pre_merge_build_hash: e260c64ec27823a644bd7c02fc157c09453b45fc
+
+findings:
+  - { id: F-HARNESS-01, severity: high, class: correctness, track: ui-tests, page: "ui.tests/test-module/global-setup.js", finding: "global-setup implements credentials-mode login only (admin/admin defaults); this run's Author tier is bearer-token-only; login 403s; Playwright's top-level globalSetup aborts ALL 18 specs (not just the 2 author specs) before any test runs", routed_to: blockwright, disposition: open }
+  - { id: F-HARNESS-02, severity: medium, class: threshold, track: ui-tests, page: "ui.tests/test-module/playwright.config.js", finding: "no Firefox project, no mobile-emulation device project — only publish-chromium/publish-webkit/author-chromium defined", routed_to: blockwright, disposition: open }
+  - { id: F-LINK-01, severity: high, class: correctness, track: "visual/ui-tests/a11y", page: "site-header, site-footer, innovation-card", finding: "dangling internal link targets (never-authored sub-pages) cause Core Components' LinkHandler to correctly-by-design omit anchor+aria-label rendering across 2/2 header utility links, 7/9 footer links, 1/4 footer social links, and 4/4 card CTAs", routed_to: composer, disposition: open }
+  - { id: F-LANDMARK-01, severity: high, class: correctness, track: "a11y/ui-tests", page: "site-header, site-footer (inside their XF wrapper)", finding: "duplicate <header>/<footer> landmarks — the XF wrapper and the component both render the same semantic tag; deterministically fails UI-010/UI-012's toHaveCount(1) assertions and axe's landmark-* rules", routed_to: blockwright, disposition: open }
+  - { id: F-A11Y-01, severity: high, class: threshold, track: a11y-deep, page: "hero (mobile viewport)", finding: "hero H1 color contrast 1.18:1 at 390x844 (requires >=4.5:1 per requirements.yaml); desktop 1440x900 passes", routed_to: blockwright, disposition: open }
+  - { id: F-PERF-01, severity: medium, class: threshold, track: nfr-baseline, page: "hero image (Dynamic Media)", finding: "LCP 3015ms exceeds 2500ms target", routed_to: blockwright, disposition: open }
+  - { id: F-SEO-01, severity: medium, class: threshold, track: seo-deep, page: "<link rel=canonical>", finding: "canonical is a relative path, not absolute; Lighthouse canonical audit fails", routed_to: configsmith, disposition: open }
+  - { id: F-SEO-02, severity: low, class: threshold, track: seo-deep, page: "robots.txt / sitemap.xml", finding: "both 404 on Publish; pre-existing project-level gap, out of this run's requirements.yaml scope", routed_to: configsmith, disposition: informational-out-of-scope }
+  - { id: F-BP-01, severity: low, class: threshold, track: nfr-baseline, page: favicon.ico, finding: "404 causes a Lighthouse errors-in-console Best Practices failure", routed_to: configsmith, disposition: informational-out-of-scope }
+  - { id: F-SEO-03, severity: low, class: threshold, track: seo-deep, page: "<head>", finding: "no OpenGraph tags; not required by this run's requirements.yaml seo scope", routed_to: composer, disposition: informational-out-of-scope }
+  - { id: CQ-09, severity: low, class: threshold, track: "visual/a11y/ui-tests", page: innovation-card, finding: "cards render Core Teaser h2 default + no .cmp-teaser--innovation-card class (nested Content Policy resolution limitation)", routed_to: "n/a", disposition: "accepted_known_gap (DECISIONS.md 2026-08-28T20:50Z)" }
+  - { id: F-INFO-01, severity: info, class: "n/a", track: "nfr-baseline/visual", page: "clientlib-site.css", finding: "CONFIRMED GOOD — Style System clientlib CSS present + correctly compiled on Publish (all expected selectors found, including .cmp-teaser--innovation-card's unapplied-but-present rule); Cloud Manager's frontend build ran as expected; NOT a new blocking finding, explicitly distinguished from CQ-03's local-only Zscaler build-skip", routed_to: "n/a", disposition: confirmed-good }
+
+coverage:
+  matrix: runs/2026-08-28T1200Z-tata-innovation-page/test/sentinel/coverage-matrix.md
+  dispatch: { number: 1, kind: baseline, build_hash: "unknown — see deployed_build_reference note" }
+  scope: { reason: "baseline full run — every ID in ui-test-scenarios.md and authoring-test-cases.md attempted" }
+  id_census:
+    method: "grep -oE '\\b(UI|AUTH|TC)-[0-9]+\\b' <file> | sort -u | wc -l"
+    ui_test_scenarios:     { file: design/ui-test-scenarios.md, total_from_file: 18, ids: [UI-001,UI-002,UI-003,UI-004,UI-005,UI-006,UI-007,UI-008,UI-009,UI-010,UI-011,UI-012,UI-013,UI-014,UI-015,UI-016,UI-017,UI-018] }
+    authoring_test_cases:  { file: design/authoring-test-cases.md, total_from_file: 20, ids: [AUTH-001,AUTH-002,AUTH-003,AUTH-004,AUTH-005,AUTH-006,AUTH-007,AUTH-008,AUTH-009,AUTH-010,AUTH-011,AUTH-012,AUTH-013,AUTH-014,AUTH-015,AUTH-016,AUTH-017,AUTH-018,AUTH-019,AUTH-020] }
+    functional_test_cases: { file: design/functional-test-cases.md, total_from_file: 46, ids: [TC-001,TC-002,TC-003,TC-004,TC-005,TC-006,TC-007,TC-008,TC-009,TC-010,TC-011,TC-012,TC-013,TC-014,TC-015,TC-016,TC-017,TC-018,TC-019,TC-020,TC-021,TC-022,TC-023,TC-024,TC-025,TC-026,TC-027,TC-028,TC-029,TC-030,TC-031,TC-032,TC-033,TC-034,TC-035,TC-036,TC-037,TC-038,TC-039,TC-040,TC-041,TC-042,TC-043,TC-044,TC-045,TC-046] }
+  ui_test_scenarios:     { total: 18, total_from_file: 18, executed: 0, carried_forward: 0, pass: 0, fail: 0, na: 0, blocked: 18 }
+  authoring_test_cases:  { total: 20, total_from_file: 20, executed: 20, carried_forward: 0, pass: 17, fail: 0, na: 3, blocked: 0 }
+  functional_test_cases: { total: 46, total_from_file: 46, sentinel_owned: 6, auditron_owned: 40, executed: 40, carried_forward: 40, pass: 38, fail: 0, na: 6, blocked: 0 }
+  authorization_citations: []
+  carried_forward_ids:
+    - { id: "TC-001..046 (auditron_owned 40)", result: "38 pass / 2 accepted_known_gap", observed_on_dispatch: "auditron iteration 5", observed_on_build: "e260c64ec27823a644bd7c02fc157c09453b45fc (pre-merge)" }
+  blocked_ids:
+    - { id: "UI-001..UI-018", reason: blocked_harness_defect, tier: publish_and_author, note: "F-HARNESS-01 — global-setup.js auth-mode mismatch aborts npm test before any spec executes; NOT blocked_missing_url or blocked_missing_credential (both tier URLs and the bearer credential are present and independently confirmed valid)" }
+  na_reasons:
+    - { id: AUTH-011, reason: "per authoring-test-cases.md's own stated rationale — no bracket-notation multi-value hazard exercised this run" }
+    - { id: AUTH-018, reason: "no empty-required-field content instance deployed this run (disclosed fixture gap, matches Auditron's TC-003/005/009)" }
+    - { id: AUTH-020, reason: "no empty-list content instance deployed this run (disclosed fixture gap, matches Auditron's TC-014/020/025)" }
+    - { id: "TC-003,TC-005,TC-009,TC-014,TC-020,TC-025", reason: "carried forward from Auditron's own disclosed fixture gap — Sentinel does not author new test fixtures (verification-only agent)" }
+
+ui_tests:
+  framework: playwright
+  ui_tests_skipped: true
+  ui_tests_skipped_reason: "harness_auth_mismatch (F-HARNESS-01) — NOT target_unreachable, NOT auth_rejected-at-target (the bearer credential itself is valid); the harness's own global-setup.js auth MECHANISM is incompatible with this run's declared auth mode"
+  browsers_configured: [publish-chromium, publish-webkit, author-chromium]
+  browsers_missing: [firefox, mobile-emulation]   # F-HARNESS-02
+  specs_authored_by: blockwright
+  specs_run: { pass: 0, fail: 0, skipped: 18 }
+  playwright_log: /tmp/aem-playwright.log
+  standalone_sentinel_script: runs/2026-08-28T1200Z-tata-innovation-page/test/sentinel/sentinel-standalone-a11y-visual-sweep.mjs
+  harness_left_unmodified: true   # git status --short ui.tests/ confirmed byte-identical after use
+
+nfr_baseline:
+  lighthouse_scores: { performance: 93, accessibility: 95, best_practices: 96, seo: 92 }
+  performance:
+    lcp_ms: 3015
+    cls: 0.0001515939888213393
+    tbt_ms: 0
+    server_response_ms: 120
+    target_lcp_ms: 2500
+    lcp_verdict: fail
+    bundle_baseline_established: true   # no prior Sentinel baseline existed
+  best_practices:
+    score: 96
+    failing_audits: ["errors-in-console (favicon.ico 404, F-BP-01)"]
+  seo_baseline:
+    title: pass
+    description: pass
+    canonical: fail   # relative URL, F-SEO-01
+    crawlable: pass
+    robots_txt: fail   # 404, F-SEO-02
+
+a11y_deep:
+  method: "standalone script, Playwright's own pinned Chromium library API, full ruleset (wcag2a/2aa/21a/21aa/22aa/best-practice)"
+  per_viewport:
+    - { viewport: "1440x900", critical: 0, serious: 0, moderate: 5, h1_count: 1 }
+    - { viewport: "390x844", critical: 0, serious: 1, moderate: 5, h1_count: 1 }
+  raw: runs/2026-08-28T1200Z-tata-innovation-page/test/sentinel/axe-innovation.json
+
+seo_deep:
+  per_url:
+    - { url: "/content/realmac/us/en/innovation.html", og: fail, jsonld: not_applicable, title_len: pass, desc_len: pass }
+  robots: fail
+  sitemap: fail
+
+observability:
+  status: pass
+  per_url:
+    - { url: "/content/realmac/us/en/innovation.html", acdl_present: true, launch_present: false, launch_required: false, note: "no new Launch/Analytics requirement this run — existing ACDL baseline confirmed unchanged" }
+
+authoring_provisions:
+  status: pass
+  cases_summary: { total: 20, pass: 17, na: 3, fail: 0 }
+  highlight: "AUTH-016 genuine live edit round-trip performed by Sentinel via Sling POST + JCR read-back + author-render re-check + restore"
+
+graphql_content_parity:
+  status: not_applicable
+  reason: "server-rendered Sites page, no CF Models / persisted queries in scope this run (handoffs/composer.yaml -> headless: null; handoffs/strategist.yaml explicitly rejected headless/CF+GraphQL architecture)"
+
+spa_integration:
+  status: not_applicable
+  reason: "no headless/SPA front-end consumer app in this repo"
+
+visual:
+  tier_a:
+    reference_url: "https://www.tata.com/about-us/innovation"
+    reference_extract: runs/2026-08-28T1200Z-tata-innovation-page/test/sentinel/reference-extract-tata-innovation.md
+    viewports_captured: ["1440x900", "390x844"]
+    screenshots:
+      - runs/2026-08-28T1200Z-tata-innovation-page/test/sentinel/screenshots/innovation-desktop.png
+      - runs/2026-08-28T1200Z-tata-innovation-page/test/sentinel/screenshots/innovation-mobile.png
+    regions_evaluated: 6
+    regions_matching_layout_intent: 4
+    regions_diverging: 2   # hero-mobile (F-A11Y-01), card-grid CTA / footer links (F-LINK-01)
+  tier_b:
+    baseline_captured: false
+    note: "no prior baseline existed; this run's screenshots establish the Tier B baseline for future regression comparison"
+
+secrets_in_artifacts_check: pass   # grepped every emitted artifact for the token variable value pattern; none found

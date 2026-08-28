@@ -1,0 +1,204 @@
+phase: integrate
+agent: composer
+run_id: 2026-08-28T1200Z-tata-innovation-page
+status: pass
+tracks_used: [content-seeding]
+
+remediation_iteration_2:
+  trigger: "Auditron iteration-2 Build Gate re-run — 2 HIGH findings (CQ-05, CQ-04)"
+  cq_05_duplicate_sibling_names:
+    file: ui.content/src/main/content/jcr_root/content/realmac/us/en/innovation/.content.xml
+    root_cause: "4 card teasers under the card-grid container were all literally named <teaser>; same-name-siblings are invalid for DocView import — only the last (Tata Motors ETC) would survive on import, collapsing the other 3."
+    fix: "Renamed the 4 sibling nodes to unique DocView node names, in authored order: teaser, teaser_1, teaser_2, teaser_3 (matches AEM authoring UI's own same-resourceType sibling naming convention)."
+    diff_summary:
+      - { old_name: teaser, new_name: teaser, card: "Tata Chemicals Innovation Centre", order: 1, note: "unchanged — was already first and unique" }
+      - { old_name: teaser, new_name: teaser_1, card: "Tata Steel Europe RD&T", order: 2 }
+      - { old_name: teaser, new_name: teaser_2, card: "TCS Innovation Labs", order: 3 }
+      - { old_name: teaser, new_name: teaser_3, card: "Tata Motors European Technical Centre", order: 4 }
+    preserved_verbatim: [jcr:title, jcr:description, fileReference, imageAlt, actionsEnabled, "cq:styleIds=[20260828104] on all 4", nested actions/item0 (text, link), authored order]
+    untouched: [hero teaser node (different parent, sibling of intro text/title, not a card), all other nodes in the file]
+  cq_04_filter_xml_merge_gap:
+    file: ui.content/src/main/content/META-INF/vault/filter.xml
+    approach: "Human-approved Approach A — narrowly-scoped mode=\"replace\" entries added only where investigation showed the existing mode=\"merge\" broad roots genuinely cannot deliver the change; the 3 broad merge roots and the Stage-04 DAM entry left untouched."
+    five_area_investigation:
+      - area: "1. Shared policies subtree (6 new policies + XF-Root amendment)"
+        finding: "policies/.content.xml is ONE docview file serializing the entire /conf/realmac/settings/wcm/policies/realmac subtree (confirmed: only .content.xml + _rep_policy.xml in that dir, no per-node subfolders). git diff confirms this run added 5 new policy_landing_* nodes (intro_text, content, card_grid, hero_teaser, card_teaser) + a new button/policy_landing_button node (=6 new policies), and amended the pre-existing policy_1575040440977 (\"XF Root\") components attribute. Because the aggregate's top-level node (policies/realmac) already existed before this run, mode=\"merge\" treats the whole aggregate as already-present and neither adds the new children nor updates the amended property — matching Auditron's live evidence (5/6 policies 404, XF-Root amendment not live)."
+        needs_new_entry: true
+        entry_added: '<filter root="/conf/realmac/settings/wcm/policies/realmac" mode="replace"/>'
+        scoping_rationale: "Scoped to the realmac node under policies (not the whole /conf/realmac tree). The package's copy of this subtree is the complete current definition (all pre-existing untouched policies — image, title, page, download, form, languagenavigation, experiencefragment, the original container/teaser policies — plus the 6 new + 1 amended), so a replace here is a clean full reinstall of exactly what's in source; nothing outside this run's changes is altered in effect even though the node is technically cleared-then-reinstalled. A further split into 4 per-component-type entries (container/teaser/text/button) was considered and rejected as unnecessary complexity for an identical outcome."
+      - area: "2. landing-page template subtree"
+        finding: "git status shows the entire ui.content/.../conf/realmac/settings/wcm/templates/landing-page/ directory as untracked (??) — i.e. a wholly new path with no pre-existing node at that path. mode=\"merge\" adds missing content normally when there is no existing node blocking it, which is why Auditron TC-027 found status=enabled and allowedPaths correct and live. The template's policies/.content.xml cq:policy references (policy_landing_hero_teaser, policy_landing_card_teaser, policy_landing_intro_text, policy_landing_card_grid, policy_landing_button) point into the shared policies file from area 1 — their prior 404s are area 1's bug surfacing here, not a template-subtree bug."
+        needs_new_entry: false
+        reason: "Brand-new node path deploys fine under the existing broad /conf/realmac merge root. Fixing area 1 resolves the policy-reference 404s. No redundant entry added."
+      - area: "3. XF master jcr:content subtrees (header + footer)"
+        finding: "git status shows both content/experience-fragments/realmac/us/en/site/header/master/.content.xml and .../footer/master/.content.xml as Modified (M) pre-existing nodes — this run genuinely REMOVES legacy children (Navigation/LanguageNavigation/Search from header; Separator/Text from footer) and replaces them with site-header/site-footer. Header's master/_jcr_content/root/logo/logo.svg was also deleted (git diff: D). This is exactly the delete-old-then-install-new case that merge cannot do (merge only adds missing content, never removes or overwrites existing) — matching Auditron's confirmed-broken live evidence (legacy Navigation/LanguageNavigation/Search and Separator/Text still serving)."
+        needs_new_entry: true
+        entries_added:
+          - '<filter root="/content/experience-fragments/realmac/us/en/site/header/master/jcr:content" mode="replace"/>'
+          - '<filter root="/content/experience-fragments/realmac/us/en/site/footer/master/jcr:content" mode="replace"/>'
+        scoping_rationale: "Scoped to exactly the jcr:content node of each master (not the whole header/footer/master page node, not the whole experience-fragments tree) — narrow enough to leave everything else under /content/experience-fragments/realmac on the existing merge root."
+      - area: "4. New sample page (/content/realmac/us/en/innovation)"
+        finding: "git status shows the entire .../content/realmac/us/en/innovation/ directory as untracked (??) — a wholly new child node under the pre-existing /content/realmac/us/en parent. Auditron TC-001 confirmed the page renders (image src/srcset correct) with jcr:primaryType/cq:template resolved live; the only visible defect was missing style classes, which traces to area 1's policy 404s, not to a page-node deployment failure."
+        needs_new_entry: false
+        reason: "New node deploys fine as a new child under the existing /content/realmac merge root. CQ-05's rename fix (this dispatch) + area 1's policy fix are what make the page render fully styled; no filter change needed here."
+      - area: "5. 13 DAM assets (/content/dam/realmac/tata-innovation)"
+        finding: "Confirmed the Stage-04 entry <filter root=\"/content/dam/realmac/tata-innovation\" mode=\"merge\"/> is still present in filter.xml, unchanged, at its original position. Auditron iteration 2 confirmed 13/13 assets deploy and render."
+        needs_new_entry: false
+        reason: "Already fixed and verified in a prior stage; not re-added or duplicated."
+    entries_added_total: 3
+    entries_added_paths: [/conf/realmac/settings/wcm/policies/realmac, /content/experience-fragments/realmac/us/en/site/header/master/jcr:content, /content/experience-fragments/realmac/us/en/site/footer/master/jcr:content]
+    final_filter_xml_diff: |
+      --- a/ui.content/src/main/content/META-INF/vault/filter.xml
+      +++ b/ui.content/src/main/content/META-INF/vault/filter.xml
+       <workspaceFilter version="1.0">
+           <filter root="/conf/realmac" mode="merge"/>
+      +    <filter root="/conf/realmac/settings/wcm/policies/realmac" mode="replace"/>
+           <filter root="/content/realmac" mode="merge"/>
+           <filter root="/content/dam/realmac" mode="merge">
+               <exclude pattern="/content/dam/realmac(/.*)?"/>
+               <include pattern="/content/dam/realmac/jcr:content(/.*)?"/>
+           </filter>
+           <filter root="/content/dam/realmac/asset.jpg" mode="merge"/>
+           <filter root="/content/dam/realmac/tata-innovation" mode="merge"/>
+           <filter root="/content/experience-fragments/realmac" mode="merge"/>
+      +    <filter root="/content/experience-fragments/realmac/us/en/site/header/master/jcr:content" mode="replace"/>
+      +    <filter root="/content/experience-fragments/realmac/us/en/site/footer/master/jcr:content" mode="replace"/>
+       </workspaceFilter>
+    unchanged_confirmed:
+      - "/conf/realmac mode=merge — untouched"
+      - "/content/realmac mode=merge — untouched"
+      - "/content/dam/realmac mode=merge (with exclude/include) — untouched"
+      - "/content/dam/realmac/asset.jpg mode=merge — untouched"
+      - "/content/dam/realmac/tata-innovation mode=merge — untouched (Stage-04 entry)"
+      - "/content/experience-fragments/realmac mode=merge — untouched"
+  constraints_confirmed:
+    ui_apps_core_ui_frontend_pom_touched: false
+    configsmith_policy_xml_content_changed: false
+    mvn_invoked_by_composer: false
+
+headless: null   # no CF Models / persisted queries this run — out of scope per requirements.yaml § out_of_scope
+
+content_seeding:
+  track2_template_registration_verification:
+    method: static-repo-inspection   # no live AEM instance available to this agent; mvn/deploy not invoked per run instructions
+    checked:
+      - { path: /content/realmac/jcr:content, property: cq:allowedTemplates, value: "[/conf/realmac/settings/wcm/templates/(?!xf-).*]", result: present-verbatim }
+      - { path: /content/realmac/us/jcr:content, property: cq:allowedTemplates, result: absent-inherits }
+      - { path: /content/realmac/us/en/jcr:content, property: cq:allowedTemplates, result: absent-inherits }
+      - { path: /conf/realmac/settings/wcm/templates/landing-page/jcr:content, property: status, value: enabled, result: confirmed }
+      - { path: /conf/realmac/settings/wcm/templates/landing-page/jcr:content, property: allowedPaths, value: "[/content/realmac(/.*)?]", result: confirmed }
+    verdict: pass_no_override_needed
+    override_added: false
+    deferred_to: [auditron, sentinel]   # live Create Page wizard UI confirmation requires a running author instance
+  pages_authored:
+    - path: /content/realmac/us/en/innovation
+      template: /conf/realmac/settings/wcm/templates/landing-page
+      component_count: 7   # hero teaser + intro text + optional h2 title + card-grid container + 4 card teasers
+      authoring_depth_verified: "jcr:content/root/container/container/* (matches D11/C9)"
+      cq_styleids_resolve_to_policy_styleids: true
+      style_ids_used:
+        - { component: "hero teaser", styleId: 20260828101, styleClasses: cmp-teaser--hero }
+        - { component: "intro text", styleId: 20260828102, styleClasses: cmp-text--intro-lead }
+        - { component: "card-grid container", styleId: 20260828103, styleClasses: cmp-container--card-grid }
+        - { component: "card teaser (x4, each individually styled per C13)", styleId: 20260828104, styleClasses: cmp-teaser--innovation-card }
+  header_footer_master_xf_replacement:
+    header:
+      path: /content/experience-fragments/realmac/us/en/site/header/master
+      removed: [navigation, languagenavigation, search]
+      added: [site-header]
+      genuine_replace_not_addition: true
+      orphaned_content_removed: "_jcr_content/root/logo/logo.svg — stray undeclared binary from prior state, deleted"
+    footer:
+      path: /content/experience-fragments/realmac/us/en/site/footer/master
+      removed: [separator, text]
+      added: [site-footer]
+      genuine_replace_not_addition: true
+      legal_text_neutral_verified: true   # "© 2026 Realmac. All rights reserved." — Tata's copyright/address text not carried forward
+  dam_assets_seeded:
+    - { path: /content/dam/realmac/tata-innovation/about_innovation_banner_desktop_1920x1080.jpg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/TataChemicals_Desk.jpg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/TataSteelEurope_Desk.jpg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/TMETC_Desk.jpg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/tcsinnovation_information_desktop_360x260.jpg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/tata-logo.svg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/search.svg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/video.svg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/close.svg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/ContactUs.svg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/FB.svg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/Instagram.svg, source: local-fixture }
+    - { path: /content/dam/realmac/tata-innovation/Linkedin.svg, source: local-fixture }
+  dam_seeding_integrity:
+    total_manifest: 13
+    total_seeded: 13
+    checksum_verification: "sha1 diff of source fixture vs seeded original rendition — all 13 match"
+    raster_dimensions_measured_not_invented: true   # tiff:ImageWidth/ImageLength authored from actual measured pixel dimensions (System.Drawing), never fabricated
+    every_dam_asset_has_binary_and_rendition: true   # C11 — no bare dam:Asset node
+    filter_xml_fix_applied: "added <filter root=\"/content/dam/realmac/tata-innovation\" mode=\"merge\"/> — the parent /content/dam/realmac filter excludes everything except jcr:content and the pre-existing asset.jpg sibling; without this explicit root, the new folder would not have been packaged"
+  fixture_manifest: runs/2026-08-28T1200Z-tata-innovation-page/integrate/composer/dam-fixture-manifest.yaml
+  content_fidelity:
+    reference_role: visual-reference-only   # no source-content-inventory.md this run — reference does not carry content per reference-assets.md
+    invented_copy_scope: "intro text (lead+strategy paragraph), optional h2 sub-heading, 4 card descriptors, footer column labels/links, header/footer neutral demo URLs — all original, mirroring the reference's structure, not its sentences"
+    tata_verbatim_copy_used: false
+    business_unit_names_kept_as_structural_placeholders:
+      - "Tata Chemicals Innovation Centre"
+      - "Tata Steel Europe RD&T"
+      - "TCS Innovation Labs"
+      - "Tata Motors European Technical Centre"
+      flagged_per_dispatch_allowance: true
+  smoke_render_request:
+    target_urls: [/content/realmac/us/en/innovation.html]
+    expected_selectors: [.cmp-site-header, .cmp-teaser--hero, .cmp-text--intro-lead, .cmp-container--card-grid, .cmp-teaser--innovation-card, .cmp-site-footer]
+    handed_to: pilot
+
+self_verification:
+  cq_styleids_resolve_to_policy_styleids: true
+  authoring_depth_matches_template_innermost_parsys: true
+  every_dam_asset_has_binary_and_rendition: true
+  reference_integrity_all_paths_resolve: true
+  no_protected_jcr_properties_authored: true
+  xml_namespace_prefixes_declared_for_all_used_prefixes: true
+  no_double_hyphen_in_xml_comments: true
+  content_only_in_ui_content: true
+  no_mvn_invoked: true
+
+report: runs/2026-08-28T1200Z-tata-innovation-page/integrate/composer/content-seeding-report.md
+
+open_items_for_downstream:
+  - { owner: auditron, item: "Confirm C11/C4/C7/C13 static checks against this run's authored files (13 DAM assets, header/footer master XFs, sample page)." }
+  - { owner: auditron, item: "Run local autoInstallSinglePackage and re-verify Track 2 template registration live in the Create Page wizard at /content/realmac/us/en — this agent's verification was static/on-disk only, no running AEM instance was available." }
+  - { owner: sentinel, item: "Real-environment activation confirmation for the sample page, its 13 DAM assets, and both master XFs (AUTH-017) — deferred, as expected." }
+  - { owner: pilot, item: "Smoke-render /content/realmac/us/en/innovation.html per the selector list above once deployed." }
+
+remediation_cq_07:
+  trigger: "Auditron finding CQ-07 — card-grid's 4 sample-page card nodes still referenced sling:resourceType=realmac/components/teaser after Blockwright scaffolded realmac/components/innovation-card and Configsmith re-keyed the card-grid policy allowlist + mapping tree to it."
+  file: ui.content/src/main/content/jcr_root/content/realmac/us/en/innovation/.content.xml
+  pre_checks:
+    innovation_card_component_exists_on_disk:
+      confirmed: true
+      evidence: "ui.apps/src/main/content/jcr_root/apps/realmac/components/innovation-card/.content.xml present — jcr:primaryType=cq:Component, sling:resourceSuperType=realmac/components/teaser, componentGroup='Realmac - Content', jcr:title='Innovation Card' (thin proxy, per Blockwright)."
+    policy_rekeying_landed:
+      confirmed: true
+      evidence:
+        - "ui.content/.../conf/realmac/settings/wcm/policies/.content.xml line 351: policy_landing_card_grid's allowlist is components=\"[realmac/components/innovation-card]\" — keys on innovation-card, not teaser."
+        - "ui.content/.../conf/realmac/settings/wcm/templates/landing-page/policies/.content.xml lines 56-57: the card-grid's policy-mapping segment has a child node named <innovation-card cq:policy=\"realmac/components/innovation-card/policy_landing_card_teaser\">, not <teaser>."
+      would_have_stopped_if: "either check had still said teaser — did not need to stop."
+  resourcetype_diff:
+    - { node_name_before: teaser,   node_name_after: card_0, card: "Tata Chemicals Innovation Centre",              resourceType_before: realmac/components/teaser, resourceType_after: realmac/components/innovation-card }
+    - { node_name_before: teaser_1, node_name_after: card_1, card: "Tata Steel Europe RD&T",                        resourceType_before: realmac/components/teaser, resourceType_after: realmac/components/innovation-card }
+    - { node_name_before: teaser_2, node_name_after: card_2, card: "TCS Innovation Labs",                           resourceType_before: realmac/components/teaser, resourceType_after: realmac/components/innovation-card }
+    - { node_name_before: teaser_3, node_name_after: card_3, card: "Tata Motors European Technical Centre",         resourceType_before: realmac/components/teaser, resourceType_after: realmac/components/innovation-card }
+  node_rename_rationale: "Renamed teaser/teaser_1/teaser_2/teaser_3 to card_0/card_1/card_2/card_3 now that the nodes are no longer literally teaser instances (they proxy innovation-card). Names remain unique DocView siblings; authored order preserved exactly (Tata Chemicals, Tata Steel Europe, TCS Innovation Labs, Tata Motors ETC)."
+  preserved_verbatim_per_card: [jcr:title, jcr:description, fileReference, imageAlt, actionsEnabled, "cq:styleIds=[20260828104]", nested actions/item0 (text + link), authored order]
+  untouched:
+    - "hero teaser node (root/container/container/teaser) — different parent, sling:resourceType=realmac/components/teaser unchanged, out of scope per dispatch"
+    - "intro text, title, card-grid container, experiencefragment-header, experiencefragment-footer nodes"
+    - "all other files: no ui.apps, core, ui.frontend, or policy XML touched"
+  filter_xml_no_change:
+    confirmed: true
+    reasoning: "Verified META-INF/vault/filter.xml still has <filter root=\"/content/realmac\" mode=\"merge\"/> — this is a content-only edit (resourceType attribute + node rename) inside an already-covered, pre-existing page node under that broad merge root. The new realmac/components/innovation-card component lives under /apps, packaged by ui.apps's own default coverage, not ui.content's filter.xml. No filter.xml edit was made or needed."
+  constraints_confirmed:
+    ui_apps_core_ui_frontend_pom_touched: false
+    policy_xml_touched: false
+    filter_xml_touched: false
+    mvn_invoked_by_composer: false

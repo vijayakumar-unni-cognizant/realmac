@@ -1,0 +1,134 @@
+phase: implement
+agent: configsmith
+run_id: 2026-08-28T1200Z-tata-innovation-page
+status: pass
+tracks_used: [security]
+
+policy_provisioning:
+  landing_page_template:
+    mapping_file: ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/templates/landing-page/policies/.content.xml
+    matches_policy_mapping_md_section_1: verbatim
+    nested_resourcetype_fallback_segments_preserved: true
+  new_policy_nodes:
+    - { path: realmac/components/container/policy_landing_content, purpose: "editable parsys allowlist", components: [realmac/components/teaser, realmac/components/text, realmac/components/title, realmac/components/image, realmac/components/button, realmac/components/container] }
+    - { path: realmac/components/teaser/policy_landing_hero_teaser, purpose: "hero teaser, h1, no CTA", titleType: h1, allowedTypes: [h1], actionsDisabled: true, styleId: 20260828101 }
+    - { path: realmac/components/text/policy_landing_intro_text, purpose: "intro text, cloned RTE + intro-lead variant", styleId: 20260828102 }
+    - { path: realmac/components/container/policy_landing_card_grid, purpose: "card-grid allowlist (teaser only)", components: [realmac/components/teaser], styleId: 20260828103 }
+    - { path: realmac/components/teaser/policy_landing_card_teaser, purpose: "card teaser, h3, CTA retained", titleType: h3, allowedTypes: [h3], styleId: 20260828104 }
+    - { path: realmac/components/button/policy_landing_button, purpose: "minimal default policy, satisfies G1 only" }
+  consolidated_policies_file: ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/policies/.content.xml
+  reused_policies_verified:
+    all_match_documented_shape: true
+    checked:
+      - realmac/components/page/policy
+      - realmac/components/container/policy_1574694950110
+      - realmac/components/experiencefragment/policy_header
+      - realmac/components/experiencefragment/policy_footer
+      - realmac/components/container/policy_649128221558427
+      - realmac/components/title/policy_641528232375303
+      - realmac/components/image/policy_651483963895698
+    discrepancies_found: []
+
+xf_root_amendment:
+  path: realmac/components/container/policy_1575040440977
+  file: ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/policies/.content.xml
+  change_type: additive
+  before: "components=[group:Realmac - Content,/apps/realmac/components/form/container]"
+  after: "components=[group:Realmac - Content,/apps/realmac/components/form/container,group:Realmac - Structure]"
+  other_properties_touched: false
+  precondition_for: composer (site-header/site-footer authoring in header/footer master XFs)
+  observed_not_remediated:
+    - item: "resourceType-fallback segment under this policy's template mapping (templates/xf-web-variation/policies/.content.xml) is named <mysite> instead of <realmac>, unlike page-content and the new landing-page mapping."
+      impact: "none currently — the only nested resource under site-header (embedded Navigation) is a synthetic data-sly-resource call, not policy-resolved."
+      routed_to: auditron
+      action_taken: none (explicitly out of scope this run, human-approved)
+
+security:
+  repoinit_scripts: []
+  service_users: []
+  service_user_gap_check:
+    assumption_verified: true
+    finding: "No service user / ACL / repoinit change needed. Both new Sling Models are pure read-side (@ValueMapValue/@ChildResource), no ResourceResolverFactory service-user usage, no write-back, no external integration."
+  review:
+    findings_summary: { high: 0, medium: 0, low: 4 }
+    findings:
+      - { severity: low, id: L1, summary: "pathfields correctly rootPath-scoped, no open-redirect surface", disposition: pass }
+      - { severity: low, id: L2, summary: "legalText is plain textfield not RTE — no stored-XSS surface", disposition: pass }
+      - { severity: low, id: L3, summary: "fileupload fields use allowUpload=false, forcing DAM-only asset selection", disposition: pass }
+      - { severity: low, id: L4, summary: "pre-existing <mysite> vs <realmac> naming oddity in xf-web-variation policy mapping", disposition: accepted_not_remediated }
+    blocks_promotion: false
+    report_path: runs/2026-08-28T1200Z-tata-innovation-page/implement/configsmith/security-review.md
+    caveat: "site-header/site-footer ui.apps/core code was not yet on disk at review time (Blockwright's parallel track) — review performed against approved design artifacts (component-specifications.md, dialog-specifications.md). Recommend re-verification once Blockwright's actual diff lands."
+
+dispatcher:
+  files_changed: []
+  validator_result: not_applicable
+  cdn_changes: []
+  note: "No dispatcher/ directory exists in this repo; standard cacheable Sites page under /content/realmac requires no dispatcher/CDN change. Confirmed, not added speculatively."
+
+gate_self_check:
+  every_new_policy_matches_spec_verbatim: true
+  policy_mapping_tree_matches_spec_verbatim: true
+  xf_root_amended_additively_only: true
+  zero_wildcard_allowlists_introduced: true
+  zero_high_severity_findings: true
+  no_ui_apps_core_ui_frontend_files_touched: true
+  no_mvn_invoked: true
+
+outputs:
+  - ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/templates/landing-page/policies/.content.xml
+  - ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/policies/.content.xml
+  - runs/2026-08-28T1200Z-tata-innovation-page/implement/configsmith/security-review.md
+  - runs/2026-08-28T1200Z-tata-innovation-page/handoffs/configsmith.yaml
+
+open_items_for_downstream:
+  - { owner: auditron, item: "Observed (not remediated per run scope): xf-web-variation policy mapping's resourceType-fallback segment named <mysite> instead of <realmac>. No current impact; flag for a future hardening pass." }
+  - { owner: composer, item: "XF Root policy_1575040440977 now allows group:Realmac - Structure — site-header/site-footer are authorable in the header/footer master XFs. Precondition satisfied." }
+  - { owner: program_agent, item: "Re-run/spot-check this security review once Blockwright's site-header/site-footer ui.apps + core code lands on disk, since this review was performed against design artifacts (no code diff existed at review time)." }
+
+remediation_cq07:
+  dispatch: dispatch/10b-configsmith-cq07.md
+  human_approved_plan_revision: "realmac/components/innovation-card thin proxy (sling:resourceSuperType=realmac/components/teaser), created in parallel by blockwright, gives the 4 card teasers a distinct resourceType from the hero so AEM's runtime Content Policy resolution stops conflating the two author-droppable nesting depths under one resourceType."
+  root_cause_recap: "AEM's runtime Content Policy resolution does not differentiate realmac/components/teaser at 2 different author-droppable nesting depths (hero vs. card-grid) under landing-page's mapping tree — live-confirmed by Auditron/Program Agent: all 4 cards resolved the hero's policy (h1, styleId 20260828101) instead of their own (h3, styleId 20260828104)."
+  fixes_applied:
+    - id: fix_1
+      description: "policy_landing_card_grid allowlist re-keyed from teaser to the new proxy — least-privilege, also prevents an author from ever re-dropping a plain teaser into card-grid and re-triggering the ambiguity."
+      file: ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/policies/.content.xml
+      node: realmac/components/container/policy_landing_card_grid
+      diff:
+        before: 'components="[realmac/components/teaser]"'
+        after: 'components="[realmac/components/innovation-card]"'
+    - id: fix_2
+      description: "landing-page template mapping tree, card-grid's nested fallback segment re-keyed from teaser to innovation-card (element name = resourceType-fallback key) and cq:policy repointed to the new resourceType's own policy namespace. Outer parsys-level hero mapping (one level up) explicitly left untouched."
+      file: ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/templates/landing-page/policies/.content.xml
+      path: jcr:content/root/container/container/realmac/components/container/realmac/components (card-grid's nested segment)
+      diff:
+        before: '<teaser cq:policy="realmac/components/teaser/policy_landing_card_teaser" .../>'
+        after: '<innovation-card cq:policy="realmac/components/innovation-card/policy_landing_card_teaser" .../>'
+    - id: fix_3
+      description: "policy_landing_card_teaser definition MOVED (not duplicated) from under the <teaser> component node to a new sibling <innovation-card> component node in the consolidated policies file, mirroring the file's existing per-component-type nesting convention. policy_landing_hero_teaser left exactly where it was, under <teaser>."
+      file: ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/policies/.content.xml
+      diff:
+        before: "policy_landing_card_teaser nested under <teaser jcr:primaryType=\"nt:unstructured\"> alongside policy_1575031387650 and policy_landing_hero_teaser"
+        after: "policy_landing_card_teaser nested under new sibling node <innovation-card jcr:primaryType=\"nt:unstructured\"> (only child); <teaser> now contains only policy_1575031387650 and policy_landing_hero_teaser; zero duplication — grepped both nodes to confirm exactly one occurrence of policy_landing_card_teaser in the file"
+  hero_mapping_untouched_confirmation:
+    verified: true
+    method: "re-read both files directly after all 3 edits"
+    detail: "templates/landing-page/policies/.content.xml jcr:content/root/container/container/realmac/components/teaser still reads cq:policy=\"realmac/components/teaser/policy_landing_hero_teaser\" with sling:resourceType=\"wcm/core/components/policies/mapping\" — byte-identical to pre-fix state, one level up from the card-grid's own <realmac><components> segment, still keys on plain teaser. policies/.content.xml's <teaser> node still contains policy_landing_hero_teaser (h1, styleId 20260828101, cq:styleClasses=cmp-teaser--hero) unchanged."
+  scope_confirmation:
+    ui_apps_touched: false
+    core_touched: false
+    ui_frontend_touched: false
+    pom_files_touched: false
+    filter_xml_touched: false
+    mvn_invoked: false
+    files_touched_this_remediation:
+      - ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/policies/.content.xml
+      - ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/templates/landing-page/policies/.content.xml
+  gate_self_check_cq07:
+    policy_landing_card_grid_allowlist_is_exactly_innovation_card: true
+    card_grid_nested_segment_keys_on_innovation_card: true
+    policy_landing_card_teaser_lives_under_innovation_card_only_no_duplication: true
+    hero_mapping_verified_unchanged: true
+    no_out_of_scope_files_touched: true
+    no_mvn_invoked: true

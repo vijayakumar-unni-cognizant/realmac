@@ -1,0 +1,80 @@
+phase: plan
+agent: strategist
+run_id: 2026-08-28T1200Z-tata-innovation-page
+status: pass
+artifacts:
+  requirements: runs/2026-08-28T1200Z-tata-innovation-page/plan/requirements.yaml
+  solution_architecture: runs/2026-08-28T1200Z-tata-innovation-page/plan/technical-specifications.md
+  reference_deconstruction: runs/2026-08-28T1200Z-tata-innovation-page/plan/reference-deconstruction.md
+
+architecture_pattern: server-rendered-sites
+architecture_rationale: >
+  Public, SEO-relevant, editor-authored marketing page with dialog-authored text+image content;
+  no cross-surface structured-content reuse -> Headless CF+GraphQL / Hybrid / Universal Editor rejected.
+
+reference_role_classification:
+  - source: https://www.tata.com/about-us/innovation
+    role: visual-reference-only
+    dom_css_transplant: forbidden
+    copy_owner: composer
+
+component_triage:
+  hero_banner:      { class: A, target: realmac/components/teaser, variant: cmp-teaser--hero, new: false }
+  intro_text:       { class: A, target: realmac/components/text, variant: cmp-text--intro-lead, new: false }
+  card_grid:        { class: A, target: realmac/components/container, variant: cmp-container--card-grid, new: false }
+  showcase_card:    { class: A, target: realmac/components/teaser, variant: cmp-teaser--innovation-card, new: false }
+  site_header:      { class: C, target: realmac/components/site-header, new: true, reason: "S8 header - one atomic chrome surface" }
+  site_footer:      { class: C, target: realmac/components/site-footer, new: true, reason: "S8 footer - one atomic chrome surface" }
+net_new_components: [site-header, site-footer]
+
+template_decision:
+  choice: new-template
+  name: landing-page
+  template_type: /conf/realmac/settings/wcm/template-types/page (reused)
+  reason: >
+    S10 - existing page-content renders a structural page-title H1 the innovation layout does not want,
+    and page-content is the shared base template (blast radius). New landing-page variant clones the
+    S1 EF-chrome pattern + cq:responsive breakpoints, drops the structural Title.
+  allowed_templates_paths: [/content/realmac, /content/realmac/us, /content/realmac/us/en]
+
+work_breakdown:
+  - { stage: plan,      agent: strategist,  task: "requirements + architecture + work breakdown + reference deconstruction", inputs: [intake, .aem-skills-config.yaml, reference-url, supplied-assets], expected_artifact: "plan/*.{yaml,md}" }
+  - { stage: design,    agent: designforge, task: "component/dialog specs, Style System variant specs, landing-page template spec (D8-D12,D22), design-token-audit, functional + Playwright test-case specs; cite reference-deconstruction per region", inputs: [plan/*], expected_artifact: "design/component-specifications.md, design/template-spec.md, design/design-token-audit.md, design/test-cases.md, handoffs/designforge.yaml" }
+  - { stage: implement, agent: blockwright, task: "author site-header/site-footer (HTL+dialog+SlingModel+wcm.io tests), landing-page template structure (B3-B6), SCSS partials, Core-Teaser variant hooks; AUTHOR (not execute) Playwright specs in ui.tests", inputs: [design/*, plan/reference-deconstruction.md], expected_artifact: "ui.apps + core + ui.frontend + ui.content + ui.tests, handoffs/blockwright.yaml" }
+  - { stage: implement, agent: configsmith, task: "content policies + mappings for landing-page (G1-G4), Style System variant definitions for hero/card/card-grid/intro; no dispatcher/OSGi change", inputs: [design/*, blockwright-template], expected_artifact: "ui.content policies, handoffs/configsmith.yaml" }
+  - { stage: implement, agent: composer,    task: "seed 8 DAM assets (C11), author header+footer EF content (S1,S8), sample page /content/realmac/us/en/innovation as cq:Page (S3) + meta + neutral demo copy, register cq:allowedTemplates (S4), C7-C10 checks", inputs: [design/*, template+policies, supplied-assets], expected_artifact: "ui.content DAM+EF+page, handoffs/composer.yaml" }
+  - { stage: test,      agent: auditron,    task: "Build Validation Gate: mvn clean install green + unit tests + best-practices + policy/Style-System resolution (Checks 20-21); local install side-effect", inputs: [all handoffs, repo], expected_artifact: "handoffs/auditron.yaml" }
+  - { stage: release,   agent: pilot,       task: "raise PR (feature/realmac-landing-page -> master)", inputs: [handoffs/auditron.yaml], expected_artifact: "runs/2026-08-28T1200Z-tata-innovation-page/deploy/pr-request.md" }
+  - { stage: gate,      agent: human,       task: "Lead: review/merge PR, deploy to real env, then record real-environment validation approval in DECISIONS.md", inputs: [handoffs/pilot.yaml], expected_artifact: "DECISIONS.md § real-environment validation approval block (real env URL + auth mode)" }
+  - { stage: test,      agent: sentinel,    task: "NFR gate against the REAL environment URL (LAST stage) - performance/a11y/SEO/Tier-A visual diff/Playwright execution. DEFERRED this run (no env URL)", inputs: [DECISIONS.md, handoffs/auditron.yaml, plan/reference-deconstruction.md], expected_artifact: "handoffs/sentinel.yaml" }
+
+parallel_groups:
+  - [blockwright, configsmith, composer]   # after designforge; template-structure handoff may be serialized first
+
+human_checkpoints_required:
+  - architecture_review                     # after strategist (this stage)
+  - real_environment_validation_approval    # after pilot PR + Lead manual deploy, before sentinel
+  - sentinel_remediation_approval           # CONDITIONAL - only if Sentinel fails at resume
+
+nfr_owners:
+  performance:      sentinel   # deferred - no env URL this run
+  accessibility:    sentinel   # deferred
+  seo:              sentinel   # deferred
+  visual_fidelity:  sentinel   # deferred (Tier-A visual diff vs reference-deconstruction)
+  security:         configsmith
+  playwright_authoring: blockwright  # authored this run; executed by sentinel/Cloud Manager at resume
+
+open_questions_blocking: []
+open_questions_nonblocking: [Q-001, Q-002, Q-003, Q-004]
+
+out_of_adlc_scope:
+  - Cloud Manager Dev/Stage/Prod pipeline triggers + approvals + Stage soak (Lead)
+  - PR merge / Adobe Git sync / real-env deploy (Lead, manual)
+  - post-deploy operations (rollback, incident triage, postmortems)
+  - Sentinel NFR + Playwright EXECUTION (deferred pending real env URL + auth mode)
+  - production branding replacement for Tata demo assets
+
+notes:
+  - No external integration (bridgesmith not in roster).
+  - Sentinel scheduled as LAST stage against real env URL; deferred this session.
+  - Tata logo/brand = demo-only; licensing risk flagged for human/Lead.

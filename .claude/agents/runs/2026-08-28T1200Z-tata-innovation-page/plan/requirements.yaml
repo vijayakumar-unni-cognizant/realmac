@@ -1,0 +1,188 @@
+intake_source: "https://www.tata.com/about-us/innovation (visual-reference-only) + local assets C:\\Users\\2489691\\Downloads\\tata-innovation-assets"
+run_id: 2026-08-28T1200Z-tata-innovation-page
+project: realmac
+
+reference_sources:
+  - source: "https://www.tata.com/about-us/innovation"
+    role: visual-reference-only          # per S9.a — layout/structure/color are truth; copy authored fresh
+    copy_owner: composer                 # Composer supplies neutral demo copy mirroring reference structure
+    dom_css_transplant: forbidden
+  - source: "C:\\Users\\2489691\\Downloads\\tata-innovation-assets"
+    role: content-asset-source           # 8 supplied binaries seeded to DAM by Composer
+    dam_target: /content/dam/realmac/tata-innovation/
+
+goals:
+  - Deliver a new, fully server-rendered AEMaaCS Sites page that visually matches the Tata innovation reference layout (header, hero, intro, 4-card showcase grid, footer).
+  - Maximize reuse of existing realmac Core-Component proxies; introduce net-new components only for header/footer chrome that no single Core Component captures.
+  - Produce a previewable sample page under /content/realmac authored with the supplied DAM assets.
+  - Keep the build green (mvn clean install) as Auditron's Build Validation Gate.
+
+personas:
+  - id: P-content-author
+    label: Content author / marketer authoring the innovation landing page in AEM.
+  - id: P-site-visitor
+    label: Public visitor reading the innovation page on desktop/tablet/mobile.
+  - id: P-developer
+    label: realmac developer maintaining components, template, and SCSS.
+
+user_stories:
+  - id: US-001
+    as: P-site-visitor
+    want: a full-bleed hero banner with an "Innovation" title overlaid on the supplied banner image
+    so_that: the page opens with a strong branded visual matching the reference
+    acceptance_criteria:
+      - Hero renders full viewport width using about_innovation_banner_desktop_1920x1080.jpg from the DAM.
+      - A single H1-level title ("Innovation") is overlaid with a dark scrim ensuring >=4.5:1 contrast.
+      - No CTA button in the hero (matches reference).
+      - Hero image is responsive (Core Image v3 srcset), retains 16:9 framing, and scales title down at tablet/mobile per reference-deconstruction Region 2.
+    domain: sites
+    candidate_agents: [designforge, blockwright, configsmith, composer]
+  - id: US-002
+    as: P-site-visitor
+    want: an intro/overview text block with a lead paragraph and body copy
+    so_that: I understand the innovation strategy narrative below the hero
+    acceptance_criteria:
+      - Single centered column (~900px max-width), left-aligned rich text.
+      - Distinct lead-paragraph typography (~20-22px) vs body (~16px) per reference-deconstruction Region 3.
+      - Authored via the reused Core Text proxy (realmac/components/text); no new component.
+    domain: sites
+    candidate_agents: [designforge, blockwright, configsmith, composer]
+  - id: US-003
+    as: P-site-visitor
+    want: a showcase grid of 4 innovation-centre cards (image + title + link)
+    so_that: I can browse and navigate to the featured innovation centres
+    acceptance_criteria:
+      - 4 cards render in a 2-column grid at desktop/tablet, single column below 768px.
+      - Each card = image (top, ~1.38:1) + title + arrow-style link, authored with the supplied card images.
+      - Cards use the reused Core Teaser proxy (realmac/components/teaser) styled as a card variant; grid via a Core Container proxy Style System variant. No new component.
+      - Card gap, radius, and surface match reference-deconstruction Region 4.
+    domain: sites
+    candidate_agents: [designforge, blockwright, configsmith, composer]
+  - id: US-004
+    as: P-site-visitor
+    want: a header with logo, primary navigation, and utility icons (search, contact)
+    so_that: the page has consistent site chrome matching the reference
+    acceptance_criteria:
+      - Header authored as an Experience Fragment referenced by the template structure (S1).
+      - Logo (tata-logo.svg), primary nav, and utility icons (search.svg, ContactUs.svg) render in one horizontal row.
+      - Collapses to a mobile menu below 768px.
+    domain: sites
+    candidate_agents: [designforge, blockwright, configsmith, composer]
+  - id: US-005
+    as: P-site-visitor
+    want: a footer with grouped link columns, a social-icon row, and a legal/copyright bar
+    so_that: the page has complete site chrome matching the reference
+    acceptance_criteria:
+      - Footer authored as an Experience Fragment referenced by the template structure (S1).
+      - Multi-column links + social icons (FB.svg, Linkedin.svg, Instagram.svg, ContactUs.svg) + copyright line on a dark background.
+      - Authored as ONE cohesive footer component (not fragmented into multiple Text blocks — S8); neutral realmac copyright, not Tata's.
+    domain: sites
+    candidate_agents: [designforge, blockwright, configsmith, composer]
+  - id: US-006
+    as: P-content-author
+    want: an editable template with content policies for this page type
+    so_that: I can author the innovation page and future similar pages with the right allowed components
+    acceptance_criteria:
+      - A template (reused page-content OR new landing-page variant — see technical-specifications §Template strategy) is registered via cq:allowedTemplates at /content/realmac, /content/realmac/us, /content/realmac/us/en (S4).
+      - Structure references header/footer EFs (S1); content parsys uses the project container proxy (S2).
+      - Every editable container/component has a resolving content policy (G1) and the page policy has a clientlibs mapping (G2).
+    domain: sites
+    candidate_agents: [designforge, blockwright, configsmith, composer]
+  - id: US-007
+    as: P-content-author
+    want: a sample authored page seeded with the supplied assets
+    so_that: the full layout is previewable end-to-end after build
+    acceptance_criteria:
+      - Sample page authored at /content/realmac/us/en/innovation with all intermediate segments as cq:Page (S3).
+      - 8 supplied assets seeded under /content/dam/realmac/tata-innovation/ with binaries (no dam:Asset without a rendition — C11).
+      - Page renders hero + intro + 4 cards + header/footer EF chrome without "Please configure" placeholders.
+    domain: sites
+    candidate_agents: [composer, blockwright]
+  - id: US-008
+    as: P-developer
+    want: SCSS partials for typography, spacing, layout, and responsive breakpoints in ui.frontend
+    so_that: the rendered page matches the reference deconstruction across breakpoints
+    acceptance_criteria:
+      - SCSS authored under ui.frontend/src/main/webpack for hero variant, card grid, card, intro, header, footer.
+      - Selectors are element/BEM-based against Core Component output classes (.cmp-teaser, .cmp-container, .cmp-image) — no DOM restructuring (S6/B5).
+      - Breakpoints align with template cq:responsive (768/1200) and reference-deconstruction tokens.
+    domain: sites
+    candidate_agents: [blockwright, designforge]
+  - id: US-009
+    as: P-developer
+    want: Sling Models with wcm.io AEM Mocks unit tests for any new Java-backed component
+    so_that: new components are testable and the build passes
+    acceptance_criteria:
+      - Each net-new component (site-header, site-footer) has a Sling Model under com.realmac.aem.core plus a wcm.io AEM Mocks unit test.
+      - No deprecated AEM APIs used (verified via best-practices).
+      - mvn clean install is green including new tests.
+    domain: sites
+    candidate_agents: [blockwright, auditron]
+  - id: US-010
+    as: P-developer
+    want: Playwright UI test specs authored (not executed) pre-deploy
+    so_that: Cloud Manager Custom UI Testing runs Playwright (not Cypress) against the deployed page
+    acceptance_criteria:
+      - Playwright specs authored under ui.tests covering hero render, 4-card grid, header/footer presence, responsive collapse.
+      - Specs are authored only this session (execution deferred to Sentinel/Cloud Manager with real env URLs).
+    domain: sites
+    candidate_agents: [blockwright, auditron, sentinel]
+
+nfr:
+  performance:
+    lcp_ms_target: 2500
+    inp_ms_target: 200
+    cls_target: 0.1
+    ttfb_ms_target: 600
+    notes: "Hero 1920x1080 is the LCP element — mitigate with Core Image v3 responsive srcset + explicit dimensions (CLS) + eager/priority hint."
+  security:
+    - No external system integration in this run (no API/webhook/IDP touchpoints).
+    - Tata logo/brand supplied for demo only — production branding/licensing risk flagged (see risks).
+    - Standard AEMaaCS dispatcher/CDN caching for a published Sites page; no secrets introduced.
+  accessibility: WCAG-2.1-AA
+  accessibility_notes:
+    - Semantic heading order: hero H1, section H2, card titles H3.
+    - Alt text on hero + all 4 card images; aria-labels on icon-only links (search, social, contact).
+    - Scrim contrast >=4.5:1 for hero title; footer light-on-dark >=4.5:1.
+    - Keyboard focus states and visible focus ring on nav, cards, and footer links.
+  seo:
+    - Server-rendered HTML (no client-only hydration for primary content).
+    - Single H1, descriptive page title + meta description authored on the sample page.
+    - Semantic landmarks (header/main/footer), descriptive link text or aria-label for arrow CTAs.
+  browsers:
+    - Last 2 versions of Chrome, Edge, Firefox, Safari.
+    - iOS Safari and Android Chrome (current).
+  i18n:
+    - Page authored under existing /content/realmac/us/en language root.
+    - English only for this demo; structure remains locale-ready.
+
+out_of_scope:
+  - Headless/GraphQL/Content Fragment Model architecture (no cross-surface reuse need identified).
+  - Any external system integration (Bridgesmith not in this run's roster).
+  - Live/real-environment deploy this session (Auditron -> Pilot PR -> pause).
+  - Sentinel NFR + Playwright EXECUTION this session (deferred pending environment URLs).
+  - Cloud Manager Dev/Stage/Prod pipeline sequencing and post-deploy operations (see technical-specifications §Out of ADLC scope).
+  - Production Tata branding — demo asset use only.
+  - Dark-mode toggle behavior is treated as optional/low-priority enhancement, not a fidelity blocker.
+
+open_questions:
+  - id: Q-001
+    statement: "Confirm reuse of existing page-content template vs a new landing-page template variant. Default recommendation is a NEW landing-page variant (S10) because page-content's structure renders a structural page-title H1 the innovation layout does not want, and page-content is the shared base template (blast radius)."
+    blocking: false
+  - id: Q-002
+    statement: "Exact demo copy for intro paragraphs and card descriptors — Composer to author neutral copy mirroring the reference structure (reference is visual-only, not content-of-truth)."
+    blocking: false
+  - id: Q-003
+    statement: "Real environment URL(s) + auth mode for Sentinel's post-deploy NFR/visual gate — deferred; supplied at resume by the Lead."
+    blocking: false
+  - id: Q-004
+    statement: "Production branding replacement for the Tata demo logo/brand before any non-demo use — human/Lead decision."
+    blocking: false
+
+constraints:
+  - AEMaaCS, Java 21, Maven groupId com.realmac / artifactId realmac; Java package base com.realmac.aem.core.
+  - App root /apps/realmac; conf /conf/realmac; content /content/realmac; DAM /content/dam/realmac.
+  - Component group "Realmac - Content" (content) / "Realmac - Structure" (nav-type chrome), per existing convention.
+  - Mutable (ui.content: content, templates, EFs, policies) vs immutable (ui.apps: components, clientlib structure; core: Java) split respected.
+  - New components must extend existing project proxies / Core Components before net-new (S5/S6/S8); no raw core/wcm/... resourceType in content.
+  - No deprecated AEM API (verified via best-practices skill).

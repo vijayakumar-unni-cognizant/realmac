@@ -1,0 +1,202 @@
+phase: implement
+agent: blockwright
+run_id: 2026-08-28T1200Z-tata-innovation-page
+status: pass
+tracks_used: [components, templates, services, ui-tests]
+
+components_created:
+  - name: site-header
+    paths:
+      - ui.apps/src/main/content/jcr_root/apps/realmac/components/site-header/.content.xml
+      - ui.apps/src/main/content/jcr_root/apps/realmac/components/site-header/site-header.html
+      - ui.apps/src/main/content/jcr_root/apps/realmac/components/site-header/_cq_dialog/.content.xml
+    model_class: com.realmac.aem.core.models.SiteHeaderModel
+    child_models: [com.realmac.aem.core.models.UtilityLink]
+    test_class: core/src/test/java/com/realmac/aem/core/models/SiteHeaderModelTest.java
+    scss_partial: ui.frontend/src/main/webpack/components/_site-header.scss
+    js_partial: ui.frontend/src/main/webpack/components/_site-header.js
+    extends: none (standalone custom component)
+    component_group: "Realmac - Structure"
+  - name: site-footer
+    paths:
+      - ui.apps/src/main/content/jcr_root/apps/realmac/components/site-footer/.content.xml
+      - ui.apps/src/main/content/jcr_root/apps/realmac/components/site-footer/site-footer.html
+      - ui.apps/src/main/content/jcr_root/apps/realmac/components/site-footer/_cq_dialog/.content.xml
+    model_class: com.realmac.aem.core.models.SiteFooterModel
+    child_models: [com.realmac.aem.core.models.FooterColumn, com.realmac.aem.core.models.FooterLink, com.realmac.aem.core.models.SocialLink]
+    test_class: core/src/test/java/com/realmac/aem/core/models/SiteFooterModelTest.java
+    scss_partial: ui.frontend/src/main/webpack/components/_site-footer.scss
+    extends: none (standalone custom component)
+    component_group: "Realmac - Structure"
+
+components_extended: []   # 4 Style System variants only — no new component, no dialog/HTL changes (D12)
+
+style_system_variants:
+  - { type: realmac/components/teaser, variant_class: cmp-teaser--hero, scss_file: ui.frontend/src/main/webpack/components/_teaser.scss }
+  - { type: realmac/components/teaser, variant_class: cmp-teaser--innovation-card, scss_file: ui.frontend/src/main/webpack/components/_teaser.scss }
+  - { type: realmac/components/text, variant_class: cmp-text--intro-lead, scss_file: ui.frontend/src/main/webpack/components/_text.scss }
+  - { type: realmac/components/container, variant_class: cmp-container--card-grid, scss_file: ui.frontend/src/main/webpack/components/_container.scss, selector_chain: ".cmp-container--card-grid > .cmp-container > .aem-Grid" }
+
+templates:
+  - name: landing-page
+    path: ui.content/src/main/content/jcr_root/conf/realmac/settings/wcm/templates/landing-page
+    subtrees_authored_by_blockwright: [.content.xml, structure/.content.xml, initial/.content.xml]
+    subtrees_authored_by_configsmith: [policies/.content.xml]
+    allowed_components: []   # policy allowlists owned by configsmith — see handoffs/configsmith.yaml
+    locked_chrome: [root/experiencefragment-header, root/experiencefragment-footer]
+    structural_title_node: absent (D22 — hero teaser owns the page H1)
+    content_roots_wired: []   # existing permissive cq:allowedTemplates regex at /content/realmac already covers this template — no edit required (Composer to verify)
+    forbidden_attributes_checklist_verified: true
+
+services:
+  - type: build-side (ui.frontend clientlib JS — no OSGi service)
+    path: ui.frontend/src/main/webpack/components/_site-header.js
+    tests: none (client-side behavior; no server-side unit-testable logic)
+    config: none
+
+workflows: []
+
+migration: null
+
+ui_tests:
+  harness_state_on_entry: migrated-from-cypress
+  playwright_version: "1.49.1"
+  cypress_fully_removed: true
+  package_lock_regenerated: true
+  pom_and_assembly_unmodified: true
+  specs_authored:
+    - { scenario_id: UI-001, spec: ui.tests/test-module/tests/publish/ui-001-hero-desktop.spec.js }
+    - { scenario_id: UI-002, spec: ui.tests/test-module/tests/publish/ui-002-hero-tablet.spec.js }
+    - { scenario_id: UI-003, spec: ui.tests/test-module/tests/publish/ui-003-hero-mobile.spec.js }
+    - { scenario_id: UI-004, spec: ui.tests/test-module/tests/publish/ui-004-hero-no-cta.spec.js }
+    - { scenario_id: UI-005, spec: ui.tests/test-module/tests/publish/ui-005-intro-typography.spec.js }
+    - { scenario_id: UI-006, spec: ui.tests/test-module/tests/publish/ui-006-card-grid-desktop.spec.js }
+    - { scenario_id: UI-007, spec: ui.tests/test-module/tests/publish/ui-007-card-grid-tablet.spec.js }
+    - { scenario_id: UI-008, spec: ui.tests/test-module/tests/publish/ui-008-card-grid-mobile.spec.js }
+    - { scenario_id: UI-009, spec: ui.tests/test-module/tests/publish/ui-009-card-cta-navigation.spec.js }
+    - { scenario_id: UI-010, spec: ui.tests/test-module/tests/publish/ui-010-header-desktop.spec.js }
+    - { scenario_id: UI-011, spec: ui.tests/test-module/tests/publish/ui-011-header-mobile-collapse.spec.js }
+    - { scenario_id: UI-012, spec: ui.tests/test-module/tests/publish/ui-012-footer-desktop.spec.js }
+    - { scenario_id: UI-013, spec: ui.tests/test-module/tests/publish/ui-013-footer-mobile-stack.spec.js }
+    - { scenario_id: UI-014, spec: ui.tests/test-module/tests/publish/ui-014-landmarks.spec.js }
+    - { scenario_id: UI-015, spec: ui.tests/test-module/tests/publish/ui-015-a11y-scan.spec.js }
+    - { scenario_id: UI-016, spec: ui.tests/test-module/tests/publish/ui-016-keyboard-focus.spec.js }
+    - { scenario_id: UI-017, spec: ui.tests/test-module/tests/author/ui-017-site-header-dialog-roundtrip.spec.js }
+    - { scenario_id: UI-018, spec: ui.tests/test-module/tests/author/ui-018-site-footer-dialog-roundtrip.spec.js }
+  scenario_coverage: { scenarios_total: 18, scenarios_with_spec: 18, unmapped: [] }
+  discovery: { command: "npx playwright test --list", exit_code: 0, specs_discovered: 18, tests_discovered: 38 }
+  eslint_clean: true
+  tier_parameterization: { author_env_var: AEM_AUTHOR_URL, publish_env_var: AEM_PUBLISH_URL, hardcoded_hosts: false, hardcoded_credentials: false }
+  executed: false
+  report: runs/2026-08-28T1200Z-tata-innovation-page/implement/blockwright/implementation-notes.md
+
+best_practice_fixes_applied: []   # greenfield code — no legacy pattern to migrate; re-scan confirmed no anti-patterns introduced
+
+service_user_requests: []   # both models are pure read-side (@ValueMapValue/@ChildResource-equivalent); no service user needed — confirmed also by configsmith's security review
+
+runtime_style_system_classes: "skipped(not-yet-deployed — ui.apps/ui.content not yet installed to local SDK; Auditron owns the local install per the Build Validation Gate)"
+
+followups:
+  - "Re-run B8 runtime smoke render after Auditron's autoInstallSinglePackage: curl the seeded landing page for .cmp-teaser--hero, .cmp-container--card-grid, .cmp-site-header, .cmp-site-footer class presence."
+  - "Sentinel: verify the Granite dialog selectors in ui-017/ui-018 against the live author instance's actual AEM version; adjust selectors only if needed, not the assertions."
+  - "Program Agent: Configsmith flagged its security review was performed against design artifacts before this agent's code diff existed — recommend re-verification now that ui.apps/core code is on disk (no service user / write-back / external call was introduced, so expected to be a no-op re-confirmation)."
+
+build_result: deferred-to-build-gate
+
+# ---------------------------------------------------------------------------
+# Remediation — Auditron Build Validation Gate iteration 1 FAILED (2 findings:
+# CQ-01, CQ-02). A 3rd finding (CQ-03) was investigated and RESOLVED by the
+# human as a pre-existing, intentional, local-build-only Zscaler workaround
+# across pom.xml (root), ui.apps/pom.xml (commented realmac.ui.frontend zip
+# dependency), and ui.frontend/pom.xml — explicitly NOT in this agent's scope
+# and NOT touched in this remediation pass.
+# ---------------------------------------------------------------------------
+remediation:
+  gate_iteration: 1
+  findings_addressed: [CQ-01, CQ-02]
+  finding_not_owned: { id: CQ-03, status: resolved-by-human, note: "pre-existing local-build-only Zscaler workaround across pom.xml / ui.apps/pom.xml / ui.frontend/pom.xml; out of scope, not touched" }
+
+  cq_01:
+    title: "data-sly-list misuse in site-footer.html"
+    file: ui.apps/src/main/content/jcr_root/apps/realmac/components/site-footer/site-footer.html
+    fix: "Changed both occurrences of data-sly-list (on the repeating <nav class=cmp-site-footer__column> and the repeating <li> inside the link list) to data-sly-repeat, since data-sly-list repeats only a host element's CONTENT, not the host element itself. Left site-header.html's own data-sly-list.link (correctly placed on the <ul> wrapper, repeating <li> as content) untouched."
+    diff_summary:
+      - "line ~10: data-sly-list.column=\"${model.columns}\" -> data-sly-repeat.column=\"${model.columns}\" on <nav class=\"cmp-site-footer__column\">"
+      - "line ~14: data-sly-list.link=\"${column.links}\" -> data-sly-repeat.link=\"${column.links}\" on <li>"
+    lines_changed_only_these: true
+
+  cq_02:
+    title: "HTL unknown-option build failure on site-header.html (navigationRoot/structureDepth data-sly-resource options not in allowedExpressionOptions)"
+    option_used: B
+    option_a_considered: true
+    option_a_rejected_reason: "Not needed — Option B (model-built synthetic resource) worked cleanly with the existing project idiom (ResourceWrapper + ValueMapDecorator, already-used SlingObject-injected Resource field), so no htl-maven-plugin pom.xml change was required at all. Falling back to Option A would have meant editing ui.apps/pom.xml unnecessarily, which the human flagged as risky given the adjacent commented-out realmac.ui.frontend dependency block."
+    files_changed:
+      - core/src/main/java/com/realmac/aem/core/models/SiteHeaderModel.java
+      - core/src/test/java/com/realmac/aem/core/models/SiteHeaderModelTest.java
+      - ui.apps/src/main/content/jcr_root/apps/realmac/components/site-header/site-header.html
+    diff_summary:
+      - "SiteHeaderModel.java: added NAVIGATION_RESOURCE_TYPE constant, a navigationResource field, and buildNavigationResource() — builds a ResourceWrapper(resource) subclass overriding getValueMap() (backed by a ValueMapDecorator pre-populated with sling:resourceType=realmac/components/navigation, navigationRoot, structureDepth), getResourceType(), and adaptTo(ValueMap.class). Wired into init() via @PostConstruct. Added public Resource getNavigationResource() accessor."
+      - "SiteHeaderModelTest.java: added testNavigationResource_carriesNavigationRootStructureDepthAndResourceType() asserting the returned resource's getResourceType() and ValueMap (navigationRoot, structureDepth, sling:resourceType) plus its ValueMap.class adaptTo path."
+      - "site-header.html: replaced the synthetic data-sly-resource with custom @-options (resourceType/navigationRoot/structureDepth) with a plain data-sly-resource=\"${model.navigationResource}\" reference — no expression options at all, so htl-maven-plugin's allowedExpressionOptions validation is never triggered for this line. Updated the top comment to reflect the model-built resource."
+    ui_apps_pom_xml_touched: false
+
+  untouchable_files_confirmation:
+    root_pom_xml_touched: false
+    ui_frontend_pom_xml_touched: false
+    ui_apps_pom_xml_touched: false
+    ui_apps_pom_xml_commented_dependency_block_touched: false
+    verification_method: "git diff --stat -- pom.xml ui.frontend/pom.xml ui.apps/pom.xml compared against pre-dispatch git status; all 3 pre-existing modifications are the human's CQ-03 local-only edits already present before this dispatch began — none re-touched or added to by this remediation pass."
+
+  mvn_invoked: false
+  npm_install_or_webpack_invoked: false
+  next_step: "Auditron re-verifies via Build Validation Gate iteration 2."
+
+remediation_iteration_3:
+  gate_iteration: 3
+  findings_addressed: [CQ-06, CQ-07]
+
+  cq_06:
+    title: "data-sly-test co-located with data-sly-repeat on the same element in site-footer.html suppresses the entire repeated block"
+    file: ui.apps/src/main/content/jcr_root/apps/realmac/components/site-footer/site-footer.html
+    root_cause: "Per HTL block-statement execution order, data-sly-test is evaluated before data-sly-repeat binds its loop variable when both sit on one element, so the test always evaluates against an undefined column/link and the block is always suppressed. All 4 authored footer link columns rendered as a completely empty div.cmp-site-footer__columns."
+    fix: "Mirrored the already-correct social-list idiom: data-sly-repeat stays on the wrapper element only; data-sly-test moves onto a nested non-rendering sly element inside it, so the test now evaluates after the loop variable is bound. Applied to both the column nav and the nested link li."
+    lines_changed_only_these: true
+    other_content_in_file_touched: false
+
+  cq_07:
+    title: "AEM runtime Content Policy resolution does not differentiate realmac/components/teaser at 2 different author-droppable nesting depths (hero vs card-grid); all 4 cards resolved the hero policy (h1, styleId 101, zero card styling)"
+    approach: "Option A, thin sling:resourceSuperType proxy component, human-approved (DECISIONS.md 2026-08-28T19:55Z)"
+    component_created:
+      name: innovation-card
+      path: ui.apps/src/main/content/jcr_root/apps/realmac/components/innovation-card/.content.xml
+      resource_super_type: realmac/components/teaser
+      component_group: "Realmac - Content"
+      files_authored: [ui.apps/src/main/content/jcr_root/apps/realmac/components/innovation-card/.content.xml]
+      files_deliberately_not_created: [html, cq_dialog, cq_editConfig, SlingModel, unit_test]
+      reason_pure_proxy_sufficient: "innovation-card inherits 100 percent of realmac/components/teaser's HTL, dialog, and Java Sling Model via the sling:resourceSuperType chain (Sling Resource Merger resolves scripts/dialogs by walking resourceSuperType). realmac/components/teaser itself carries no HTL/dialog of its own; it is itself a pure proxy of core/wcm/components/teaser/v2/teaser with imageDelegate=realmac/components/image, and its cq_editConfig.xml is explicitly cq:inherit=true, confirming the project's own established convention that a proxy-only .content.xml is sufficient for this chain. Pointing at realmac/components/teaser (not directly at Core's v2 teaser) preserves the project's imageDelegate override and any future project-level teaser customization automatically. No concrete reason found to author anything beyond the single .content.xml."
+    scss_impact_confirmation:
+      claim: "No SCSS changes needed."
+      verified: true
+      evidence: "Grepped ui.frontend for innovation-card: single hit at ui.frontend/src/main/webpack/components/_teaser.scss line 67, selector .cmp-teaser--innovation-card, targeting Core Teaser's own BEM output classes (.cmp-teaser, .cmp-teaser__ children). Since innovation-card resolves the same inherited HTL as realmac/components/teaser (Core Teaser v2's HTL, unmodified), an innovation-card instance's rendered DOM emits the identical cmp-teaser/cmp-teaser__ class structure as a plain teaser instance; the only difference is which cq:styleIds/policy resolves against the new distinct resourceType, not the DOM shape. Existing SCSS partial requires zero edits; not touched this iteration."
+      no_dom_divergence_found: true
+    dependencies_on_other_specialists:
+      configsmith: "Updates policy_landing_card_grid allowlist (teaser -> innovation-card) and the landing-page policy mapping tree's card-grid segment to key on innovation-card's resourceType, dispatched in parallel against this same agreed resourceType name."
+      composer: "Swaps the 4 card content nodes' sling:resourceType from realmac/components/teaser to realmac/components/innovation-card in the sample page, held until both this dispatch and configsmith's pass their gates."
+
+  files_touched_this_iteration:
+    - ui.apps/src/main/content/jcr_root/apps/realmac/components/site-footer/site-footer.html
+    - ui.apps/src/main/content/jcr_root/apps/realmac/components/innovation-card/.content.xml
+
+  out_of_scope_confirmation:
+    pom_xml_root_touched: false
+    ui_apps_pom_xml_touched: false
+    ui_frontend_pom_xml_touched: false
+    policy_xml_touched: false
+    sample_page_content_touched: false
+    site_header_html_touched: false
+    other_component_files_touched: false
+    verification_method: "Manual review of every file edited or created this dispatch (2 files total: site-footer.html edit, innovation-card .content.xml new file); neither is a pom.xml, policy XML, sample-page content node, or site-header.html."
+
+  mvn_invoked: false
+  npm_install_or_webpack_invoked: false
+  next_step: "Program Agent holds for configsmith's parallel CQ-07 policy fix, then dispatches composer's resourceType swap, then Auditron iteration 4 (fresh 2-mvn budget already granted)."

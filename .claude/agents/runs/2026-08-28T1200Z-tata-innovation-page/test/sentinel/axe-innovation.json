@@ -1,0 +1,213 @@
+{
+  "url": "https://publish-p185256-e1945105.adobeaemcloud.com/content/realmac/us/en/innovation.html",
+  "viewports": {
+    "desktop": {
+      "screenshot": "C:\\AEM\\Repos\\realmac\\.claude\\agents\\runs\\2026-08-28T1200Z-tata-innovation-page\\test\\sentinel\\screenshots\\innovation-desktop.png",
+      "consoleErrors": [],
+      "h1Count": 1,
+      "violations": [
+        {
+          "id": "landmark-banner-is-top-level",
+          "impact": "moderate",
+          "description": "Ensure the banner landmark is at top level",
+          "help": "Banner landmark should not be contained in another landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/landmark-banner-is-top-level?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".cmp-site-header"
+              ],
+              "html": "<header class=\"cmp-site-header\">",
+              "failureSummary": "Fix any of the following:\n  The banner landmark is contained in another landmark."
+            }
+          ]
+        },
+        {
+          "id": "landmark-contentinfo-is-top-level",
+          "impact": "moderate",
+          "description": "Ensure the contentinfo landmark is at top level",
+          "help": "Contentinfo landmark should not be contained in another landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/landmark-contentinfo-is-top-level?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".cmp-site-footer"
+              ],
+              "html": "<footer class=\"cmp-site-footer\" data-cmp-is=\"site-footer\">",
+              "failureSummary": "Fix any of the following:\n  The contentinfo landmark is contained in another landmark."
+            }
+          ]
+        },
+        {
+          "id": "landmark-no-duplicate-banner",
+          "impact": "moderate",
+          "description": "Ensure the document has at most one banner landmark",
+          "help": "Document should not have more than one banner landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/landmark-no-duplicate-banner?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".aem-Grid.aem-Grid--12.aem-Grid--default--12 > header"
+              ],
+              "html": "<header class=\"experiencefragment aem-GridColumn aem-GridColumn--default--12\">",
+              "failureSummary": "Fix any of the following:\n  Document has more than one banner landmark"
+            }
+          ]
+        },
+        {
+          "id": "landmark-no-duplicate-contentinfo",
+          "impact": "moderate",
+          "description": "Ensure the document has at most one contentinfo landmark",
+          "help": "Document should not have more than one contentinfo landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/landmark-no-duplicate-contentinfo?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".aem-Grid.aem-Grid--12.aem-Grid--default--12 > footer"
+              ],
+              "html": "<footer class=\"experiencefragment aem-GridColumn aem-GridColumn--default--12\">",
+              "failureSummary": "Fix any of the following:\n  Document has more than one contentinfo landmark"
+            }
+          ]
+        },
+        {
+          "id": "landmark-unique",
+          "impact": "moderate",
+          "description": "Ensure landmarks are unique",
+          "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/landmark-unique?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".aem-Grid.aem-Grid--12.aem-Grid--default--12 > header"
+              ],
+              "html": "<header class=\"experiencefragment aem-GridColumn aem-GridColumn--default--12\">",
+              "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+            },
+            {
+              "target": [
+                ".aem-Grid.aem-Grid--12.aem-Grid--default--12 > footer"
+              ],
+              "html": "<footer class=\"experiencefragment aem-GridColumn aem-GridColumn--default--12\">",
+              "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+            }
+          ]
+        }
+      ],
+      "passesCount": 36,
+      "violationsCount": 5
+    },
+    "mobile": {
+      "screenshot": "C:\\AEM\\Repos\\realmac\\.claude\\agents\\runs\\2026-08-28T1200Z-tata-innovation-page\\test\\sentinel\\screenshots\\innovation-mobile.png",
+      "consoleErrors": [],
+      "h1Count": 1,
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                "h1"
+              ],
+              "html": "<h1 class=\"cmp-teaser__title\">\n        Innovation\n    </h1>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.18 (foreground color: #ffffff, background color: #ececec, font size: 21.0pt (28px), font weight: bold). Expected contrast ratio of 3:1"
+            }
+          ]
+        },
+        {
+          "id": "landmark-banner-is-top-level",
+          "impact": "moderate",
+          "description": "Ensure the banner landmark is at top level",
+          "help": "Banner landmark should not be contained in another landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/landmark-banner-is-top-level?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".cmp-site-header"
+              ],
+              "html": "<header class=\"cmp-site-header\">",
+              "failureSummary": "Fix any of the following:\n  The banner landmark is contained in another landmark."
+            }
+          ]
+        },
+        {
+          "id": "landmark-contentinfo-is-top-level",
+          "impact": "moderate",
+          "description": "Ensure the contentinfo landmark is at top level",
+          "help": "Contentinfo landmark should not be contained in another landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/landmark-contentinfo-is-top-level?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".cmp-site-footer"
+              ],
+              "html": "<footer class=\"cmp-site-footer\" data-cmp-is=\"site-footer\">",
+              "failureSummary": "Fix any of the following:\n  The contentinfo landmark is contained in another landmark."
+            }
+          ]
+        },
+        {
+          "id": "landmark-no-duplicate-banner",
+          "impact": "moderate",
+          "description": "Ensure the document has at most one banner landmark",
+          "help": "Document should not have more than one banner landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/landmark-no-duplicate-banner?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".aem-Grid.aem-Grid--12.aem-Grid--default--12 > header"
+              ],
+              "html": "<header class=\"experiencefragment aem-GridColumn aem-GridColumn--default--12\">",
+              "failureSummary": "Fix any of the following:\n  Document has more than one banner landmark"
+            }
+          ]
+        },
+        {
+          "id": "landmark-no-duplicate-contentinfo",
+          "impact": "moderate",
+          "description": "Ensure the document has at most one contentinfo landmark",
+          "help": "Document should not have more than one contentinfo landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/landmark-no-duplicate-contentinfo?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".aem-Grid.aem-Grid--12.aem-Grid--default--12 > footer"
+              ],
+              "html": "<footer class=\"experiencefragment aem-GridColumn aem-GridColumn--default--12\">",
+              "failureSummary": "Fix any of the following:\n  Document has more than one contentinfo landmark"
+            }
+          ]
+        },
+        {
+          "id": "landmark-unique",
+          "impact": "moderate",
+          "description": "Ensure landmarks are unique",
+          "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/landmark-unique?application=playwright",
+          "nodes": [
+            {
+              "target": [
+                ".aem-Grid.aem-Grid--12.aem-Grid--default--12 > header"
+              ],
+              "html": "<header class=\"experiencefragment aem-GridColumn aem-GridColumn--default--12\">",
+              "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+            },
+            {
+              "target": [
+                ".aem-Grid.aem-Grid--12.aem-Grid--default--12 > footer"
+              ],
+              "html": "<footer class=\"experiencefragment aem-GridColumn aem-GridColumn--default--12\">",
+              "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+            }
+          ]
+        }
+      ],
+      "passesCount": 34,
+      "violationsCount": 6
+    }
+  }
+}

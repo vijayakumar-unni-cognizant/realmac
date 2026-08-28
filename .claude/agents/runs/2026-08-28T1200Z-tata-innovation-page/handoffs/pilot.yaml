@@ -1,0 +1,99 @@
+phase: release
+agent: pilot
+run_id: 2026-08-28T1200Z-tata-innovation-page
+status: awaiting_lead_approval
+adlc_stage: pre-sentinel
+tracks_used:
+  - raise-pr
+
+preconditions:
+  auditron_pass: true
+  auditron_handoff: runs/2026-08-28T1200Z-tata-innovation-page/handoffs/auditron.yaml
+  build_hash: e260c64ec27823a644bd7c02fc157c09453b45fc
+  build_verdict: BUILD_SUCCESS
+  unit_tests_pass: 20/20
+  exit_code: 0
+
+commit:
+  message_prefix: "feat: add Tata innovation landing page with header/footer chrome and Playwright testing"
+  hash: de99ff4
+  staged_files_count: 111
+  excluded_files:
+    - pom.xml
+    - ui.apps/pom.xml
+    - ui.frontend/pom.xml
+    - .gitignore
+    - .aem-skills-config.yaml
+  exclusion_reason: "Local-only Zscaler build-skip edits (CQ-03) + unrelated .gitignore change; these must NOT reach the PR so Cloud Manager's pipeline runs the normal frontend build."
+
+branch:
+  feature_branch: feature/realmac-landing-page
+  base_branch: master
+  pushed: true
+  tracking_remote: origin
+  commits_ahead_of_base: 1
+
+pull_request:
+  repo: vijayakumar-unni-cognizant/realmac
+  origin_stale: false
+  canonical_repo_verified: true
+  head_branch: feature/realmac-landing-page
+  base_branch: master
+  url: https://github.com/vijayakumar-unni-cognizant/realmac/pull/1
+  number: 1
+  pr_tool: gh
+  pr_tool_fallback_reason: null
+  body_file: runs/2026-08-28T1200Z-tata-innovation-page/deploy/pr-body.md
+  title: "feat: add Tata innovation landing page with header/footer chrome and Playwright testing"
+
+summary:
+  run_deliverable: |
+    Tata Innovation landing page with hero teaser, intro text, 4-card showcase grid, header/footer chrome,
+    new landing-page editable template, site-header and site-footer components (with Sling Models),
+    innovation-card component (Core Teaser overlay), 18 Playwright UI test specs, and DAM assets.
+  components_added:
+    - site-header (HTL + SiteHeaderModel)
+    - site-footer (HTL + SiteFooterModel, FooterColumn, FooterLink, SocialLink)
+    - innovation-card (Core Teaser policy)
+  sling_models: 6 (SiteHeaderModel, SiteFooterModel, FooterColumn, FooterLink, SocialLink, UtilityLink)
+  test_classes: 2 (SiteHeaderModelTest, SiteFooterModelTest)
+  ui_tests_migrated_to_playwright: 18 specs (responsive, A11y, keyboard, landmarks)
+  dam_assets_added: 20 (10 SVG icons + 4 featured images + metadata)
+  new_template: landing-page
+  functional_test_ledger: "38 pass / 2 accepted-known-gap (CQ-09) / 6 blocked (no fixture) = 46 total"
+
+known_gaps:
+  cq09:
+    category: "accepted-low"
+    description: "Innovation card heading level (h2 not h3) and lack of .cmp-teaser--innovation-card style class"
+    root_cause: "AEM nested-container Content Policy resolution limitation"
+    human_decision: "Accepted, non-blocking per DECISIONS.md 2026-08-28T20:50Z"
+    impact_on_release: false
+    sentinel_note: "If observed during Playwright visual/A11y checks, cite DECISIONS.md 2026-08-28T20:50Z — not a new defect"
+
+deferred_validations:
+  - Playwright responsive design (UI-001 through UI-016)
+  - Full accessibility scan (WCAG 2.1 AA)
+  - Performance metrics (LCP, CLS, etc.)
+  - SEO meta tags and Open Graph
+  - GraphQL parity (if applicable)
+  - Production observability
+  - Note: "These will be executed by Sentinel AFTER the Lead deploys to the real environment and supplies the Author/Publish URLs"
+
+flow_control:
+  suspended: true
+  suspend_reason: "ADLC flow pauses here; the human Lead must review, merge, deploy, and supply real env URLs to resume into Sentinel"
+  resume_requires:
+    - lead_approval_recorded_in_decisions_md
+    - real_environment_author_url
+    - real_environment_publish_url
+    - real_environment_auth_mode
+  next_stage: sentinel
+  next_stage_instruction: "Sentinel will run LAST, validating against the real environment URLs supplied by the Lead"
+
+report_files:
+  pr_request: runs/2026-08-28T1200Z-tata-innovation-page/deploy/pr-request.md
+  pr_body: runs/2026-08-28T1200Z-tata-innovation-page/deploy/pr-body.md
+
+adlc_run_terminal: false
+note: "Pilot is no longer the terminal stage of the ADLC flow; Sentinel now runs LAST, after the Lead's manual deployment to the real environment."

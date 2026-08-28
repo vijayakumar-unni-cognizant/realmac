@@ -1,0 +1,110 @@
+# DAM Fixture Manifest — Tata Innovation Landing Page
+# Run: 2026-08-28T1200Z-tata-innovation-page
+#
+# All 13 assets from the authoritative reference-assets.md manifest were available as local
+# fixtures (C:\Users\2489691\Downloads\tata-innovation-assets) and were seeded verbatim as real
+# dam:Asset nodes with binary + original rendition. No external-source assets are outstanding —
+# this manifest is a completeness record, not an action item for the human.
+
+seeding_target: /content/dam/realmac/tata-innovation/
+source_folder: C:\Users\2489691\Downloads\tata-innovation-assets
+verification_method: sha1 checksum diff between source file and seeded _jcr_content/renditions/original binary — all 13 MATCH.
+
+assets:
+  - filename: about_innovation_banner_desktop_1920x1080.jpg
+    dam_path: /content/dam/realmac/tata-innovation/about_innovation_banner_desktop_1920x1080.jpg
+    source: local-fixture
+    mimetype: image/jpeg
+    dimensions: { width: 1920, height: 1080, measured: true }
+    used_this_run: true
+    consumed_by: "Hero teaser fileReference (US-001)"
+  - filename: TataChemicals_Desk.jpg
+    dam_path: /content/dam/realmac/tata-innovation/TataChemicals_Desk.jpg
+    source: local-fixture
+    mimetype: image/jpeg
+    dimensions: { width: 360, height: 260, measured: true }
+    used_this_run: true
+    consumed_by: "Card teaser #1 fileReference (US-003)"
+  - filename: TataSteelEurope_Desk.jpg
+    dam_path: /content/dam/realmac/tata-innovation/TataSteelEurope_Desk.jpg
+    source: local-fixture
+    mimetype: image/jpeg
+    dimensions: { width: 360, height: 260, measured: true }
+    used_this_run: true
+    consumed_by: "Card teaser #2 fileReference (US-003)"
+  - filename: TMETC_Desk.jpg
+    dam_path: /content/dam/realmac/tata-innovation/TMETC_Desk.jpg
+    source: local-fixture
+    mimetype: image/jpeg
+    dimensions: { width: 360, height: 260, measured: true }
+    used_this_run: true
+    consumed_by: "Card teaser #4 fileReference (US-003)"
+  - filename: tcsinnovation_information_desktop_360x260.jpg
+    dam_path: /content/dam/realmac/tata-innovation/tcsinnovation_information_desktop_360x260.jpg
+    source: local-fixture
+    mimetype: image/jpeg
+    dimensions: { width: 360, height: 260, measured: true }
+    used_this_run: true
+    consumed_by: "Card teaser #3 fileReference (US-003)"
+  - filename: tata-logo.svg
+    dam_path: /content/dam/realmac/tata-innovation/tata-logo.svg
+    source: local-fixture
+    mimetype: image/svg+xml
+    dimensions: { measured: false, note: "vector asset — no tiff:ImageWidth/Length authored (not applicable to SVG)" }
+    used_this_run: true
+    consumed_by: "site-header logoFileReference (US-004)"
+    licensing_flag: "Demo use only in the realmac project per reference-assets.md — human/lead decision (requirements.yaml Q-004) to replace before any non-demo/production use."
+  - filename: search.svg
+    dam_path: /content/dam/realmac/tata-innovation/search.svg
+    source: local-fixture
+    mimetype: image/svg+xml
+    used_this_run: true
+    consumed_by: "site-header utility link icon (Search, US-004)"
+  - filename: ContactUs.svg
+    dam_path: /content/dam/realmac/tata-innovation/ContactUs.svg
+    source: local-fixture
+    mimetype: image/svg+xml
+    used_this_run: true
+    consumed_by: "site-header utility link icon (Contact, US-004) AND site-footer social-row icon (Contact, US-005) — used twice"
+  - filename: FB.svg
+    dam_path: /content/dam/realmac/tata-innovation/FB.svg
+    source: local-fixture
+    mimetype: image/svg+xml
+    used_this_run: true
+    consumed_by: "site-footer social link icon (Facebook, US-005)"
+  - filename: Instagram.svg
+    dam_path: /content/dam/realmac/tata-innovation/Instagram.svg
+    source: local-fixture
+    mimetype: image/svg+xml
+    used_this_run: true
+    consumed_by: "site-footer social link icon (Instagram, US-005)"
+  - filename: Linkedin.svg
+    dam_path: /content/dam/realmac/tata-innovation/Linkedin.svg
+    source: local-fixture
+    mimetype: image/svg+xml
+    used_this_run: true
+    consumed_by: "site-footer social link icon (LinkedIn, US-005)"
+  - filename: video.svg
+    dam_path: /content/dam/realmac/tata-innovation/video.svg
+    source: local-fixture
+    mimetype: image/svg+xml
+    used_this_run: false
+    consumed_by: "none — no video-modal UI in this run's scope. Seeded for DAM completeness per reference-assets.md."
+  - filename: close.svg
+    dam_path: /content/dam/realmac/tata-innovation/close.svg
+    source: local-fixture
+    mimetype: image/svg+xml
+    used_this_run: false
+    consumed_by: "none — no dismiss/modal UI in this run's scope. Seeded for DAM completeness per reference-assets.md."
+
+totals:
+  manifest_count: 13
+  seeded_count: 13
+  used_this_run: 11
+  supplied_not_used: 2
+  external_source_required: 0
+
+human_action_items:
+  - "None required for DAM seeding — all 13 fixtures were local and are seeded. The only outstanding
+     human decision is the pre-existing licensing flag on tata-logo.svg (demo-only use), carried
+     forward unchanged from reference-assets.md — not a new gap introduced by this run."

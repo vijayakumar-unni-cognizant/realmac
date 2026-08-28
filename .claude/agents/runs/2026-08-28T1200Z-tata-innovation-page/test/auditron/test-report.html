@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--
+  Shared ADLC report template (Sentinel + others).
+  Standalone: all CSS inline, no external fonts/scripts/images, no network deps.
+  Works from a file path, as an email attachment, or printed to PDF.
+
+  Placeholders the generating agent substitutes:
+    Test Report — tata-innovation-page (Iteration 4)  auditron  Test — Build Validation Gate + Unit + Integration + Live Verification  2026-08-28T1200Z-tata-innovation-page  2026-08-28T20:40:00+05:30
+    FAIL        fail  (pass|fail|warn|info)
+    test-report.md   <div class="scorecard"><a class="gauge-link" href="#build-gate"><figure class="gauge good" style="--val:100"><div class="ring"><span>100</span></div><figcaption>Build Gate<small>3/3 signals</small></figcaption></figure></a><a class="gauge-link" href="#unit-tests"><figure class="gauge good" style="--val:100"><div class="ring"><span>100</span></div><figcaption>Unit Tests<small>20/20 pass</small></figcaption></figure></a><a class="gauge-link" href="#live-verification"><figure class="gauge avg" style="--val:75"><div class="ring"><span>75</span></div><figcaption>Live Verification<small>3/4 items pass</small></figcaption></figure></a><a class="gauge-link" href="#ledger"><figure class="gauge avg" style="--val:83"><div class="ring"><span>83</span></div><figcaption>Functional TCs<small>38/40 executed pass (excl. blocked)</small></figcaption></figure></a></div><section class="card"><h2>Verdict &amp; track matrix</h2><div class="callout fail">3-signal <strong>BUILD_SUCCESS</strong> (exit=0, all.zip fresh 1,249,104 bytes, surefire 20/20). Mandatory live-verification: item 1 (footer populated) <strong>PASS</strong>, item 2 (exactly 1 h1 + 4 distinct innovation-card elements each rendering h3) <strong>FAIL</strong> (0/4 carry the style class, all 4 render literal h2, and 3 of 4 render wrong title/description text — see CQ-08/09/10), item 3 (hero unaffected) <strong>PASS</strong>, item 4 (CQ-01/02/03/04 all hold) <strong>PASS</strong>. Functional-TC ledger: 46 total = 40 auditron_executed (38 pass / 2 fail) + 0 deferred + 6 blocked. mvn calls used: 1 of 2 (2nd deliberately withheld — see below). <strong>Gate is FAIL — 4th consecutive fail of the stage-05 gate.</strong></div><table class="matrix"><thead><tr><th>Track</th><th>Verdict</th><th>Detail</th></tr></thead><tbody><tr><td>3-signal build</td><td><span class="badge pass">BUILD_SUCCESS</span></td><td>exit=0; all.zip 1,249,104 bytes fresh (install ts 20:11:15, 49s after build finished 20:10:26); surefire 20/20 across 7 test classes</td></tr><tr><td>Live item 1 — footer populated</td><td><span class="badge pass">PASS</span></td><td>All 4 columns (Company/Innovation/Resources/Legal) render heading + nested links, mirroring authored content</td></tr><tr><td>Live item 2 — 1 h1 + 4 distinct innovation-card h3s</td><td><span class="badge fail">FAIL</span></td><td>h1 count=1 (hero, correct) but 0/4 cards carry cmp-teaser--innovation-card; all 4 render literal &lt;h2&gt; not &lt;h3&gt;; the title text itself is wrong too (CQ-10)</td></tr><tr><td>Live item 3 — hero unaffected</td><td><span class="badge pass">PASS</span></td><td>policy_landing_hero_teaser resolves; .cmp-teaser--hero class present; no CTA rendered; h1 white text + scrim gradient confirmed in compiled CSS</td></tr><tr><td>Live item 4 — CQ-01/02/03/04 hold</td><td><span class="badge pass">PASS</span></td><td>all 4 independently reconfirmed this iteration with fresh evidence</td></tr><tr><td>mvn budget</td><td><span class="badge info">1 of 2 used</span></td><td>2nd call deliberately withheld — no it.tests changes this run, publish tier unreachable, and 3 new blocking findings mean the next Build Gate run should follow remediation, not precede it</td></tr></tbody></table></section><details class="track" id="build-gate" open><summary>Build Validation Gate — 3-signal detail <span class="badge pass">BUILD_SUCCESS</span></summary><div><table><thead><tr><th>Signal</th><th>Result</th></tr></thead><tbody><tr><td>mvn exit code</td><td>0</td></tr><tr><td>all.zip present / size</td><td>true / 1,249,104 bytes</td></tr><tr><td>all.zip freshness</td><td>modified 20:09, package-manager lastUnpacked ~20:11:15 — inside this build's window</td></tr><tr><td>surefire all pass</td><td>true — Tests run: 20, Failures: 0, Errors: 0 (7 test classes: LoggingFilterTest, SimpleResourceListenerTest, HelloWorldModelTest, SiteFooterModelTest x7, SiteHeaderModelTest x8, SimpleScheduledTaskTest, SimpleServletTest)</td></tr><tr><td>combined verdict</td><td>BUILD_SUCCESS</td></tr><tr><td>reactor</td><td>all 10 modules SUCCESS: core, ui.apps.structure, ui.apps, ui.content, ui.config, all, ui.frontend (skip=true no-op per CQ-03), it.tests, ui.tests</td></tr></tbody></table><div class="callout info">log: /tmp/aem-build-iter4.log (full, non--q output captured per instruction)</div></div></details><details class="track" id="live-verification" open><summary>Mandatory live re-verification (4 items) <span class="badge warn">3/4 PASS</span></summary><div><p><strong>Item 1 — Footer link columns populated.</strong> PASS. Fetched <code>/content/realmac/us/en/innovation.html</code> and confirmed all 4 authored columns (Company, Innovation, Resources, Legal) render as <code>&lt;nav class="cmp-site-footer__column"&gt;</code> with their own <code>&lt;h3&gt;</code> heading and populated <code>&lt;ul&gt;</code> of links, exactly mirroring the authored content. CQ-06 genuinely fixed.</p><p><strong>Item 2 — Exactly 1 <code>&lt;h1&gt;</code> + 4 distinct <code>.cmp-teaser--innovation-card</code> elements each rendering <code>&lt;h3&gt;</code>.</strong> FAIL. <code>&lt;h1&gt;</code> count = 1 (the hero's own, correct). But <code>cmp-teaser--innovation-card</code> occurs 0 times anywhere in the rendered page — the Style System variant class never lands on any of the 4 card wrappers — and all 4 cards render a literal <code>&lt;h2&gt;</code> (Core Component's fallback tag, since titleType never resolves for this nesting level) instead of <code>&lt;h3&gt;</code>. Additionally, the visible text inside each card's title element is the card's OWN action-link text (e.g. "Learn More") rather than its authored <code>jcr:title</code> (e.g. "Tata Chemicals Innovation Centre") — see CQ-10. Root-caused via bytecode disassembly + live JCR/policy inspection to two independent, newly-discovered defects: CQ-08 (missing imageDelegate) and CQ-09 (nested policy never resolves at runtime).</p><p><strong>Item 3 — Hero unaffected.</strong> PASS. <code>.cmp-teaser--hero</code> class present on the hero's outer wrapper; <code>&lt;h1&gt;</code> renders "Innovation" in white (<code>color:#fff</code>) with the scrim gradient (<code>rgba(0,0,0,.25)</code> → <code>rgba(0,0,0,.45)</code>) present in compiled CSS; no CTA/action-link rendered (policy <code>actionsDisabled=true</code> still honored).</p><p><strong>Item 4 — CQ-01/02/03/04 quick reconfirmation.</strong> PASS, all 4. CQ-01 (site-footer.html data-sly-repeat) and CQ-02 (plain data-sly-resource on site-header.html) both re-read directly, unchanged since Stage 06. CQ-03 (3 local-only pom.xml build-skip edits) git diff --stat byte-identical to every prior check this run. CQ-04 (3 mode=replace filter entries; XF-Root group amendment; 2 XF masters replaced) all independently reconfirmed live via query-builder + <code>.infinity.json</code> + <code>.1.json</code> reads.</p><div class="callout warn">Process note: an initial plain <code>.json</code> (depth-0) fetch of the policy subtree under <code>/conf/realmac/settings/wcm/policies/realmac/components/*</code> appeared completely empty. This was Auditron's OWN methodology error (Sling's default JSON servlet returns depth-0/properties-only without a depth selector) — NOT a real regression. Re-fetched with <code>.1.json</code>/<code>.infinity.json</code> and confirmed all policy content is present and correct. Recorded here in the interest of full disclosure of the investigation path, since it initially looked like a CQ-04 regression before being ruled out.</div></div></details><details class="track" id="unit-tests"><summary>Unit tests (ran inside install phase) <span class="badge pass">20/20 PASS</span></summary><div><table><thead><tr><th>Test class</th><th>Tests</th><th>Failures</th><th>Errors</th></tr></thead><tbody><tr><td>LoggingFilterTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>SimpleResourceListenerTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>HelloWorldModelTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>SiteFooterModelTest</td><td>7</td><td>0</td><td>0</td></tr><tr><td>SiteHeaderModelTest</td><td>8</td><td>0</td><td>0</td></tr><tr><td>SimpleScheduledTaskTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>SimpleServletTest</td><td>1</td><td>0</td><td>0</td></tr></tbody></table></div></details><details class="track" id="integration"><summary>Integration tests — mvn call 2 of 2 deliberately NOT used <span class="badge info">OPT-OUT (disclosed)</span></summary><div><p>it.tests still contains only the 2 pre-existing archetype integration tests, unrelated to this run's scope. The publish tier (:4503) was not probed this iteration (not required by the dispatch and no publish-side change this run). Given 3 NEW blocking findings (CQ-08/09/10) were discovered this iteration, the 2nd mvn call is reserved for the NEXT Build Gate run (post-remediation) rather than spent now on a build that is already known to need further fixes.</p></div></details>
+
+  Reusable building blocks the body (<div class="scorecard"><a class="gauge-link" href="#build-gate"><figure class="gauge good" style="--val:100"><div class="ring"><span>100</span></div><figcaption>Build Gate<small>3/3 signals</small></figcaption></figure></a><a class="gauge-link" href="#unit-tests"><figure class="gauge good" style="--val:100"><div class="ring"><span>100</span></div><figcaption>Unit Tests<small>20/20 pass</small></figcaption></figure></a><a class="gauge-link" href="#live-verification"><figure class="gauge avg" style="--val:75"><div class="ring"><span>75</span></div><figcaption>Live Verification<small>3/4 items pass</small></figcaption></figure></a><a class="gauge-link" href="#ledger"><figure class="gauge avg" style="--val:83"><div class="ring"><span>83</span></div><figcaption>Functional TCs<small>38/40 executed pass (excl. blocked)</small></figcaption></figure></a></div><section class="card"><h2>Verdict &amp; track matrix</h2><div class="callout fail">3-signal <strong>BUILD_SUCCESS</strong> (exit=0, all.zip fresh 1,249,104 bytes, surefire 20/20). Mandatory live-verification: item 1 (footer populated) <strong>PASS</strong>, item 2 (exactly 1 h1 + 4 distinct innovation-card elements each rendering h3) <strong>FAIL</strong> (0/4 carry the style class, all 4 render literal h2, and 3 of 4 render wrong title/description text — see CQ-08/09/10), item 3 (hero unaffected) <strong>PASS</strong>, item 4 (CQ-01/02/03/04 all hold) <strong>PASS</strong>. Functional-TC ledger: 46 total = 40 auditron_executed (38 pass / 2 fail) + 0 deferred + 6 blocked. mvn calls used: 1 of 2 (2nd deliberately withheld — see below). <strong>Gate is FAIL — 4th consecutive fail of the stage-05 gate.</strong></div><table class="matrix"><thead><tr><th>Track</th><th>Verdict</th><th>Detail</th></tr></thead><tbody><tr><td>3-signal build</td><td><span class="badge pass">BUILD_SUCCESS</span></td><td>exit=0; all.zip 1,249,104 bytes fresh (install ts 20:11:15, 49s after build finished 20:10:26); surefire 20/20 across 7 test classes</td></tr><tr><td>Live item 1 — footer populated</td><td><span class="badge pass">PASS</span></td><td>All 4 columns (Company/Innovation/Resources/Legal) render heading + nested links, mirroring authored content</td></tr><tr><td>Live item 2 — 1 h1 + 4 distinct innovation-card h3s</td><td><span class="badge fail">FAIL</span></td><td>h1 count=1 (hero, correct) but 0/4 cards carry cmp-teaser--innovation-card; all 4 render literal &lt;h2&gt; not &lt;h3&gt;; the title text itself is wrong too (CQ-10)</td></tr><tr><td>Live item 3 — hero unaffected</td><td><span class="badge pass">PASS</span></td><td>policy_landing_hero_teaser resolves; .cmp-teaser--hero class present; no CTA rendered; h1 white text + scrim gradient confirmed in compiled CSS</td></tr><tr><td>Live item 4 — CQ-01/02/03/04 hold</td><td><span class="badge pass">PASS</span></td><td>all 4 independently reconfirmed this iteration with fresh evidence</td></tr><tr><td>mvn budget</td><td><span class="badge info">1 of 2 used</span></td><td>2nd call deliberately withheld — no it.tests changes this run, publish tier unreachable, and 3 new blocking findings mean the next Build Gate run should follow remediation, not precede it</td></tr></tbody></table></section><details class="track" id="build-gate" open><summary>Build Validation Gate — 3-signal detail <span class="badge pass">BUILD_SUCCESS</span></summary><div><table><thead><tr><th>Signal</th><th>Result</th></tr></thead><tbody><tr><td>mvn exit code</td><td>0</td></tr><tr><td>all.zip present / size</td><td>true / 1,249,104 bytes</td></tr><tr><td>all.zip freshness</td><td>modified 20:09, package-manager lastUnpacked ~20:11:15 — inside this build's window</td></tr><tr><td>surefire all pass</td><td>true — Tests run: 20, Failures: 0, Errors: 0 (7 test classes: LoggingFilterTest, SimpleResourceListenerTest, HelloWorldModelTest, SiteFooterModelTest x7, SiteHeaderModelTest x8, SimpleScheduledTaskTest, SimpleServletTest)</td></tr><tr><td>combined verdict</td><td>BUILD_SUCCESS</td></tr><tr><td>reactor</td><td>all 10 modules SUCCESS: core, ui.apps.structure, ui.apps, ui.content, ui.config, all, ui.frontend (skip=true no-op per CQ-03), it.tests, ui.tests</td></tr></tbody></table><div class="callout info">log: /tmp/aem-build-iter4.log (full, non--q output captured per instruction)</div></div></details><details class="track" id="live-verification" open><summary>Mandatory live re-verification (4 items) <span class="badge warn">3/4 PASS</span></summary><div><p><strong>Item 1 — Footer link columns populated.</strong> PASS. Fetched <code>/content/realmac/us/en/innovation.html</code> and confirmed all 4 authored columns (Company, Innovation, Resources, Legal) render as <code>&lt;nav class="cmp-site-footer__column"&gt;</code> with their own <code>&lt;h3&gt;</code> heading and populated <code>&lt;ul&gt;</code> of links, exactly mirroring the authored content. CQ-06 genuinely fixed.</p><p><strong>Item 2 — Exactly 1 <code>&lt;h1&gt;</code> + 4 distinct <code>.cmp-teaser--innovation-card</code> elements each rendering <code>&lt;h3&gt;</code>.</strong> FAIL. <code>&lt;h1&gt;</code> count = 1 (the hero's own, correct). But <code>cmp-teaser--innovation-card</code> occurs 0 times anywhere in the rendered page — the Style System variant class never lands on any of the 4 card wrappers — and all 4 cards render a literal <code>&lt;h2&gt;</code> (Core Component's fallback tag, since titleType never resolves for this nesting level) instead of <code>&lt;h3&gt;</code>. Additionally, the visible text inside each card's title element is the card's OWN action-link text (e.g. "Learn More") rather than its authored <code>jcr:title</code> (e.g. "Tata Chemicals Innovation Centre") — see CQ-10. Root-caused via bytecode disassembly + live JCR/policy inspection to two independent, newly-discovered defects: CQ-08 (missing imageDelegate) and CQ-09 (nested policy never resolves at runtime).</p><p><strong>Item 3 — Hero unaffected.</strong> PASS. <code>.cmp-teaser--hero</code> class present on the hero's outer wrapper; <code>&lt;h1&gt;</code> renders "Innovation" in white (<code>color:#fff</code>) with the scrim gradient (<code>rgba(0,0,0,.25)</code> → <code>rgba(0,0,0,.45)</code>) present in compiled CSS; no CTA/action-link rendered (policy <code>actionsDisabled=true</code> still honored).</p><p><strong>Item 4 — CQ-01/02/03/04 quick reconfirmation.</strong> PASS, all 4. CQ-01 (site-footer.html data-sly-repeat) and CQ-02 (plain data-sly-resource on site-header.html) both re-read directly, unchanged since Stage 06. CQ-03 (3 local-only pom.xml build-skip edits) git diff --stat byte-identical to every prior check this run. CQ-04 (3 mode=replace filter entries; XF-Root group amendment; 2 XF masters replaced) all independently reconfirmed live via query-builder + <code>.infinity.json</code> + <code>.1.json</code> reads.</p><div class="callout warn">Process note: an initial plain <code>.json</code> (depth-0) fetch of the policy subtree under <code>/conf/realmac/settings/wcm/policies/realmac/components/*</code> appeared completely empty. This was Auditron's OWN methodology error (Sling's default JSON servlet returns depth-0/properties-only without a depth selector) — NOT a real regression. Re-fetched with <code>.1.json</code>/<code>.infinity.json</code> and confirmed all policy content is present and correct. Recorded here in the interest of full disclosure of the investigation path, since it initially looked like a CQ-04 regression before being ruled out.</div></div></details><details class="track" id="unit-tests"><summary>Unit tests (ran inside install phase) <span class="badge pass">20/20 PASS</span></summary><div><table><thead><tr><th>Test class</th><th>Tests</th><th>Failures</th><th>Errors</th></tr></thead><tbody><tr><td>LoggingFilterTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>SimpleResourceListenerTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>HelloWorldModelTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>SiteFooterModelTest</td><td>7</td><td>0</td><td>0</td></tr><tr><td>SiteHeaderModelTest</td><td>8</td><td>0</td><td>0</td></tr><tr><td>SimpleScheduledTaskTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>SimpleServletTest</td><td>1</td><td>0</td><td>0</td></tr></tbody></table></div></details><details class="track" id="integration"><summary>Integration tests — mvn call 2 of 2 deliberately NOT used <span class="badge info">OPT-OUT (disclosed)</span></summary><div><p>it.tests still contains only the 2 pre-existing archetype integration tests, unrelated to this run's scope. The publish tier (:4503) was not probed this iteration (not required by the dispatch and no publish-side change this run). Given 3 NEW blocking findings (CQ-08/09/10) were discovered this iteration, the 2nd mvn call is reserved for the NEXT Build Gate run (post-remediation) rather than spent now on a build that is already known to need further fixes.</p></div></details>) can emit — the CSS below
+  styles all of them, high-contrast and WCAG-AA:
+
+    Score gauges (Lighthouse-style donuts), for the 4 Lighthouse categories:
+      <div class="scorecard">
+        <figure class="gauge good" style="--val:98"><div class="ring"><span>98</span></div><figcaption>Accessibility</figcaption></figure>
+        <figure class="gauge avg"  style="--val:84"><div class="ring"><span>84</span></div><figcaption>Performance</figcaption></figure>
+      </div>
+      gauge class: good (>=90) | avg (50-89) | poor (<50)
+
+    Track verdict matrix:  <table class="matrix"> with a <span class="badge pass|fail|warn|info">…</span> per row.
+
+    Findings & routing table: <table class="findings"> — Severity | Track | Page/Component | Finding | Route to
+      (put a <span class="chip sev-…"> in the Severity cell).
+
+    Detailed finding card (issue / evidence / cause / recommended fix / route / status — the depth the Cypress-era reports had):
+      <div class="finding sev-high">
+        <h4><span class="chip sev-high">HIGH</span> F-PERF-01 — LCP 3046ms exceeds 2500ms</h4>
+        <dl>
+          <dt>Issue</dt><dd>…what is wrong, observable…</dd>
+          <dt>Evidence</dt><dd>…measured values, selectors, tool + audit id…</dd>
+          <dt>Cause</dt><dd>…root cause / why…</dd>
+          <dt>Recommended fix</dt><dd>…concrete remediation a reader can act on — REQUIRED for every failed/blocking finding…</dd>
+          <dt>Route</dt><dd><span class="badge info">blockwright</span> …who owns it…</dd>
+          <dt>Status</dt><dd>…blocking / documented / accepted…</dd>
+        </dl>
+      </div>
+      severity class on BOTH .finding and .chip: sev-critical | sev-high | sev-medium | sev-low | sev-info
+
+    Collapsible per-track section:
+      <details class="track" open><summary>Performance <span class="badge fail">FAIL</span></summary> … </details>
+
+    Callout:  <div class="callout warn">…</div>   (pass|fail|warn|info)
+    Inline status: <span class="badge pass|fail|warn|info|critical|high|medium|low">…</span>
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test Report — tata-innovation-page (Iteration 4)</title>
+<style>
+  :root {
+    /* Medium contrast — comfortable, not stark. Text is readable but softened. */
+    --c-text:      #363c44;
+    --c-text-soft: #6b727c;
+    --c-bg:        #f5f7f9;
+    --c-card:      #ffffff;
+    --c-border:    #e4e8ec;
+    --c-accent:    #2563b0;
+
+    --c-good: #2f8a4e;  --c-good-bg: #edf6f0;
+    --c-avg:  #b26a00;  --c-avg-bg:  #fdf1de;
+    --c-poor: #c8443b;  --c-poor-bg: #fbe9e7;
+    --c-info: #2563b0;  --c-info-bg: #eaf0fa;
+
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(54,60,68,.07), 0 1px 2px rgba(54,60,68,.05);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px; line-height: 1.6; color: var(--c-text); background: var(--c-bg);
+  }
+  /* clickable gauge -> scrolls to its track section */
+  .gauge-link { text-decoration: none; color: inherit; display: block; cursor: pointer; }
+  .gauge-link .ring { transition: transform .12s ease; }
+  .gauge-link:hover .ring { transform: scale(1.05); }
+  .gauge-link:hover figcaption { text-decoration: underline; }
+  :target { scroll-margin-top: 16px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 28px 20px 64px; }
+
+  /* Header */
+  header.report {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px 26px; margin-bottom: 22px;
+  }
+  header.report .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--c-text-soft); font-weight: 700; }
+  header.report h1 { margin: 6px 0 14px; font-size: 25px; line-height: 1.25; }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14px;
+    padding: 7px 16px; border-radius: 999px; border: 1.5px solid;
+  }
+  .status-pill::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+  .status-pill.pass { color: var(--c-good); background: var(--c-good-bg); border-color: var(--c-good); }
+  .status-pill.fail { color: var(--c-poor); background: var(--c-poor-bg); border-color: var(--c-poor); }
+  .status-pill.warn { color: var(--c-avg);  background: var(--c-avg-bg);  border-color: var(--c-avg); }
+  .status-pill.info { color: var(--c-info); background: var(--c-info-bg); border-color: var(--c-info); }
+  .meta { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px 26px; font-size: 13px; color: var(--c-text-soft); }
+  .meta b { color: var(--c-text); font-weight: 600; }
+
+  /* Lighthouse-style score gauges */
+  .scorecard {
+    display: flex; flex-wrap: wrap; gap: 14px; justify-content: center;
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 18px; margin-bottom: 22px;
+  }
+  .gauge { --val: 0; width: 128px; text-align: center; margin: 0; }
+  .gauge .ring {
+    width: 92px; height: 92px; border-radius: 50%; margin: 0 auto; display: grid; place-items: center; position: relative;
+    background: conic-gradient(var(--gc) calc(var(--val) * 1%), var(--rbg) 0);
+  }
+  .gauge .ring::before { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: var(--c-card); }
+  .gauge .ring span { position: relative; font-size: 26px; font-weight: 800; color: var(--gc); }
+  .gauge figcaption { margin-top: 10px; font-size: 13px; font-weight: 600; }
+  .gauge.good { --gc: var(--c-good); --rbg: var(--c-good-bg); }
+  .gauge.avg  { --gc: var(--c-avg);  --rbg: var(--c-avg-bg); }
+  .gauge.poor { --gc: var(--c-poor); --rbg: var(--c-poor-bg); }
+
+  /* Cards / collapsible sections */
+  section.card, details.track {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 18px;
+    scroll-margin-top: 16px;
+  }
+  section.card { padding: 20px 24px; }
+  details.track > summary {
+    list-style: none; cursor: pointer; padding: 16px 24px; font-size: 17px; font-weight: 700;
+    display: flex; align-items: center; gap: 12px;
+  }
+  details.track > summary::-webkit-details-marker { display: none; }
+  details.track > summary::after { content: "\25be"; margin-left: auto; color: var(--c-text-soft); }
+  details.track[open] > summary::after { content: "\25b4"; }
+  details.track > summary:hover { background: var(--c-bg); border-radius: var(--radius); }
+  details.track > *:not(summary) { padding: 0 24px 20px; }
+  h2 { font-size: 20px; margin: 4px 0 14px; }
+  h3 { font-size: 16px; margin: 20px 0 8px; }
+
+  /* Badges & severity chips */
+  .badge, .chip {
+    display: inline-block; font-size: 12px; font-weight: 700; line-height: 1;
+    padding: 4px 9px; border-radius: 6px; white-space: nowrap; vertical-align: middle;
+  }
+  .badge.pass { background: var(--c-good-bg); color: var(--c-good); }
+  .badge.fail { background: var(--c-poor-bg); color: var(--c-poor); }
+  .badge.warn { background: var(--c-avg-bg);  color: var(--c-avg); }
+  .badge.info { background: var(--c-info-bg); color: var(--c-info); }
+  .chip.sev-critical { background: var(--c-poor); color: #fff; }
+  .chip.sev-high     { background: var(--c-poor-bg); color: var(--c-poor); border: 1px solid var(--c-poor); }
+  .chip.sev-medium   { background: var(--c-avg-bg);  color: var(--c-avg);  border: 1px solid var(--c-avg); }
+  .chip.sev-low      { background: var(--c-info-bg); color: var(--c-info); }
+  .chip.sev-info     { background: #eceff3; color: var(--c-text-soft); }
+
+  /* Tables */
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 4px; font-size: 14px; }
+  thead th { text-align: left; background: var(--c-bg); color: var(--c-text); font-weight: 700; }
+  th, td { border: 1px solid var(--c-border); padding: 9px 12px; vertical-align: top; }
+  tbody tr:nth-child(even) td { background: #fafbfc; }
+
+  /* Finding card */
+  .finding {
+    border: 1px solid var(--c-border); border-left: 5px solid var(--c-text-soft);
+    border-radius: 8px; padding: 14px 18px; margin: 14px 0; background: var(--c-card);
+  }
+  .finding.sev-critical, .finding.sev-high { border-left-color: var(--c-poor); }
+  .finding.sev-medium { border-left-color: var(--c-avg); }
+  .finding.sev-low, .finding.sev-info { border-left-color: var(--c-info); }
+  .finding h4 { margin: 0 0 10px; font-size: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .finding dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; }
+  .finding dt { font-weight: 700; color: var(--c-text-soft); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; padding-top: 3px; }
+  .finding dd { margin: 0; }
+
+  /* Callouts */
+  .callout { border-radius: 8px; padding: 12px 16px; margin: 14px 0; border: 1px solid; border-left-width: 5px; }
+  .callout.pass { background: var(--c-good-bg); border-color: var(--c-good); }
+  .callout.fail { background: var(--c-poor-bg); border-color: var(--c-poor); }
+  .callout.warn { background: var(--c-avg-bg);  border-color: var(--c-avg); }
+  .callout.info { background: var(--c-info-bg); border-color: var(--c-info); }
+
+  /* Code / misc */
+  code { background: #eceff3; border: 1px solid #dde1e7; border-radius: 4px; padding: 1px 5px; font-family: "SF Mono", "Cascadia Code", Consolas, monospace; font-size: 12.5px; }
+  pre { background: #14181f; color: #e6e9ee; border-radius: 8px; padding: 14px 16px; overflow: auto; font-size: 12.5px; }
+  pre code { background: none; border: none; color: inherit; padding: 0; }
+  a { color: var(--c-accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  footer.report { color: var(--c-text-soft); font-size: 12px; text-align: center; margin-top: 26px; }
+  @media (max-width: 640px) { .gauge { width: 44%; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="report">
+      <div class="eyebrow">auditron &middot; Test — Build Validation Gate + Unit + Integration + Live Verification</div>
+      <h1>Test Report — tata-innovation-page (Iteration 4)</h1>
+      <span class="status-pill fail">FAIL</span>
+      <div class="meta">
+        <span><b>Run</b> 2026-08-28T1200Z-tata-innovation-page</span>
+        <span><b>Generated</b> 2026-08-28T20:40:00+05:30</span>
+        <span><b>Source</b> test-report.md</span>
+      </div>
+    </header>
+
+    <div class="scorecard"><a class="gauge-link" href="#build-gate"><figure class="gauge good" style="--val:100"><div class="ring"><span>100</span></div><figcaption>Build Gate<small>3/3 signals</small></figcaption></figure></a><a class="gauge-link" href="#unit-tests"><figure class="gauge good" style="--val:100"><div class="ring"><span>100</span></div><figcaption>Unit Tests<small>20/20 pass</small></figcaption></figure></a><a class="gauge-link" href="#live-verification"><figure class="gauge avg" style="--val:75"><div class="ring"><span>75</span></div><figcaption>Live Verification<small>3/4 items pass</small></figcaption></figure></a><a class="gauge-link" href="#ledger"><figure class="gauge avg" style="--val:83"><div class="ring"><span>83</span></div><figcaption>Functional TCs<small>38/40 executed pass (excl. blocked)</small></figcaption></figure></a></div><section class="card"><h2>Verdict &amp; track matrix</h2><div class="callout fail">3-signal <strong>BUILD_SUCCESS</strong> (exit=0, all.zip fresh 1,249,104 bytes, surefire 20/20). Mandatory live-verification: item 1 (footer populated) <strong>PASS</strong>, item 2 (exactly 1 h1 + 4 distinct innovation-card elements each rendering h3) <strong>FAIL</strong> (0/4 carry the style class, all 4 render literal h2, and 3 of 4 render wrong title/description text — see CQ-08/09/10), item 3 (hero unaffected) <strong>PASS</strong>, item 4 (CQ-01/02/03/04 all hold) <strong>PASS</strong>. Functional-TC ledger: 46 total = 40 auditron_executed (38 pass / 2 fail) + 0 deferred + 6 blocked. mvn calls used: 1 of 2 (2nd deliberately withheld — see below). <strong>Gate is FAIL — 4th consecutive fail of the stage-05 gate.</strong></div><table class="matrix"><thead><tr><th>Track</th><th>Verdict</th><th>Detail</th></tr></thead><tbody><tr><td>3-signal build</td><td><span class="badge pass">BUILD_SUCCESS</span></td><td>exit=0; all.zip 1,249,104 bytes fresh (install ts 20:11:15, 49s after build finished 20:10:26); surefire 20/20 across 7 test classes</td></tr><tr><td>Live item 1 — footer populated</td><td><span class="badge pass">PASS</span></td><td>All 4 columns (Company/Innovation/Resources/Legal) render heading + nested links, mirroring authored content</td></tr><tr><td>Live item 2 — 1 h1 + 4 distinct innovation-card h3s</td><td><span class="badge fail">FAIL</span></td><td>h1 count=1 (hero, correct) but 0/4 cards carry cmp-teaser--innovation-card; all 4 render literal &lt;h2&gt; not &lt;h3&gt;; the title text itself is wrong too (CQ-10)</td></tr><tr><td>Live item 3 — hero unaffected</td><td><span class="badge pass">PASS</span></td><td>policy_landing_hero_teaser resolves; .cmp-teaser--hero class present; no CTA rendered; h1 white text + scrim gradient confirmed in compiled CSS</td></tr><tr><td>Live item 4 — CQ-01/02/03/04 hold</td><td><span class="badge pass">PASS</span></td><td>all 4 independently reconfirmed this iteration with fresh evidence</td></tr><tr><td>mvn budget</td><td><span class="badge info">1 of 2 used</span></td><td>2nd call deliberately withheld — no it.tests changes this run, publish tier unreachable, and 3 new blocking findings mean the next Build Gate run should follow remediation, not precede it</td></tr></tbody></table></section><details class="track" id="build-gate" open><summary>Build Validation Gate — 3-signal detail <span class="badge pass">BUILD_SUCCESS</span></summary><div><table><thead><tr><th>Signal</th><th>Result</th></tr></thead><tbody><tr><td>mvn exit code</td><td>0</td></tr><tr><td>all.zip present / size</td><td>true / 1,249,104 bytes</td></tr><tr><td>all.zip freshness</td><td>modified 20:09, package-manager lastUnpacked ~20:11:15 — inside this build's window</td></tr><tr><td>surefire all pass</td><td>true — Tests run: 20, Failures: 0, Errors: 0 (7 test classes: LoggingFilterTest, SimpleResourceListenerTest, HelloWorldModelTest, SiteFooterModelTest x7, SiteHeaderModelTest x8, SimpleScheduledTaskTest, SimpleServletTest)</td></tr><tr><td>combined verdict</td><td>BUILD_SUCCESS</td></tr><tr><td>reactor</td><td>all 10 modules SUCCESS: core, ui.apps.structure, ui.apps, ui.content, ui.config, all, ui.frontend (skip=true no-op per CQ-03), it.tests, ui.tests</td></tr></tbody></table><div class="callout info">log: /tmp/aem-build-iter4.log (full, non--q output captured per instruction)</div></div></details><details class="track" id="live-verification" open><summary>Mandatory live re-verification (4 items) <span class="badge warn">3/4 PASS</span></summary><div><p><strong>Item 1 — Footer link columns populated.</strong> PASS. Fetched <code>/content/realmac/us/en/innovation.html</code> and confirmed all 4 authored columns (Company, Innovation, Resources, Legal) render as <code>&lt;nav class="cmp-site-footer__column"&gt;</code> with their own <code>&lt;h3&gt;</code> heading and populated <code>&lt;ul&gt;</code> of links, exactly mirroring the authored content. CQ-06 genuinely fixed.</p><p><strong>Item 2 — Exactly 1 <code>&lt;h1&gt;</code> + 4 distinct <code>.cmp-teaser--innovation-card</code> elements each rendering <code>&lt;h3&gt;</code>.</strong> FAIL. <code>&lt;h1&gt;</code> count = 1 (the hero's own, correct). But <code>cmp-teaser--innovation-card</code> occurs 0 times anywhere in the rendered page — the Style System variant class never lands on any of the 4 card wrappers — and all 4 cards render a literal <code>&lt;h2&gt;</code> (Core Component's fallback tag, since titleType never resolves for this nesting level) instead of <code>&lt;h3&gt;</code>. Additionally, the visible text inside each card's title element is the card's OWN action-link text (e.g. "Learn More") rather than its authored <code>jcr:title</code> (e.g. "Tata Chemicals Innovation Centre") — see CQ-10. Root-caused via bytecode disassembly + live JCR/policy inspection to two independent, newly-discovered defects: CQ-08 (missing imageDelegate) and CQ-09 (nested policy never resolves at runtime).</p><p><strong>Item 3 — Hero unaffected.</strong> PASS. <code>.cmp-teaser--hero</code> class present on the hero's outer wrapper; <code>&lt;h1&gt;</code> renders "Innovation" in white (<code>color:#fff</code>) with the scrim gradient (<code>rgba(0,0,0,.25)</code> → <code>rgba(0,0,0,.45)</code>) present in compiled CSS; no CTA/action-link rendered (policy <code>actionsDisabled=true</code> still honored).</p><p><strong>Item 4 — CQ-01/02/03/04 quick reconfirmation.</strong> PASS, all 4. CQ-01 (site-footer.html data-sly-repeat) and CQ-02 (plain data-sly-resource on site-header.html) both re-read directly, unchanged since Stage 06. CQ-03 (3 local-only pom.xml build-skip edits) git diff --stat byte-identical to every prior check this run. CQ-04 (3 mode=replace filter entries; XF-Root group amendment; 2 XF masters replaced) all independently reconfirmed live via query-builder + <code>.infinity.json</code> + <code>.1.json</code> reads.</p><div class="callout warn">Process note: an initial plain <code>.json</code> (depth-0) fetch of the policy subtree under <code>/conf/realmac/settings/wcm/policies/realmac/components/*</code> appeared completely empty. This was Auditron's OWN methodology error (Sling's default JSON servlet returns depth-0/properties-only without a depth selector) — NOT a real regression. Re-fetched with <code>.1.json</code>/<code>.infinity.json</code> and confirmed all policy content is present and correct. Recorded here in the interest of full disclosure of the investigation path, since it initially looked like a CQ-04 regression before being ruled out.</div></div></details><details class="track" id="unit-tests"><summary>Unit tests (ran inside install phase) <span class="badge pass">20/20 PASS</span></summary><div><table><thead><tr><th>Test class</th><th>Tests</th><th>Failures</th><th>Errors</th></tr></thead><tbody><tr><td>LoggingFilterTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>SimpleResourceListenerTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>HelloWorldModelTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>SiteFooterModelTest</td><td>7</td><td>0</td><td>0</td></tr><tr><td>SiteHeaderModelTest</td><td>8</td><td>0</td><td>0</td></tr><tr><td>SimpleScheduledTaskTest</td><td>1</td><td>0</td><td>0</td></tr><tr><td>SimpleServletTest</td><td>1</td><td>0</td><td>0</td></tr></tbody></table></div></details><details class="track" id="integration"><summary>Integration tests — mvn call 2 of 2 deliberately NOT used <span class="badge info">OPT-OUT (disclosed)</span></summary><div><p>it.tests still contains only the 2 pre-existing archetype integration tests, unrelated to this run's scope. The publish tier (:4503) was not probed this iteration (not required by the dispatch and no publish-side change this run). Given 3 NEW blocking findings (CQ-08/09/10) were discovered this iteration, the 2nd mvn call is reserved for the NEXT Build Gate run (post-remediation) rather than spent now on a build that is already known to need further fixes.</p></div></details>
+
+    <footer class="report">Generated by the ADLC auditron agent &middot; canonical source: test-report.md</footer>
+  </div>
+  <script>
+    // Inline, standalone (no network). Clicking a gauge (or any in-page anchor)
+    // opens the target's collapsed <details> before the browser smooth-scrolls to it.
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var el = document.querySelector(a.getAttribute('href'));
+        if (el) { var d = el.closest('details'); if (d) d.open = true; }
+      });
+    });
+  </script>
+</body>
+</html>

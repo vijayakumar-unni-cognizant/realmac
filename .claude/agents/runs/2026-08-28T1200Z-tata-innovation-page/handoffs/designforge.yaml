@@ -1,0 +1,103 @@
+phase: design
+agent: designforge
+run_id: 2026-08-28T1200Z-tata-innovation-page
+status: pass
+
+docs:
+  component_specifications: runs/2026-08-28T1200Z-tata-innovation-page/design/component-specifications.md
+  dialog_specifications:    runs/2026-08-28T1200Z-tata-innovation-page/design/dialog-specifications.md
+  template_design:          runs/2026-08-28T1200Z-tata-innovation-page/design/template-design.md
+  policy_mapping:           runs/2026-08-28T1200Z-tata-innovation-page/design/policy-mapping.md
+  authoring_guidelines:     runs/2026-08-28T1200Z-tata-innovation-page/design/authoring-guidelines.md
+  design_token_audit:       runs/2026-08-28T1200Z-tata-innovation-page/design/design-token-audit.md
+  functional_test_cases:    runs/2026-08-28T1200Z-tata-innovation-page/design/functional-test-cases.md
+  ui_test_scenarios:        runs/2026-08-28T1200Z-tata-innovation-page/design/ui-test-scenarios.md
+  authoring_test_cases:     runs/2026-08-28T1200Z-tata-innovation-page/design/authoring-test-cases.md
+  reference_assets:         runs/2026-08-28T1200Z-tata-innovation-page/design/reference-assets.md
+  # content_fragment_models: omitted — headless/CF Models not in scope this run (server-rendered Sites page only)
+  # source_content_inventory: omitted — reference role is visual-reference-only, carries no content (see reference-assets.md)
+
+components_specified:
+  - { name: site-header, role: chrome, reuse_or_new: new, extends: none, sling_model_class: com.realmac.aem.core.models.SiteHeaderModel, accessors: [getLogoFileReference, getLogoAlt, getLogoLinkURL, getNavigationRoot, getNavigationStructureDepth, getUtilityLinks, hasContent] }
+  - { name: site-footer, role: chrome, reuse_or_new: new, extends: none, sling_model_class: com.realmac.aem.core.models.SiteFooterModel, accessors: [getFooterLogoFileReference, getColumns, getSocialLinks, getLegalText, hasContent] }
+  - { name: hero-teaser-variant, role: content, reuse_or_new: style-system-variant, extends: realmac/components/teaser (core/wcm/components/teaser/v2/teaser), sling_model_class: none (Core Teaser), accessors: [] }
+  - { name: intro-text-variant, role: content, reuse_or_new: style-system-variant, extends: realmac/components/text (core/wcm/components/text/v2/text), sling_model_class: none (Core Text), accessors: [] }
+  - { name: card-grid-variant, role: content, reuse_or_new: style-system-variant, extends: realmac/components/container (core/wcm/components/container/v1/container), sling_model_class: none (Core Container), accessors: [] }
+  - { name: innovation-card-variant, role: content, reuse_or_new: style-system-variant, extends: realmac/components/teaser (core/wcm/components/teaser/v2/teaser), sling_model_class: none (Core Teaser), accessors: [] }
+
+templates_specified:
+  - name: landing-page
+    template_type: /conf/realmac/settings/wcm/template-types/page (reused)
+    parsys_areas: [root/container/container]
+    locked_chrome: [root/experiencefragment-header, root/experiencefragment-footer]
+    structural_title_node: absent (D22 — hero owns the page H1)
+
+policies_specified:
+  - { template: landing-page, parsys: root/container/container, allowed_components: [realmac/components/teaser, realmac/components/text, realmac/components/title, realmac/components/image, realmac/components/button, realmac/components/container] }
+  - { template: landing-page, parsys: root/container/container/<card-grid-container>, allowed_components: [realmac/components/teaser] }
+  - { template: xf-web-variation (existing, amendment required), parsys: root, allowed_groups: [group:Realmac - Content, group:Realmac - Structure], allowed_components: [/apps/realmac/components/form/container] }
+
+traceability:
+  requirements_to_test_cases:
+    - { requirement_id: US-001, test_case_ids: [TC-001, TC-002, TC-003, TC-004, TC-005] }
+    - { requirement_id: US-002, test_case_ids: [TC-006, TC-007, TC-008, TC-009] }
+    - { requirement_id: US-003, test_case_ids: [TC-010, TC-011, TC-012, TC-013, TC-014, TC-015] }
+    - { requirement_id: US-004, test_case_ids: [TC-016, TC-017, TC-018, TC-019, TC-020] }
+    - { requirement_id: US-005, test_case_ids: [TC-021, TC-022, TC-023, TC-024, TC-025, TC-026] }
+    - { requirement_id: US-006, test_case_ids: [TC-027, TC-028, TC-029, TC-030, TC-031] }
+    - { requirement_id: US-007, test_case_ids: [TC-032, TC-033, TC-034] }
+    - { requirement_id: US-008, test_case_ids: [TC-035, TC-036, TC-037] }
+    - { requirement_id: US-009, test_case_ids: [TC-038, TC-039, TC-040, TC-041, TC-042, TC-043, TC-044, TC-045] }
+    - { requirement_id: US-010, test_case_ids: [TC-046] }
+
+ui_test_coverage:
+  - { journey: hero-render-and-responsive-scaling, scenario_count: 4 }
+  - { journey: intro-text-typography, scenario_count: 1 }
+  - { journey: card-grid-responsive-and-navigation, scenario_count: 4 }
+  - { journey: header-presence-and-mobile-collapse, scenario_count: 2 }
+  - { journey: footer-presence-and-mobile-stack, scenario_count: 2 }
+  - { journey: landmarks-and-accessibility, scenario_count: 3 }
+  - { journey: dialog-roundtrip-authoring, scenario_count: 2 }
+
+authoring_test_coverage:
+  model_editor_parity: [AUTH-001, AUTH-002]
+  multi_value_authorability: [AUTH-003, AUTH-004, AUTH-005, AUTH-006]
+  required_field_enforcement: [AUTH-007, AUTH-008, AUTH-009]
+  data_setup_integrity: [AUTH-010, AUTH-011, AUTH-012, AUTH-013, AUTH-014]
+  redeploy_update_semantics: [AUTH-015]
+  edit_roundtrip: [AUTH-016]
+  publish_activation_state: [AUTH-017]
+  authoring_guardrails: [AUTH-018, AUTH-019, AUTH-020]
+
+reference_assets_summary:
+  reference_url_count: 1
+  local_asset_count: 13
+  local_asset_used_count: 11
+  local_asset_not_used_this_run: [video.svg, close.svg]
+
+design_token_audit_summary:
+  categories_pinned: [colors, typography, spacing, radii, breakpoints, layout_patterns, z_index]
+  deviation_from_guardrail_default: "card radius pinned 6px (reference-measured), overrides generic D19 16px default — see design-token-audit.md § Radii"
+
+gates:
+  dialog_spec_confirmed: true
+  least_privilege_policies: true
+  all_requirements_have_test_cases: true
+  ui_test_scenarios_for_visual_journeys: true
+  authoring_coverage_present: true
+  reference_manifest_present: true
+  source_content_inventory_required: false
+  no_deferral_in_test_artifacts: true
+  no_code_artifacts_produced: true
+
+open_items_for_downstream:
+  - { owner: configsmith, item: "Amend existing xf-web-variation template's XF Root policy (policy_1575040440977) to add group:Realmac - Structure to its components allowlist — required before site-header/site-footer are authorable in the header/footer master XFs. See policy-mapping.md § 4." }
+  - { owner: composer, item: "Verify (not assume) that landing-page appears in the Create Page wizard at /content/realmac/us/en — the existing permissive cq:allowedTemplates regex at /content/realmac already covers it; add an explicit override only if verification fails. See template-design.md § cq:allowedTemplates registration." }
+  - { owner: composer, item: "Replace the header/footer master XFs' existing legacy content (Navigation+LanguageNavigation+Search; Separator+Text) with single site-header/site-footer instances per S8 — do not author alongside the legacy nodes." }
+
+downstream_consumers:
+  - blockwright   # consumes component-specifications + dialog-specifications + template-design + policy-mapping + design-token-audit
+  - configsmith   # consumes policy-mapping (new + amended policies) + template-design
+  - composer      # consumes authoring-guidelines + reference-assets + policy-mapping (XF amendment dependency)
+  - auditron      # consumes functional-test-cases (unit/build/static coverage)
+  - sentinel      # consumes ui-test-scenarios (Playwright specs, post-deploy, deferred this run)

@@ -99,8 +99,8 @@ actions/common/
 node/
 
 # Tests
-coverage/
-reports/
+# coverage/
+# reports/
 
 # Others
 dispatcher/src/conf.d/variables/default.vars
@@ -112,3 +112,5 @@ dispatcher/src/conf.d/variables/default.vars
 
 # Completely ignore .claude/skills
 .claude/skills/
+
+.env

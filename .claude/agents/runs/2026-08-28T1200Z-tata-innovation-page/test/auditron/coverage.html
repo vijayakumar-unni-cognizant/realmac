@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--
+  Shared ADLC report template (Sentinel + others).
+  Standalone: all CSS inline, no external fonts/scripts/images, no network deps.
+  Works from a file path, as an email attachment, or printed to PDF.
+
+  Placeholders the generating agent substitutes:
+    Functional-TC Attribution Ledger + Coverage — tata-innovation-page (Iteration 4)  auditron  Test — Coverage  2026-08-28T1200Z-tata-innovation-page  2026-08-28T20:40:00+05:30
+    FAIL        fail  (pass|fail|warn|info)
+    coverage.md   <div class="scorecard"><a class="gauge-link" href="#ledger"><figure class="gauge avg" style="--val:87"><div class="ring"><span>87</span></div><figcaption>TC Discharge<small>40/46 executed (not blocked)</small></figcaption></figure></a><a class="gauge-link" href="#ledger"><figure class="gauge good" style="--val:95"><div class="ring"><span>95</span></div><figcaption>TC Pass Rate<small>38/40 executed pass</small></figcaption></figure></a><figure class="gauge good" style="--val:100"><div class="ring"><span>100</span></div><figcaption>Unit Coverage<small>20/20 surefire; JaCoCo not configured in this reactor</small></figcaption></figure></div><section class="card"><h2>Verdict &amp; track matrix</h2><div class="callout fail">functional test cases: 46 total — 40 auditron_executed (38 pass / 2 fail), 0 deferred_to_sentinel, 6 blocked. Buckets sum to 46 = total_from_file. Ledger is COMPLETE (not the reason for the FAIL verdict — the FAIL is from 3 new HIGH code findings CQ-08/09/10, reported in code-quality-report.md/test-report.md). All 5 previously-failing IDs (TC-002, TC-012, TC-015, TC-022, TC-031) re-attempted with fresh live evidence this iteration: 3 flipped to pass (TC-002, TC-022, TC-031), 2 remain fail under newly-attributed causes (TC-012, TC-015 — now CQ-08/09/10, not the old CQ-07).</div></section><details class="track" id="ledger" open><summary>Functional-TC ledger — all 46 IDs by bucket <span class="badge pass">46/46 accounted</span></summary><div><p>census_method: <code>grep -oE '\bTC-[0-9]+\b' design/functional-test-cases.md | sort -u | wc -l</code> -&gt; total_from_file = 46. auditron_executed (40) + deferred_to_sentinel (0) + blocked (6) = 46.</p><table><thead><tr><th>ID</th><th>Bucket</th><th>Result</th><th>Evidence</th></tr></thead><tbody><tr><td>TC-001</td><td>auditron_executed</td><td>pass</td><td>unchanged: img src/srcset + .cmp-teaser--hero class + compiled CSS height:5in confirmed</td></tr><tr><td>TC-002</td><td>auditron_executed</td><td>pass (was fail)</td><td>h1 count=1 confirmed on hero element; color:#fff and scrim gradient rgba(0,0,0,.25)-&gt;rgba(0,0,0,.45) confirmed in compiled clientlib-site.css</td></tr><tr><td>TC-003</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (hero teaser instance with an authored action)</td></tr><tr><td>TC-004</td><td>auditron_executed</td><td>pass</td><td>unchanged: srcset/width/height confirmed</td></tr><tr><td>TC-005</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (hero teaser instance with empty fileReference)</td></tr><tr><td>TC-006</td><td>auditron_executed</td><td>pass</td><td>unchanged: intro text class + compiled CSS max-width:840px confirmed</td></tr><tr><td>TC-007</td><td>auditron_executed</td><td>pass</td><td>unchanged: compiled CSS font-size 21px/16px confirmed</td></tr><tr><td>TC-008</td><td>auditron_executed</td><td>pass</td><td>unchanged: static resourceType check</td></tr><tr><td>TC-009</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (Text instance with empty rich-text property)</td></tr><tr><td>TC-010</td><td>auditron_executed</td><td>pass</td><td>unchanged: grid-template-columns:repeat(2,1fr) confirmed in compiled CSS this iteration</td></tr><tr><td>TC-011</td><td>auditron_executed</td><td>pass</td><td>unchanged: mobile override grid-template-columns:1fr confirmed in compiled CSS this iteration</td></tr><tr><td>TC-012</td><td>auditron_executed</td><td>fail</td><td>NEW cause — CQ-08 (0/4 cards render any .cmp-teaser__image at all) + CQ-09 (0/4 carry .cmp-teaser--innovation-card) + CQ-10 (title text is the action's own text, not the card's jcr:title)</td></tr><tr><td>TC-013</td><td>auditron_executed</td><td>pass</td><td>components=[realmac/components/innovation-card] resolves live; least-privilege intent holds (design doc text predates the CQ-07 plan revision; resourceType name changed from teaser to innovation-card, informational drift only)</td></tr><tr><td>TC-014</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (card-grid container with 0 children)</td></tr><tr><td>TC-015</td><td>auditron_executed</td><td>fail</td><td>NEW cause — CQ-09: border-radius:6px / border:1px solid rgb(229,229,229) / gap:24px ARE all correctly compiled in clientlib-site.css, but the .cmp-teaser--innovation-card class never lands on the DOM so the rule never applies; live page shows unstyled cards</td></tr><tr><td>TC-016</td><td>auditron_executed</td><td>pass</td><td>unchanged: &lt;header class=cmp-site-header&gt; present</td></tr><tr><td>TC-017</td><td>auditron_executed</td><td>pass</td><td>unchanged: logo/nav/utility-ul siblings + compiled CSS flex/space-between confirmed</td></tr><tr><td>TC-018</td><td>auditron_executed</td><td>pass</td><td>unchanged: compiled CSS nav/menu-toggle display toggle pair confirmed</td></tr><tr><td>TC-019</td><td>auditron_executed</td><td>pass</td><td>unchanged: aria-label Search/Contact us confirmed present</td></tr><tr><td>TC-020</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (0-utility-links state)</td></tr><tr><td>TC-021</td><td>auditron_executed</td><td>pass</td><td>unchanged: &lt;footer class=cmp-site-footer&gt; present</td></tr><tr><td>TC-022</td><td>auditron_executed</td><td>pass (was fail)</td><td>CQ-06 confirmed genuinely fixed: background-color:#1a1a1a (rgb(26,26,26)) + .cmp-site-footer__columns (4 populated) + __social + __legal-text all present</td></tr><tr><td>TC-023</td><td>auditron_executed</td><td>pass</td><td>unchanged: exactly one site-footer child under the footer master's root node, confirmed via .1.json read, no legacy Separator/Text siblings</td></tr><tr><td>TC-024</td><td>auditron_executed</td><td>pass</td><td>unchanged: live legal text confirmed neutral realmac copy</td></tr><tr><td>TC-025</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (0-columns/0-social state) — current page's populated-columns state does not discharge this deliberate-empty-state case</td></tr><tr><td>TC-026</td><td>auditron_executed</td><td>pass</td><td>unchanged: contrast-ratio math (#fff/#ccc on #1a1a1a background, both &gt;=4.5:1)</td></tr><tr><td>TC-027</td><td>auditron_executed</td><td>pass</td><td>unchanged: template status=enabled, allowedPaths matches</td></tr><tr><td>TC-028</td><td>auditron_executed</td><td>pass</td><td>unchanged: static template structure check</td></tr><tr><td>TC-029</td><td>auditron_executed</td><td>pass</td><td>all cq:policy refs resolve to existing nodes (mapping-tree dangling-ref check) — distinct from CQ-09, which is about correct policy CONTENT not being APPLIED at render time for one specific nested entry, not about the reference being dangling</td></tr><tr><td>TC-030</td><td>auditron_executed</td><td>pass</td><td>clientlib-site.css confirmed loading with real, non-trivial compiled content for every new selector (hero/card/footer/header/card-grid all present with correct property values)</td></tr><tr><td>TC-031</td><td>auditron_executed</td><td>pass (was fail)</td><td>h1 count=1 confirmed; structure/.content.xml has zero title-component nodes</td></tr><tr><td>TC-032</td><td>auditron_executed</td><td>pass</td><td>unchanged: live cq:Page check</td></tr><tr><td>TC-033</td><td>auditron_executed</td><td>pass</td><td>unchanged: static DAM asset check</td></tr><tr><td>TC-034</td><td>auditron_executed</td><td>pass</td><td>re-confirmed this iteration: zero 'Please configure' occurrences; hero+intro+4 distinct card ids (innovation-card-ef4b482805/01c999f5f4/6b9c29175d/63f54dee0e)+header/footer chrome all present</td></tr><tr><td>TC-035</td><td>auditron_executed</td><td>pass</td><td>unchanged: static SCSS selector existence, confirmed live in compiled CSS this iteration</td></tr><tr><td>TC-036</td><td>auditron_executed</td><td>pass</td><td>unchanged: static SCSS selector correctness</td></tr><tr><td>TC-037</td><td>auditron_executed</td><td>pass</td><td>unchanged: static SCSS breakpoint check</td></tr><tr><td>TC-038</td><td>auditron_executed</td><td>pass</td><td>unit test pass (SiteHeaderModelTest/SiteFooterModelTest suite)</td></tr><tr><td>TC-039</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-040</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-041</td><td>auditron_executed</td><td>pass</td><td>unit test pass — Java model layer correct; does not contradict CQ-08/09/10 (those are Core Component runtime behavior + policy resolution + content-authoring gaps, not our own Sling Model bugs)</td></tr><tr><td>TC-042</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-043</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-044</td><td>auditron_executed</td><td>pass</td><td>fresh this iteration: mvn exit=0, BUILD SUCCESS, 20/20 unit tests</td></tr><tr><td>TC-045</td><td>auditron_executed</td><td>pass</td><td>unchanged: static deprecated-API scan of AUTHORED files (the one HTL-JS-Use-Provider deprecation warning seen in error.log this iteration belongs to /libs core experience-fragments xfpage/body.js, a platform script, not authored code)</td></tr><tr><td>TC-046</td><td>auditron_executed</td><td>pass</td><td>unchanged: 18 Playwright spec files discovered (discovery-only, not executed — Sentinel's responsibility)</td></tr></tbody></table><div class="callout info">bucket_sum_check: 40 (38 pass / 2 fail) + 0 (deferred) + 6 (blocked) = 46 = total_from_file. LEDGER COMPLETE.</div></div></details><details class="track" id="jacoco"><summary>Code coverage (JaCoCo) — does not substitute for the TC ledger above <span class="badge info">not configured</span></summary><div><p>JaCoCo report-aggregation is not configured in this project's reactor for a single-module pass. Surefire pass/fail counts (20/20, 0 failures) are the available code-level signal for <code>core</code>. This is a code-coverage metric only and discharges no functional test case on its own — see the TC ledger above for case-level attribution.</p></div></details>
+
+  Reusable building blocks the body (<div class="scorecard"><a class="gauge-link" href="#ledger"><figure class="gauge avg" style="--val:87"><div class="ring"><span>87</span></div><figcaption>TC Discharge<small>40/46 executed (not blocked)</small></figcaption></figure></a><a class="gauge-link" href="#ledger"><figure class="gauge good" style="--val:95"><div class="ring"><span>95</span></div><figcaption>TC Pass Rate<small>38/40 executed pass</small></figcaption></figure></a><figure class="gauge good" style="--val:100"><div class="ring"><span>100</span></div><figcaption>Unit Coverage<small>20/20 surefire; JaCoCo not configured in this reactor</small></figcaption></figure></div><section class="card"><h2>Verdict &amp; track matrix</h2><div class="callout fail">functional test cases: 46 total — 40 auditron_executed (38 pass / 2 fail), 0 deferred_to_sentinel, 6 blocked. Buckets sum to 46 = total_from_file. Ledger is COMPLETE (not the reason for the FAIL verdict — the FAIL is from 3 new HIGH code findings CQ-08/09/10, reported in code-quality-report.md/test-report.md). All 5 previously-failing IDs (TC-002, TC-012, TC-015, TC-022, TC-031) re-attempted with fresh live evidence this iteration: 3 flipped to pass (TC-002, TC-022, TC-031), 2 remain fail under newly-attributed causes (TC-012, TC-015 — now CQ-08/09/10, not the old CQ-07).</div></section><details class="track" id="ledger" open><summary>Functional-TC ledger — all 46 IDs by bucket <span class="badge pass">46/46 accounted</span></summary><div><p>census_method: <code>grep -oE '\bTC-[0-9]+\b' design/functional-test-cases.md | sort -u | wc -l</code> -&gt; total_from_file = 46. auditron_executed (40) + deferred_to_sentinel (0) + blocked (6) = 46.</p><table><thead><tr><th>ID</th><th>Bucket</th><th>Result</th><th>Evidence</th></tr></thead><tbody><tr><td>TC-001</td><td>auditron_executed</td><td>pass</td><td>unchanged: img src/srcset + .cmp-teaser--hero class + compiled CSS height:5in confirmed</td></tr><tr><td>TC-002</td><td>auditron_executed</td><td>pass (was fail)</td><td>h1 count=1 confirmed on hero element; color:#fff and scrim gradient rgba(0,0,0,.25)-&gt;rgba(0,0,0,.45) confirmed in compiled clientlib-site.css</td></tr><tr><td>TC-003</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (hero teaser instance with an authored action)</td></tr><tr><td>TC-004</td><td>auditron_executed</td><td>pass</td><td>unchanged: srcset/width/height confirmed</td></tr><tr><td>TC-005</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (hero teaser instance with empty fileReference)</td></tr><tr><td>TC-006</td><td>auditron_executed</td><td>pass</td><td>unchanged: intro text class + compiled CSS max-width:840px confirmed</td></tr><tr><td>TC-007</td><td>auditron_executed</td><td>pass</td><td>unchanged: compiled CSS font-size 21px/16px confirmed</td></tr><tr><td>TC-008</td><td>auditron_executed</td><td>pass</td><td>unchanged: static resourceType check</td></tr><tr><td>TC-009</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (Text instance with empty rich-text property)</td></tr><tr><td>TC-010</td><td>auditron_executed</td><td>pass</td><td>unchanged: grid-template-columns:repeat(2,1fr) confirmed in compiled CSS this iteration</td></tr><tr><td>TC-011</td><td>auditron_executed</td><td>pass</td><td>unchanged: mobile override grid-template-columns:1fr confirmed in compiled CSS this iteration</td></tr><tr><td>TC-012</td><td>auditron_executed</td><td>fail</td><td>NEW cause — CQ-08 (0/4 cards render any .cmp-teaser__image at all) + CQ-09 (0/4 carry .cmp-teaser--innovation-card) + CQ-10 (title text is the action's own text, not the card's jcr:title)</td></tr><tr><td>TC-013</td><td>auditron_executed</td><td>pass</td><td>components=[realmac/components/innovation-card] resolves live; least-privilege intent holds (design doc text predates the CQ-07 plan revision; resourceType name changed from teaser to innovation-card, informational drift only)</td></tr><tr><td>TC-014</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (card-grid container with 0 children)</td></tr><tr><td>TC-015</td><td>auditron_executed</td><td>fail</td><td>NEW cause — CQ-09: border-radius:6px / border:1px solid rgb(229,229,229) / gap:24px ARE all correctly compiled in clientlib-site.css, but the .cmp-teaser--innovation-card class never lands on the DOM so the rule never applies; live page shows unstyled cards</td></tr><tr><td>TC-016</td><td>auditron_executed</td><td>pass</td><td>unchanged: &lt;header class=cmp-site-header&gt; present</td></tr><tr><td>TC-017</td><td>auditron_executed</td><td>pass</td><td>unchanged: logo/nav/utility-ul siblings + compiled CSS flex/space-between confirmed</td></tr><tr><td>TC-018</td><td>auditron_executed</td><td>pass</td><td>unchanged: compiled CSS nav/menu-toggle display toggle pair confirmed</td></tr><tr><td>TC-019</td><td>auditron_executed</td><td>pass</td><td>unchanged: aria-label Search/Contact us confirmed present</td></tr><tr><td>TC-020</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (0-utility-links state)</td></tr><tr><td>TC-021</td><td>auditron_executed</td><td>pass</td><td>unchanged: &lt;footer class=cmp-site-footer&gt; present</td></tr><tr><td>TC-022</td><td>auditron_executed</td><td>pass (was fail)</td><td>CQ-06 confirmed genuinely fixed: background-color:#1a1a1a (rgb(26,26,26)) + .cmp-site-footer__columns (4 populated) + __social + __legal-text all present</td></tr><tr><td>TC-023</td><td>auditron_executed</td><td>pass</td><td>unchanged: exactly one site-footer child under the footer master's root node, confirmed via .1.json read, no legacy Separator/Text siblings</td></tr><tr><td>TC-024</td><td>auditron_executed</td><td>pass</td><td>unchanged: live legal text confirmed neutral realmac copy</td></tr><tr><td>TC-025</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (0-columns/0-social state) — current page's populated-columns state does not discharge this deliberate-empty-state case</td></tr><tr><td>TC-026</td><td>auditron_executed</td><td>pass</td><td>unchanged: contrast-ratio math (#fff/#ccc on #1a1a1a background, both &gt;=4.5:1)</td></tr><tr><td>TC-027</td><td>auditron_executed</td><td>pass</td><td>unchanged: template status=enabled, allowedPaths matches</td></tr><tr><td>TC-028</td><td>auditron_executed</td><td>pass</td><td>unchanged: static template structure check</td></tr><tr><td>TC-029</td><td>auditron_executed</td><td>pass</td><td>all cq:policy refs resolve to existing nodes (mapping-tree dangling-ref check) — distinct from CQ-09, which is about correct policy CONTENT not being APPLIED at render time for one specific nested entry, not about the reference being dangling</td></tr><tr><td>TC-030</td><td>auditron_executed</td><td>pass</td><td>clientlib-site.css confirmed loading with real, non-trivial compiled content for every new selector (hero/card/footer/header/card-grid all present with correct property values)</td></tr><tr><td>TC-031</td><td>auditron_executed</td><td>pass (was fail)</td><td>h1 count=1 confirmed; structure/.content.xml has zero title-component nodes</td></tr><tr><td>TC-032</td><td>auditron_executed</td><td>pass</td><td>unchanged: live cq:Page check</td></tr><tr><td>TC-033</td><td>auditron_executed</td><td>pass</td><td>unchanged: static DAM asset check</td></tr><tr><td>TC-034</td><td>auditron_executed</td><td>pass</td><td>re-confirmed this iteration: zero 'Please configure' occurrences; hero+intro+4 distinct card ids (innovation-card-ef4b482805/01c999f5f4/6b9c29175d/63f54dee0e)+header/footer chrome all present</td></tr><tr><td>TC-035</td><td>auditron_executed</td><td>pass</td><td>unchanged: static SCSS selector existence, confirmed live in compiled CSS this iteration</td></tr><tr><td>TC-036</td><td>auditron_executed</td><td>pass</td><td>unchanged: static SCSS selector correctness</td></tr><tr><td>TC-037</td><td>auditron_executed</td><td>pass</td><td>unchanged: static SCSS breakpoint check</td></tr><tr><td>TC-038</td><td>auditron_executed</td><td>pass</td><td>unit test pass (SiteHeaderModelTest/SiteFooterModelTest suite)</td></tr><tr><td>TC-039</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-040</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-041</td><td>auditron_executed</td><td>pass</td><td>unit test pass — Java model layer correct; does not contradict CQ-08/09/10 (those are Core Component runtime behavior + policy resolution + content-authoring gaps, not our own Sling Model bugs)</td></tr><tr><td>TC-042</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-043</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-044</td><td>auditron_executed</td><td>pass</td><td>fresh this iteration: mvn exit=0, BUILD SUCCESS, 20/20 unit tests</td></tr><tr><td>TC-045</td><td>auditron_executed</td><td>pass</td><td>unchanged: static deprecated-API scan of AUTHORED files (the one HTL-JS-Use-Provider deprecation warning seen in error.log this iteration belongs to /libs core experience-fragments xfpage/body.js, a platform script, not authored code)</td></tr><tr><td>TC-046</td><td>auditron_executed</td><td>pass</td><td>unchanged: 18 Playwright spec files discovered (discovery-only, not executed — Sentinel's responsibility)</td></tr></tbody></table><div class="callout info">bucket_sum_check: 40 (38 pass / 2 fail) + 0 (deferred) + 6 (blocked) = 46 = total_from_file. LEDGER COMPLETE.</div></div></details><details class="track" id="jacoco"><summary>Code coverage (JaCoCo) — does not substitute for the TC ledger above <span class="badge info">not configured</span></summary><div><p>JaCoCo report-aggregation is not configured in this project's reactor for a single-module pass. Surefire pass/fail counts (20/20, 0 failures) are the available code-level signal for <code>core</code>. This is a code-coverage metric only and discharges no functional test case on its own — see the TC ledger above for case-level attribution.</p></div></details>) can emit — the CSS below
+  styles all of them, high-contrast and WCAG-AA:
+
+    Score gauges (Lighthouse-style donuts), for the 4 Lighthouse categories:
+      <div class="scorecard">
+        <figure class="gauge good" style="--val:98"><div class="ring"><span>98</span></div><figcaption>Accessibility</figcaption></figure>
+        <figure class="gauge avg"  style="--val:84"><div class="ring"><span>84</span></div><figcaption>Performance</figcaption></figure>
+      </div>
+      gauge class: good (>=90) | avg (50-89) | poor (<50)
+
+    Track verdict matrix:  <table class="matrix"> with a <span class="badge pass|fail|warn|info">…</span> per row.
+
+    Findings & routing table: <table class="findings"> — Severity | Track | Page/Component | Finding | Route to
+      (put a <span class="chip sev-…"> in the Severity cell).
+
+    Detailed finding card (issue / evidence / cause / recommended fix / route / status — the depth the Cypress-era reports had):
+      <div class="finding sev-high">
+        <h4><span class="chip sev-high">HIGH</span> F-PERF-01 — LCP 3046ms exceeds 2500ms</h4>
+        <dl>
+          <dt>Issue</dt><dd>…what is wrong, observable…</dd>
+          <dt>Evidence</dt><dd>…measured values, selectors, tool + audit id…</dd>
+          <dt>Cause</dt><dd>…root cause / why…</dd>
+          <dt>Recommended fix</dt><dd>…concrete remediation a reader can act on — REQUIRED for every failed/blocking finding…</dd>
+          <dt>Route</dt><dd><span class="badge info">blockwright</span> …who owns it…</dd>
+          <dt>Status</dt><dd>…blocking / documented / accepted…</dd>
+        </dl>
+      </div>
+      severity class on BOTH .finding and .chip: sev-critical | sev-high | sev-medium | sev-low | sev-info
+
+    Collapsible per-track section:
+      <details class="track" open><summary>Performance <span class="badge fail">FAIL</span></summary> … </details>
+
+    Callout:  <div class="callout warn">…</div>   (pass|fail|warn|info)
+    Inline status: <span class="badge pass|fail|warn|info|critical|high|medium|low">…</span>
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Functional-TC Attribution Ledger + Coverage — tata-innovation-page (Iteration 4)</title>
+<style>
+  :root {
+    /* Medium contrast — comfortable, not stark. Text is readable but softened. */
+    --c-text:      #363c44;
+    --c-text-soft: #6b727c;
+    --c-bg:        #f5f7f9;
+    --c-card:      #ffffff;
+    --c-border:    #e4e8ec;
+    --c-accent:    #2563b0;
+
+    --c-good: #2f8a4e;  --c-good-bg: #edf6f0;
+    --c-avg:  #b26a00;  --c-avg-bg:  #fdf1de;
+    --c-poor: #c8443b;  --c-poor-bg: #fbe9e7;
+    --c-info: #2563b0;  --c-info-bg: #eaf0fa;
+
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(54,60,68,.07), 0 1px 2px rgba(54,60,68,.05);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px; line-height: 1.6; color: var(--c-text); background: var(--c-bg);
+  }
+  /* clickable gauge -> scrolls to its track section */
+  .gauge-link { text-decoration: none; color: inherit; display: block; cursor: pointer; }
+  .gauge-link .ring { transition: transform .12s ease; }
+  .gauge-link:hover .ring { transform: scale(1.05); }
+  .gauge-link:hover figcaption { text-decoration: underline; }
+  :target { scroll-margin-top: 16px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 28px 20px 64px; }
+
+  /* Header */
+  header.report {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px 26px; margin-bottom: 22px;
+  }
+  header.report .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--c-text-soft); font-weight: 700; }
+  header.report h1 { margin: 6px 0 14px; font-size: 25px; line-height: 1.25; }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14px;
+    padding: 7px 16px; border-radius: 999px; border: 1.5px solid;
+  }
+  .status-pill::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+  .status-pill.pass { color: var(--c-good); background: var(--c-good-bg); border-color: var(--c-good); }
+  .status-pill.fail { color: var(--c-poor); background: var(--c-poor-bg); border-color: var(--c-poor); }
+  .status-pill.warn { color: var(--c-avg);  background: var(--c-avg-bg);  border-color: var(--c-avg); }
+  .status-pill.info { color: var(--c-info); background: var(--c-info-bg); border-color: var(--c-info); }
+  .meta { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px 26px; font-size: 13px; color: var(--c-text-soft); }
+  .meta b { color: var(--c-text); font-weight: 600; }
+
+  /* Lighthouse-style score gauges */
+  .scorecard {
+    display: flex; flex-wrap: wrap; gap: 14px; justify-content: center;
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 18px; margin-bottom: 22px;
+  }
+  .gauge { --val: 0; width: 128px; text-align: center; margin: 0; }
+  .gauge .ring {
+    width: 92px; height: 92px; border-radius: 50%; margin: 0 auto; display: grid; place-items: center; position: relative;
+    background: conic-gradient(var(--gc) calc(var(--val) * 1%), var(--rbg) 0);
+  }
+  .gauge .ring::before { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: var(--c-card); }
+  .gauge .ring span { position: relative; font-size: 26px; font-weight: 800; color: var(--gc); }
+  .gauge figcaption { margin-top: 10px; font-size: 13px; font-weight: 600; }
+  .gauge.good { --gc: var(--c-good); --rbg: var(--c-good-bg); }
+  .gauge.avg  { --gc: var(--c-avg);  --rbg: var(--c-avg-bg); }
+  .gauge.poor { --gc: var(--c-poor); --rbg: var(--c-poor-bg); }
+
+  /* Cards / collapsible sections */
+  section.card, details.track {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 18px;
+    scroll-margin-top: 16px;
+  }
+  section.card { padding: 20px 24px; }
+  details.track > summary {
+    list-style: none; cursor: pointer; padding: 16px 24px; font-size: 17px; font-weight: 700;
+    display: flex; align-items: center; gap: 12px;
+  }
+  details.track > summary::-webkit-details-marker { display: none; }
+  details.track > summary::after { content: "\25be"; margin-left: auto; color: var(--c-text-soft); }
+  details.track[open] > summary::after { content: "\25b4"; }
+  details.track > summary:hover { background: var(--c-bg); border-radius: var(--radius); }
+  details.track > *:not(summary) { padding: 0 24px 20px; }
+  h2 { font-size: 20px; margin: 4px 0 14px; }
+  h3 { font-size: 16px; margin: 20px 0 8px; }
+
+  /* Badges & severity chips */
+  .badge, .chip {
+    display: inline-block; font-size: 12px; font-weight: 700; line-height: 1;
+    padding: 4px 9px; border-radius: 6px; white-space: nowrap; vertical-align: middle;
+  }
+  .badge.pass { background: var(--c-good-bg); color: var(--c-good); }
+  .badge.fail { background: var(--c-poor-bg); color: var(--c-poor); }
+  .badge.warn { background: var(--c-avg-bg);  color: var(--c-avg); }
+  .badge.info { background: var(--c-info-bg); color: var(--c-info); }
+  .chip.sev-critical { background: var(--c-poor); color: #fff; }
+  .chip.sev-high     { background: var(--c-poor-bg); color: var(--c-poor); border: 1px solid var(--c-poor); }
+  .chip.sev-medium   { background: var(--c-avg-bg);  color: var(--c-avg);  border: 1px solid var(--c-avg); }
+  .chip.sev-low      { background: var(--c-info-bg); color: var(--c-info); }
+  .chip.sev-info     { background: #eceff3; color: var(--c-text-soft); }
+
+  /* Tables */
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 4px; font-size: 14px; }
+  thead th { text-align: left; background: var(--c-bg); color: var(--c-text); font-weight: 700; }
+  th, td { border: 1px solid var(--c-border); padding: 9px 12px; vertical-align: top; }
+  tbody tr:nth-child(even) td { background: #fafbfc; }
+
+  /* Finding card */
+  .finding {
+    border: 1px solid var(--c-border); border-left: 5px solid var(--c-text-soft);
+    border-radius: 8px; padding: 14px 18px; margin: 14px 0; background: var(--c-card);
+  }
+  .finding.sev-critical, .finding.sev-high { border-left-color: var(--c-poor); }
+  .finding.sev-medium { border-left-color: var(--c-avg); }
+  .finding.sev-low, .finding.sev-info { border-left-color: var(--c-info); }
+  .finding h4 { margin: 0 0 10px; font-size: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .finding dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; }
+  .finding dt { font-weight: 700; color: var(--c-text-soft); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; padding-top: 3px; }
+  .finding dd { margin: 0; }
+
+  /* Callouts */
+  .callout { border-radius: 8px; padding: 12px 16px; margin: 14px 0; border: 1px solid; border-left-width: 5px; }
+  .callout.pass { background: var(--c-good-bg); border-color: var(--c-good); }
+  .callout.fail { background: var(--c-poor-bg); border-color: var(--c-poor); }
+  .callout.warn { background: var(--c-avg-bg);  border-color: var(--c-avg); }
+  .callout.info { background: var(--c-info-bg); border-color: var(--c-info); }
+
+  /* Code / misc */
+  code { background: #eceff3; border: 1px solid #dde1e7; border-radius: 4px; padding: 1px 5px; font-family: "SF Mono", "Cascadia Code", Consolas, monospace; font-size: 12.5px; }
+  pre { background: #14181f; color: #e6e9ee; border-radius: 8px; padding: 14px 16px; overflow: auto; font-size: 12.5px; }
+  pre code { background: none; border: none; color: inherit; padding: 0; }
+  a { color: var(--c-accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  footer.report { color: var(--c-text-soft); font-size: 12px; text-align: center; margin-top: 26px; }
+  @media (max-width: 640px) { .gauge { width: 44%; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="report">
+      <div class="eyebrow">auditron &middot; Test — Coverage</div>
+      <h1>Functional-TC Attribution Ledger + Coverage — tata-innovation-page (Iteration 4)</h1>
+      <span class="status-pill fail">FAIL</span>
+      <div class="meta">
+        <span><b>Run</b> 2026-08-28T1200Z-tata-innovation-page</span>
+        <span><b>Generated</b> 2026-08-28T20:40:00+05:30</span>
+        <span><b>Source</b> coverage.md</span>
+      </div>
+    </header>
+
+    <div class="scorecard"><a class="gauge-link" href="#ledger"><figure class="gauge avg" style="--val:87"><div class="ring"><span>87</span></div><figcaption>TC Discharge<small>40/46 executed (not blocked)</small></figcaption></figure></a><a class="gauge-link" href="#ledger"><figure class="gauge good" style="--val:95"><div class="ring"><span>95</span></div><figcaption>TC Pass Rate<small>38/40 executed pass</small></figcaption></figure></a><figure class="gauge good" style="--val:100"><div class="ring"><span>100</span></div><figcaption>Unit Coverage<small>20/20 surefire; JaCoCo not configured in this reactor</small></figcaption></figure></div><section class="card"><h2>Verdict &amp; track matrix</h2><div class="callout fail">functional test cases: 46 total — 40 auditron_executed (38 pass / 2 fail), 0 deferred_to_sentinel, 6 blocked. Buckets sum to 46 = total_from_file. Ledger is COMPLETE (not the reason for the FAIL verdict — the FAIL is from 3 new HIGH code findings CQ-08/09/10, reported in code-quality-report.md/test-report.md). All 5 previously-failing IDs (TC-002, TC-012, TC-015, TC-022, TC-031) re-attempted with fresh live evidence this iteration: 3 flipped to pass (TC-002, TC-022, TC-031), 2 remain fail under newly-attributed causes (TC-012, TC-015 — now CQ-08/09/10, not the old CQ-07).</div></section><details class="track" id="ledger" open><summary>Functional-TC ledger — all 46 IDs by bucket <span class="badge pass">46/46 accounted</span></summary><div><p>census_method: <code>grep -oE '\bTC-[0-9]+\b' design/functional-test-cases.md | sort -u | wc -l</code> -&gt; total_from_file = 46. auditron_executed (40) + deferred_to_sentinel (0) + blocked (6) = 46.</p><table><thead><tr><th>ID</th><th>Bucket</th><th>Result</th><th>Evidence</th></tr></thead><tbody><tr><td>TC-001</td><td>auditron_executed</td><td>pass</td><td>unchanged: img src/srcset + .cmp-teaser--hero class + compiled CSS height:5in confirmed</td></tr><tr><td>TC-002</td><td>auditron_executed</td><td>pass (was fail)</td><td>h1 count=1 confirmed on hero element; color:#fff and scrim gradient rgba(0,0,0,.25)-&gt;rgba(0,0,0,.45) confirmed in compiled clientlib-site.css</td></tr><tr><td>TC-003</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (hero teaser instance with an authored action)</td></tr><tr><td>TC-004</td><td>auditron_executed</td><td>pass</td><td>unchanged: srcset/width/height confirmed</td></tr><tr><td>TC-005</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (hero teaser instance with empty fileReference)</td></tr><tr><td>TC-006</td><td>auditron_executed</td><td>pass</td><td>unchanged: intro text class + compiled CSS max-width:840px confirmed</td></tr><tr><td>TC-007</td><td>auditron_executed</td><td>pass</td><td>unchanged: compiled CSS font-size 21px/16px confirmed</td></tr><tr><td>TC-008</td><td>auditron_executed</td><td>pass</td><td>unchanged: static resourceType check</td></tr><tr><td>TC-009</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (Text instance with empty rich-text property)</td></tr><tr><td>TC-010</td><td>auditron_executed</td><td>pass</td><td>unchanged: grid-template-columns:repeat(2,1fr) confirmed in compiled CSS this iteration</td></tr><tr><td>TC-011</td><td>auditron_executed</td><td>pass</td><td>unchanged: mobile override grid-template-columns:1fr confirmed in compiled CSS this iteration</td></tr><tr><td>TC-012</td><td>auditron_executed</td><td>fail</td><td>NEW cause — CQ-08 (0/4 cards render any .cmp-teaser__image at all) + CQ-09 (0/4 carry .cmp-teaser--innovation-card) + CQ-10 (title text is the action's own text, not the card's jcr:title)</td></tr><tr><td>TC-013</td><td>auditron_executed</td><td>pass</td><td>components=[realmac/components/innovation-card] resolves live; least-privilege intent holds (design doc text predates the CQ-07 plan revision; resourceType name changed from teaser to innovation-card, informational drift only)</td></tr><tr><td>TC-014</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (card-grid container with 0 children)</td></tr><tr><td>TC-015</td><td>auditron_executed</td><td>fail</td><td>NEW cause — CQ-09: border-radius:6px / border:1px solid rgb(229,229,229) / gap:24px ARE all correctly compiled in clientlib-site.css, but the .cmp-teaser--innovation-card class never lands on the DOM so the rule never applies; live page shows unstyled cards</td></tr><tr><td>TC-016</td><td>auditron_executed</td><td>pass</td><td>unchanged: &lt;header class=cmp-site-header&gt; present</td></tr><tr><td>TC-017</td><td>auditron_executed</td><td>pass</td><td>unchanged: logo/nav/utility-ul siblings + compiled CSS flex/space-between confirmed</td></tr><tr><td>TC-018</td><td>auditron_executed</td><td>pass</td><td>unchanged: compiled CSS nav/menu-toggle display toggle pair confirmed</td></tr><tr><td>TC-019</td><td>auditron_executed</td><td>pass</td><td>unchanged: aria-label Search/Contact us confirmed present</td></tr><tr><td>TC-020</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (0-utility-links state)</td></tr><tr><td>TC-021</td><td>auditron_executed</td><td>pass</td><td>unchanged: &lt;footer class=cmp-site-footer&gt; present</td></tr><tr><td>TC-022</td><td>auditron_executed</td><td>pass (was fail)</td><td>CQ-06 confirmed genuinely fixed: background-color:#1a1a1a (rgb(26,26,26)) + .cmp-site-footer__columns (4 populated) + __social + __legal-text all present</td></tr><tr><td>TC-023</td><td>auditron_executed</td><td>pass</td><td>unchanged: exactly one site-footer child under the footer master's root node, confirmed via .1.json read, no legacy Separator/Text siblings</td></tr><tr><td>TC-024</td><td>auditron_executed</td><td>pass</td><td>unchanged: live legal text confirmed neutral realmac copy</td></tr><tr><td>TC-025</td><td>blocked</td><td>-</td><td>no dedicated fixture authored this run (0-columns/0-social state) — current page's populated-columns state does not discharge this deliberate-empty-state case</td></tr><tr><td>TC-026</td><td>auditron_executed</td><td>pass</td><td>unchanged: contrast-ratio math (#fff/#ccc on #1a1a1a background, both &gt;=4.5:1)</td></tr><tr><td>TC-027</td><td>auditron_executed</td><td>pass</td><td>unchanged: template status=enabled, allowedPaths matches</td></tr><tr><td>TC-028</td><td>auditron_executed</td><td>pass</td><td>unchanged: static template structure check</td></tr><tr><td>TC-029</td><td>auditron_executed</td><td>pass</td><td>all cq:policy refs resolve to existing nodes (mapping-tree dangling-ref check) — distinct from CQ-09, which is about correct policy CONTENT not being APPLIED at render time for one specific nested entry, not about the reference being dangling</td></tr><tr><td>TC-030</td><td>auditron_executed</td><td>pass</td><td>clientlib-site.css confirmed loading with real, non-trivial compiled content for every new selector (hero/card/footer/header/card-grid all present with correct property values)</td></tr><tr><td>TC-031</td><td>auditron_executed</td><td>pass (was fail)</td><td>h1 count=1 confirmed; structure/.content.xml has zero title-component nodes</td></tr><tr><td>TC-032</td><td>auditron_executed</td><td>pass</td><td>unchanged: live cq:Page check</td></tr><tr><td>TC-033</td><td>auditron_executed</td><td>pass</td><td>unchanged: static DAM asset check</td></tr><tr><td>TC-034</td><td>auditron_executed</td><td>pass</td><td>re-confirmed this iteration: zero 'Please configure' occurrences; hero+intro+4 distinct card ids (innovation-card-ef4b482805/01c999f5f4/6b9c29175d/63f54dee0e)+header/footer chrome all present</td></tr><tr><td>TC-035</td><td>auditron_executed</td><td>pass</td><td>unchanged: static SCSS selector existence, confirmed live in compiled CSS this iteration</td></tr><tr><td>TC-036</td><td>auditron_executed</td><td>pass</td><td>unchanged: static SCSS selector correctness</td></tr><tr><td>TC-037</td><td>auditron_executed</td><td>pass</td><td>unchanged: static SCSS breakpoint check</td></tr><tr><td>TC-038</td><td>auditron_executed</td><td>pass</td><td>unit test pass (SiteHeaderModelTest/SiteFooterModelTest suite)</td></tr><tr><td>TC-039</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-040</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-041</td><td>auditron_executed</td><td>pass</td><td>unit test pass — Java model layer correct; does not contradict CQ-08/09/10 (those are Core Component runtime behavior + policy resolution + content-authoring gaps, not our own Sling Model bugs)</td></tr><tr><td>TC-042</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-043</td><td>auditron_executed</td><td>pass</td><td>unit test pass</td></tr><tr><td>TC-044</td><td>auditron_executed</td><td>pass</td><td>fresh this iteration: mvn exit=0, BUILD SUCCESS, 20/20 unit tests</td></tr><tr><td>TC-045</td><td>auditron_executed</td><td>pass</td><td>unchanged: static deprecated-API scan of AUTHORED files (the one HTL-JS-Use-Provider deprecation warning seen in error.log this iteration belongs to /libs core experience-fragments xfpage/body.js, a platform script, not authored code)</td></tr><tr><td>TC-046</td><td>auditron_executed</td><td>pass</td><td>unchanged: 18 Playwright spec files discovered (discovery-only, not executed — Sentinel's responsibility)</td></tr></tbody></table><div class="callout info">bucket_sum_check: 40 (38 pass / 2 fail) + 0 (deferred) + 6 (blocked) = 46 = total_from_file. LEDGER COMPLETE.</div></div></details><details class="track" id="jacoco"><summary>Code coverage (JaCoCo) — does not substitute for the TC ledger above <span class="badge info">not configured</span></summary><div><p>JaCoCo report-aggregation is not configured in this project's reactor for a single-module pass. Surefire pass/fail counts (20/20, 0 failures) are the available code-level signal for <code>core</code>. This is a code-coverage metric only and discharges no functional test case on its own — see the TC ledger above for case-level attribution.</p></div></details>
+
+    <footer class="report">Generated by the ADLC auditron agent &middot; canonical source: coverage.md</footer>
+  </div>
+  <script>
+    // Inline, standalone (no network). Clicking a gauge (or any in-page anchor)
+    // opens the target's collapsed <details> before the browser smooth-scrolls to it.
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var el = document.querySelector(a.getAttribute('href'));
+        if (el) { var d = el.closest('details'); if (d) d.open = true; }
+      });
+    });
+  </script>
+</body>
+</html>

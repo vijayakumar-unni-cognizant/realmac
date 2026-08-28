@@ -1,0 +1,132 @@
+phase: test
+agent: auditron
+run_id: 2026-08-28T1200Z-tata-innovation-page
+iteration: 5
+dispatch_type: sanity_only
+status: pass
+tracks_used: [build-gate, tests]   # review track not re-run this iteration — sanity-only scope explicitly limited to 5 items, no new cross-file review
+
+review:
+  note: "SANITY-ONLY dispatch — full review track (Skill: review, cross-file consistency checks 13-31) NOT re-run this iteration. Scope was explicitly limited by the Program Agent's dispatch packet to: (a) CQ-08 source confirmation, (b) CQ-10 source confirmation, (c) 1 Build Gate mvn call, (d) CQ-09 acceptance recording, (e) ledger update. CQ-01 through CQ-07 were exhaustively independently verified fixed/accepted across iterations 1-4 (see DECISIONS.md) and are carried forward unchanged, not re-reviewed."
+  files_reviewed_this_iteration: 3   # innovation-card/.content.xml, settings/wcm/policies/.content.xml, content/realmac/us/en/innovation/.content.xml — the 3 files read to confirm CQ-08/CQ-10
+  findings: { critical: 0, high: 0, medium: 0, low: 1 }   # CQ-09, accepted-low, not blocking
+  cq08_source_confirmed: true
+  cq10_source_confirmed: true
+  cq09_disposition: accepted_low   # per DECISIONS.md 2026-08-28T20:50Z human decision
+  report: runs/2026-08-28T1200Z-tata-innovation-page/test/auditron/code-quality-report.md
+
+build_gate:
+  command: "mvn clean install -PautoInstallSinglePackage"
+  result: BUILD_SUCCESS
+  three_signal:
+    exit_code: 0
+    all_zip_present: true
+    all_zip_is_stale: false   # produced 21:09:42, inside this build's window (21:08:50-21:10:49)
+    all_zip_size_bytes: 1249225
+    surefire_all_pass: true   # 20/20 across 7 test classes, 0 failures/errors
+    surefire_summary: "Tests run: 20, Failures: 0, Errors: 0, Skipped: 0 (all 10 reactor modules built; core module's 7 test classes all pass)"
+    combined_verdict: BUILD_SUCCESS
+  reactor_trace: "core SUCCESS -> ui.apps.structure SUCCESS -> ui.apps SUCCESS -> ui.content SUCCESS -> ui.config SUCCESS -> all SUCCESS -> ui.frontend SUCCESS (skip=true, no-op per accepted CQ-03) -> it.tests SUCCESS (compile+package only) -> ui.tests SUCCESS"
+  log: /tmp/aem-build-iter5.log
+  local_sdk_deployed: true
+  cq01_through_cq07_confirmed_holding: true   # not re-verified this iteration; carried forward from iteration 4's independent verification
+  cq08_confirmed_in_versioned_source: true
+  cq10_confirmed_in_versioned_source: true
+  cq09_disposition: accepted_low
+  bonus_opportunistic_smoke_check:
+    performed: true
+    required: false
+    mvn_budget_consumed: 0
+    results:
+      cq08_live: "5 occurrences of .cmp-teaser__image (1 hero + 4 cards) — all cards render images"
+      cq10_live: "all 4 cards render own jcr:title + own jcr:description, not action-link text / page meta-description"
+      cq09_symptom_still_present_as_expected: "0 occurrences of .cmp-teaser--innovation-card; heading levels 1xh1 (hero) + 4xh2 (cards, should be h3) — matches the accepted-gap description exactly, no regression, no surprise"
+
+tests:
+  layers:
+    unit:        { pass: 20, fail: 0, skipped: 0 }   # ran inside install phase
+    integration: { pass: 0, fail: 0, skipped: 0, note: "not invoked this dispatch — sanity-only scope grants exactly 1 mvn call, spent on the Build Gate" }
+  coverage: { line: not_measured, branch: not_measured, note: "JaCoCo report-aggregation not configured in this project's reactor for a single-module pass; surefire pass/fail counts are the available code-level signal. Does not substitute for the TC ledger regardless." }
+  failing_tests: []
+  flaky_tests: []
+  functional_test_cases:
+    file: design/functional-test-cases.md
+    census_method: "grep -oE '\\bTC-[0-9]+\\b' design/functional-test-cases.md | sort -u | wc -l"
+    total_from_file: 46
+    total: 46
+    auditron_executed:
+      - { id: TC-001, result: pass, evidence: "carried forward from iter4 (out of this dispatch's scope, unchanged)" }
+      - { id: TC-002, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-004, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-006, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-007, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-008, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-010, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-011, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-012, result: accepted_known_gap, evidence: "RE-ATTRIBUTED this iteration: CQ-08 (image) and CQ-10 (title/description) both confirmed fixed live this iteration (bonus check). Only remaining symptom is CQ-09 (no style class, h2 not h3), which is human-accepted-low per DECISIONS.md 2026-08-28T20:50Z, not an open defect." }
+      - { id: TC-013, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-015, result: accepted_known_gap, evidence: "RE-ATTRIBUTED this iteration, same rationale as TC-012: CQ-09's accepted style-class gap is the sole remaining cause; CQ-08/CQ-10 confirmed fixed." }
+      - { id: TC-016, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-017, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-018, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-019, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-021, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-022, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-023, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-024, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-026, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-027, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-028, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-029, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-030, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-031, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-032, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-033, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-034, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-035, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-036, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-037, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-038, result: pass, evidence: "carried forward from iter4 (unit test pass)" }
+      - { id: TC-039, result: pass, evidence: "carried forward from iter4 (unit test pass)" }
+      - { id: TC-040, result: pass, evidence: "carried forward from iter4 (unit test pass)" }
+      - { id: TC-041, result: pass, evidence: "carried forward from iter4 (unit test pass)" }
+      - { id: TC-042, result: pass, evidence: "carried forward from iter4 (unit test pass)" }
+      - { id: TC-043, result: pass, evidence: "carried forward from iter4 (unit test pass)" }
+      - { id: TC-044, result: pass, evidence: "REFRESHED this iteration: mvn exit=0, 3-signal BUILD_SUCCESS, 20/20 unit tests" }
+      - { id: TC-045, result: pass, evidence: "carried forward from iter4" }
+      - { id: TC-046, result: pass, evidence: "carried forward from iter4 (18 Playwright spec files discovered)" }
+    deferred_to_sentinel: []
+    blocked:
+      - { id: TC-003, reason: "no dedicated fixture authored this run (hero teaser instance with an authored action) — unchanged from iter2" }
+      - { id: TC-005, reason: "no dedicated fixture authored this run (hero teaser instance with empty fileReference) — unchanged from iter2" }
+      - { id: TC-009, reason: "no dedicated fixture authored this run (Text instance with empty rich-text property) — unchanged from iter2" }
+      - { id: TC-014, reason: "no dedicated fixture authored this run (card-grid container with 0 children) — unchanged from iter2" }
+      - { id: TC-020, reason: "no dedicated fixture authored this run (0-utility-links state) — unchanged from iter2" }
+      - { id: TC-025, reason: "no dedicated fixture authored this run (0-columns/0-social state) — unchanged from iter2" }
+  bucket_sum_check: "40 (auditron_executed: 38 pass / 2 accepted_known_gap / 0 fail) + 0 (deferred_to_sentinel) + 6 (blocked) = 46 = total_from_file — LEDGER COMPLETE"
+  self_corrections_beyond_dispatch_scope:
+    - { ids: "TC-012,TC-015", from: fail, to: accepted_known_gap, reason: "CQ-08/CQ-10 independently reconfirmed fixed (source + bonus live check) this iteration; sole remaining cause is CQ-09, human-accepted-low per DECISIONS.md 2026-08-28T20:50Z — reporting as plain fail would misstate an accepted, disclosed gap as an open defect." }
+  no_silent_scope_narrowing: "This dispatch's scope was explicitly and narrowly bounded by the Program Agent's own dispatch packet to exactly 5 items. 44 of 46 ledger rows are carried forward from iteration 4 WITHOUT re-verification this iteration, per the dispatch's own explicit instruction ('You do NOT need to re-verify every other previously-passing TC from scratch'). This is a disclosed, human/Program-Agent-directed scope reduction, not a self-imposed one, and is stated here plainly rather than absorbed silently."
+
+mvn_invocations: 1   # exactly the 1 granted for this sanity-only dispatch. No 2nd call made or requested.
+
+carry_forward_items_addressed:
+  - { item: "Confirm CQ-08 in the versioned source", status: done, result: "imageDelegate=\"realmac/components/image\" confirmed present on apps/realmac/components/innovation-card/.content.xml" }
+  - { item: "Confirm CQ-10 in the versioned source", status: done, result: "titleFromPage/descriptionFromPage={Boolean}false confirmed present on both policies and all 5 content instances" }
+  - { item: "Run exactly 1 mvn Build Gate call with 3-signal detection", status: done, result: "BUILD_SUCCESS: exit=0, fresh 1,249,225-byte all.zip, 20/20 surefire" }
+  - { item: "Record CQ-09 as accepted-low, not blocking", status: done, result: "recorded in code-quality-report.md and this handoff, citing DECISIONS.md 2026-08-28T20:50Z" }
+  - { item: "Update functional-TC ledger to reflect CQ-09's accepted status for TC-012/TC-015", status: done, result: "re-attributed from fail to accepted_known_gap; 46-total ledger re-verified via own grep census" }
+
+hands_off_to_sentinel:
+  ui_test_scope_source: design/ui-test-scenarios.md
+  functional_test_scope_source: design/functional-test-cases.md
+  functional_tcs_deferred_to_sentinel: []
+  changed_files_inventory: runs/2026-08-28T1200Z-tata-innovation-page/test/auditron/changed_files.txt
+  local_sdk_url: http://localhost:4502
+  local_sdk_publish_url: http://localhost:4503   # not probed this dispatch
+  build_hash: e260c64ec27823a644bd7c02fc157c09453b45fc   # git HEAD SHA at build time; working tree carries this run's uncommitted source changes not yet committed by Pilot
+  note: "GATE IS GREEN. This is iteration 5 (sanity-only) of the stage-05 gate. CQ-01 through CQ-08 and CQ-10 are all resolved/accepted across iterations 1-5 (independently re-confirmed in versioned source this iteration for CQ-08/CQ-10 specifically). CQ-09 is accepted-low per explicit human decision (DECISIONS.md 2026-08-28T20:50Z) — a documented, non-blocking cosmetic gap (cards render Core Teaser's h2 default + no distinct .cmp-teaser--innovation-card style class, due to AEM's nested-container Content Policy resolution limitation). Build Validation Gate achieved genuine 3-signal BUILD_SUCCESS with exactly 1 mvn invocation. Zero remaining unaccepted HIGH findings. Pilot may proceed to raise the release PR against build_hash above, subject to the PR-hygiene reminders already recorded in DECISIONS.md (exclude the 3 local-only Zscaler build-skip pom edits in pom.xml/ui.apps/pom.xml/ui.frontend/pom.xml, and the unrelated .gitignore change, from the release PR commit)."
+
+followups_required:
+  - { owner: pilot, severity: info, item: "PR hygiene: exclude pom.xml, ui.apps/pom.xml, ui.frontend/pom.xml local-only Zscaler build-skip edits, and the unrelated .gitignore change, from the release PR commit (carried forward from DECISIONS.md CQ-03 resolution)." }
+  - { owner: sentinel, severity: info, item: "Post-deploy: CQ-09 is an accepted-low known gap (no card style class / h2 not h3 heading on the 4 innovation cards). Do not re-open as a new finding — cite DECISIONS.md 2026-08-28T20:50Z if observed during Playwright/visual verification." }

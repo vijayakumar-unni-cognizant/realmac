@@ -1,0 +1,25 @@
+# AEM Skills configuration — project identifiers resolved once per session.
+# Consumed by the Program Agent and every specialist per ADLC-SPEC.md.
+project: realmac
+package: com.realmac.aem.core
+group: "Realmac - Content"
+maven:
+  groupId: com.realmac
+  artifactId: realmac
+java_version_file: .cloudmanager/java-version
+paths:
+  apps_root: /apps/realmac
+  conf_root: /conf/realmac
+  content_root: /content/realmac
+  dam_root: /content/dam/realmac
+modules:
+  core: core
+  ui_apps: ui.apps
+  ui_apps_structure: ui.apps.structure
+  ui_config: ui.config
+  ui_content: ui.content
+  ui_frontend: ui.frontend
+  it_tests: it.tests
+  ui_tests: ui.tests
+  all: all
+configured: true
