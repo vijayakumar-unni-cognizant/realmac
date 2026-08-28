@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/conf/realmac" mode="merge"/>
+    <filter root="/content/realmac" mode="merge"/>
+    <filter root="/content/dam/realmac" mode="merge">
+        <exclude pattern="/content/dam/realmac(/.*)?"/>
+        <include pattern="/content/dam/realmac/jcr:content(/.*)?"/>
+    </filter>
+    <filter root="/content/dam/realmac/asset.jpg" mode="merge"/>
+    <filter root="/content/experience-fragments/realmac" mode="merge"/>
+</workspaceFilter>
